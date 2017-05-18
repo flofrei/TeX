@@ -10,7 +10,7 @@
 
 \begin{document}
 \author{Florian Frei}
-\title{Overview ab-initio Molecular Dynamics}
+\title{The Computational Bottleneck of Ab-initio Molecular Dynamics And Possible Solutions}
 
 \maketitle
 
@@ -20,28 +20,19 @@
 
 \newpage
 
-\section{Derivation of ab-initio molecular dynamics simulations}
+\section{Derivation of ab-initio molecular dynamics}
+To understand where the computational bottleneck is coming from and why it is there one should start from the very beginning namely the Lagrangian and Hamilton formalism. These are essential that one does not forget the equivalence of these two views of the world. For the advanced reader it is recommended to skip these sections and start with derivation of classical molecular dynamics section \ref{sec:cmd}.
 \subsection{Lagrangian of a system}
 The Lagrangian is defined by
-\begin{equation}
-\mathcal{L}(\mathbf{q},\dot{\mathbf{q}}) = \mathcal{T}(\mathbf{q},\dot{\mathbf{q}}) - \mathcal{V}(\mathbf{q},\dot{\mathbf{q}})
-\end{equation}
-, with kinetic energy $\mathcal{T}$ and potential energy $\mathcal{V}$. 
+\begin{align}
+\mathcal{L}(\mathbf{q},\dot{\mathbf{q}}) &= \mathcal{T}(\mathbf{q},\dot{\mathbf{q}}) - \mathcal{V}(\mathbf{q},\dot{\mathbf{q}})\label{def:lagrangian}\\
+\intertext{with kinetic energy $\mathcal{T}$ and potential energy $\mathcal{V}$. In case of Born-Oppenheimer view the kinetic energy is dominated by nuclear motion and the potential energy is solely given by the electronic energy. Thus an educated guess requires that the Lagrangian is of the following form:}
+\mathcal{L}^{BO}(\mathbf{R}_I,\dot{\mathbf{R}}_I) &= \frac{1}{2}\sum_{I}M_I\dot{\mathbf{R}}_I^2 - \mathcal{V}(\{\mathbf{R}_I\},D)\label{lagrangian:BO}\\
+\intertext{where the potential is evaluated at the ground state $D$ which minimizes the electronic energy for a given nuclear configuration $\{R_I\}$. The equations of motion of the system is then given by the Euler-Lagrange equation:}
+\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}} &=\frac{\partial \mathcal{L}}{\partial \mathbf{q}}\label{eq:euler-lagrange}
+\end{align}
 
-%TODO
-In case of a Born-Oppenheimer approximation the kinetic energy is given by the nuclear motion since the nuclear part could be separated from the electronic part. This was done to simplify the problem and is valid because the nuclear motion is on a different timescale than the electronic motion. Therefore the Lagrangian is of the following form:
-\begin{equation}
-\mathcal{L}^{BO}(\mathbf{R}_I,\dot{\mathbf{R}}_I) = \frac{1}{2}\sum_{I}M_I\dot{\mathbf{R}}_I^2 - \mathcal{V}(\{\mathbf{R}_I\},D)
-\end{equation}
-, where the potential is evaluated to a ground state $D$ for a nuclear configuration $\{R_I\}$. 
-
-
-The motion of the system is then given by the Euler-Lagrange equation:
-\begin{equation}
-\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}} - \frac{\partial \mathcal{L}}{\partial \mathbf{q}} = 0
-\label{euler-lagrange-eq}
-\end{equation}
-Inserted with $\mathcal{L}^{BO}$ gives us:
+Inserting \ref{lagrangian:BO} into \ref{eq:euler-lagrange} and looking at each individual term results in:
 \begin{align*}
 \frac{\partial \mathcal{L}^{BO}}{\partial \mathbf{R}_I} &= - \frac{\partial \mathcal{V}(\{\mathbf{R}_I\},D)}{\partial \mathbf{R}_I}\\
 \frac{\partial \mathcal{L}^{BO}}{\partial \dot{\mathbf{R}}_I} &= \frac{1}{2}\cdot 2 M_I \dot{\mathbf{R}}_I\\
@@ -49,17 +40,16 @@ Inserted with $\mathcal{L}^{BO}$ gives us:
 \implies M_I \ddot{\mathbf{R}}_I &= - \frac{\partial \mathcal{V}(\{\mathbf{R}_I\},D)}{\partial \mathbf{R}_I}\\
 \iff M_I \ddot{\mathbf{R}}_I &= - \nabla_I \mathcal{V}(\{\mathbf{R}_I\},D)
 \end{align*}
-Therefore before integrating the nuclear motion one has to evaluate the potential energy for the ground state for a given configuration. The computational effort is here dominated by this evaluation.
+Therefore before integrating the nuclear motion one has to evaluate the potential energy which leads to search for the ground state $D$ for a given nuclear configuration.
 
 \subsection{Changing to Hamiltonian function}
-An equivalent formalism to the Lagrangian is the Hamiltonian which is in most cases easier to understand. The Legendre transformation can be used to transform from Lagrangian to Hamiltonian formalism which is of the following form:
-\begin{equation}
-\mathcal{H}(\mathbf{q}_j,\mathbf{p}_j,t) = \sum_{i} \dot{\mathbf{q}}_i \frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}_i} - \mathcal{L}(\mathbf{q}_j,\dot{\mathbf{q}}_j,t)
-\end{equation}
-, where
-\begin{equation}
-\frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}_i} = \mathbf{p}_i(\mathbf{q}_i,\dot{\mathbf{q}}_i,t)
-\end{equation}
+An equivalent formalism to the Lagrangian is the Hamiltonian which is in most cases easier to understand. The Legendre transformation can be used to change from Lagrangian to Hamiltonian formalism which is of the following form:
+
+\begin{align}
+\mathcal{H}(\mathbf{q}_j,\mathbf{p}_j,t) &= \sum_{i} \dot{\mathbf{q}}_i \frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}_i} - \mathcal{L}(\mathbf{q}_j,\dot{\mathbf{q}}_j,t)
+\intertext{where}
+\frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}_i} &= \mathbf{p}_i(\mathbf{q}_i,\dot{\mathbf{q}}_i,t)
+\end{align}
 is the momenta expressed with generalized coordinates $\mathbf{q}_i$ and velocities $\dot{\mathbf{q}}_i$. Therefore with the definition of the Born-Oppenheimer Lagrangian one can derive the Hamiltonian as:
 \begin{align*}
 \frac{\partial \mathcal{L}^{BO}}{\partial \dot{\mathbf{R}}_I} &= \frac{1}{2}\cdot 2 M_I \dot{\mathbf{R}}_I\\
@@ -83,7 +73,7 @@ d\mathcal{H}&=\sum_{i} \left(  \frac{\partial \mathcal{H}}{\partial \mathbf{q}_i
 \frac{\partial \mathcal{H}}{\partial \mathbf{p}_i}=\dot{\mathbf{q}}_i,\;
 \frac{\partial \mathcal{H}}{\partial t}=-\frac{\partial \mathcal{L}}{\partial t}
 \end{align*}
-In case when the Euler-Lagrange equation \ref{euler-lagrange-eq} holds, it can be rewritten as:
+In case when the Euler-Lagrange equation \ref{eq:euler-lagrange} holds, it can be rewritten as:
 \begin{equation}
 \frac{\partial \mathcal{L}}{\partial \mathbf{q}_i} = \frac{d}{dt}\mathbf{p}_i=\dot{\mathbf{p}}_i
 \end{equation}
@@ -91,10 +81,11 @@ and therefore also:
 \begin{equation}
 \frac{\partial \mathcal{H}}{\partial \mathbf{q}_j}=-\dot{\mathbf{p}}_j,\;\frac{\partial \mathcal{H}}{\partial \mathbf{p}_j}=\dot{\mathbf{q}}_j,\;\frac{\partial \mathcal{H}}{\partial t}=-\frac{\partial \mathcal{L}}{\partial t}
 \end{equation}
-Thus it is now of essence to derive the Hamiltonian of the system for deriving the equations of motion. A good framework to accomplish  this in molecular dynamics is the Schr\"odinger equation with the correspondence principle explained in the next sections.
+Thus if one has the Hamiltonian of the system the derivation for the equations of motions is straightforward. A possible and well-known framework to accomplish this in molecular dynamics is to use Schr\"odinger's equation with using the correspondence principle, explained in the next section.
 
 \subsection{Derivation of Classical Molecular Dynamics}
-To derive classical molecular dynamics a good choice is to start with non–relativistic quantum mechanics formalized via the time-dependent Schr\"odinger equation:
+\label{sec:cmd}
+To derive classical molecular dynamics a good choice is to start with non-relativistic quantum mechanics formalized via the time-dependent Schr\"odinger equation:
 \begin{equation}
 \mathrm{i} \hbar \frac{\partial }{\partial t} \Psi = \hat{\mathcal{H}} \Psi
 \label{eq:tdse}
@@ -119,28 +110,32 @@ For this discussion $\Psi=\Psi(\{\mathbf{r}_i\},\{\mathbf{R}_I \};t)$ is a funct
 \hat{H}_{el}&=\hat{H}-\hat{T}_n=\hat{T}_e + \hat{V}_{n-e}\label{def:electronichamilton}
 \end{align}
 
-In case that one can separate the 
-%TODO
-Furthermore when looking for a standing wave solution where $V(\mathbf{r},t)=0$ Louis de Broglies used
+In case that one assumes that the time coordinate can be separated from the spatial coordinates one can use Louis de Broglies ansatz for standing waves
 \begin{equation}
 \Psi(\mathbf{r},t)=A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p}))
+\label{ansatz:louisdebroglieswave}
 \end{equation}
-as an Ansatz to further reduce the problem since:
+to transform the time dependent Schr\"odinger equation
 \begin{align*}
-\mathrm{i} \hbar \frac{\partial }{\partial t} (A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) )&=\hat{\mathcal{H}}\Psi(\mathbf{r},t)\\
-\mathrm{i} \hbar  A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) \frac{\partial }{\partial t}(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) &=\hat{\mathcal{H}}\Psi(\mathbf{r},t)\\
-\mathrm{i} \hbar\cdot -\frac{\mathrm{i}}{\hbar} \cdot E \cdot A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p}))  &=\hat{\mathcal{H}}\Psi(\mathbf{r},t)\\
-\mathrm{i} \hbar\cdot -\frac{\mathrm{i}}{\hbar} \cdot E \cdot \Psi(\mathbf{r},t)&=\hat{\mathcal{H}}\Psi(\mathbf{r},t)\\
- E \Psi(\mathbf{r},t)&=\hat{\mathcal{H}}\Psi(\mathbf{r},t)\\
+\mathrm{i} \hbar \frac{\partial }{\partial t} (A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) )&=\hat{H}\Psi(\mathbf{r},t)\\
+\mathrm{i} \hbar  A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) \frac{\partial }{\partial t}(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p})) &=\hat{H}\Psi(\mathbf{r},t)\\
+\mathrm{i} \hbar\cdot -\frac{\mathrm{i}}{\hbar} \cdot E \cdot A\cdot \exp(-\frac{\mathrm{i}}{\hbar}(Et-\mathbf{r}\cdot\mathbf{p}))  &=\hat{H}\Psi(\mathbf{r},t)\\
+\mathrm{i} \hbar\cdot -\frac{\mathrm{i}}{\hbar} \cdot E \cdot \Psi(\mathbf{r},t)&=\hat{H}\Psi(\mathbf{r},t)\\
+ E \Psi(\mathbf{r},t)&=\hat{H}\Psi(\mathbf{r},t)\\
 \end{align*}
-to the time-independent Schr\"odinger equation which is in essence an eigenvalue problem for the Hamiltonian,
+into the time independent Schr\"odinger equation
+\begin{equation}
+\hat{H}\Psi(\mathbf{r},t)=E \Psi(\mathbf{r},t)
+\label{eq:tiseq}
+\end{equation}
+where this is equivalent to an eigenvalue problem
 \begin{equation}
 \mathcal{M} \mathbf{v} = \lambda \mathbf{v}
 \label{eigenvalueproblem}
 \end{equation}
-, where the operator has a matrix representation $\mathcal{M}$ with the wavefunctions represented in eigenvectors with corresponding eigenvalues $\lambda$.
+with matrix $\mathcal{M}$, eigenvector $\mathbf{v}$ and eigenvalue $\lambda$. Hence it is of importance to choose the right basis such that the Hamiltonian can expressed as a matrix.
 
-\section{Solving TDSE with two different Ansatz}
+\section{Solving Schr\"odinger equation with two different Ansatz}
 \subsection{Ansatz for TDSCF}
 For solving the time-dependent Schr\"odinger equation \ref{eq:tdse} one has to separate the nuclear from the electronic coordinates. The simplest form of separation is a single Hartree product of the following form:
 \begin{equation}
@@ -253,12 +248,13 @@ Now lets return to a case with more than one electronic function. The equation t
 &\chi \Phi_1 \Phi_2 \exp\left( \frac{\mathrm{i}}{\hbar} 2 \cdot \int_{t0}^{t}dt' \Bra{\chi\Phi_1\Phi_2}\hat{H}_{el}\Ket{\chi\Phi_1\Phi_2} \right)
 \end{align*}
 Now one can derive easily the formulas for the whole product:
-\begin{align*}
-&\mathrm{i}\hbar \frac{\partial \chi}{\partial t} = \hat{T}_n\chi+  \Bra{\Phi_i} \hat{H}_{el}\Ket{\Phi_i} \chi, \quad  i=1...N\\
-&\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ket{\Phi_{k'}} \Phi_k + \Bra{\chi\Phi_{k'}} \hat{V}_{n-e} \Ket{\chi\Phi_{k'}} \Phi_k, \quad k,k'=1...N \wedge k'\neq k\\
-&\Psi \approx \chi \prod_{k}\Phi_k \cdot \exp\left( \frac{\mathrm{i}}{\hbar} N \cdot \int_{t0}^{t}dt' \Bra{\chi\Phi_i}\hat{H}_{el}\Ket{\chi\Phi_i} \right),\quad  i=1...N
-\end{align*}
+\begin{align}
+&\mathrm{i}\hbar \frac{\partial \chi}{\partial t} = \hat{T}_n\chi+  \Bra{\Phi_i} \hat{H}_{el}\Ket{\Phi_i} \chi, \quad  i=1...N \label{eq:tdscfnuclear}\\
+&\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ket{\Phi_{k'}} \Phi_k + \Bra{\chi\Phi_{k'}} \hat{V}_{n-e} \Ket{\chi\Phi_{k'}} \Phi_k, \quad k,k'=1...N \wedge k'\neq k\label{eq:tdscfelectronic}\\
+&\Psi \approx \chi \prod_{k}\Phi_k \cdot \exp\left( \frac{\mathrm{i}}{\hbar} N \cdot \int_{t0}^{t}dt' \Bra{\chi\Phi_i}\hat{H}_{el}\Ket{\chi\Phi_i} \right),\quad  i=1...N \label{ansatz:tdscfwithphase}
+\end{align}
 Here one can easily see the interdependence of electronic and nuclear coordinates for the SCF method. In each timestep the orbital functions have to iteratively optimized until all equations are fulfilled. This is the computational bottleneck for choosing this method. Now let us have a look at an alternative method which will be derived from the Born-Oppenheimer approximation.
+
 
 \subsection{Ansatz for BOMD}
 As already briefly mentioned the big difference for this approximation is that we chose the electronic part time independent. Therefore one has to find a solution for the eigenvalue problem \ref{eigenvalueproblem}. This is a valid view because the motion of the nuclei dominate all motion of electrons because of significant mass differences. Meaning one has to integrate the nuclear motion on a energy surface which minimizes the electronic energy. Therefore one can introduce the electronic time independent Schr\"odinger equation where the nuclei are stationary parameters.
@@ -312,20 +308,109 @@ The structure of equation \ref{eq:nse} shows that this is again an eigenvalue pr
 \intertext{$E_{el,m}$ is again a scalar. With Kronecker delta the second sum collapses.}
 \sum_{m}\Bra{\Psi_{el,p}}\hat{T}_n\Ket{\chi_{k,m}\Psi_{el,m}} + E_{el,m}\chi_{k,m}&=E_k\chi_{k,m}
 \end{align*}
-Looking at the definition \ref{def:nuclearkinetic} for $\hat{T}_n$, the gradient operator has to be evaluated.
+Looking at the definition \ref{def:nuclearkinetic} for $\hat{T}_n=-\sum_{I}\frac{1}{2M_I}\Delta_I$, the Laplace operator has to be evaluated.
 \begin{align*}
 \nabla_I^2(\chi_{k,m}\Psi_{el,m})=\nabla_I \cdot (\Psi_{el,m}\nabla_I\chi_{k,m}+\chi_{k,m}\nabla_I\Psi_{el,m}) \\
 =\Psi_{el,m}\Delta_I\chi_{k,m}+2(\nabla_I\chi_{k,m})\cdot(\nabla_I\Psi_{el,m})+\chi_{k,m}\Delta_I\Psi_{el,m}
 \end{align*}
-Therefore the above inserted into
+Hence:
+\begin{align*}
+\Psi_{el,m}\Delta_I\chi_{k,m} &\rightarrow \sum_{m}\sum_{I}\Braket{\Psi_{el,p}|\Psi_{el,m}}\left(-\frac{1}{2M_I}\Delta_I \right)\chi_{k,m}\\
+2(\nabla_I\chi_{k,m})\cdot(\nabla_I\Psi_{el,m})&\rightarrow \sum_{m}\sum_{I}2\Bra{\Psi_{el,p}}\nabla_I\Ket{\Psi_{el,m}}\left(-\frac{1}{2M_I}\nabla_I \right)\chi_{k,m}\\
+\chi_{k,m}\Delta_I\Psi_{el,m} &\rightarrow \sum_{m}\sum_{I}\Bra{\Psi_{el,p}}\left(-\frac{1}{2M_I}\Delta_I \right)\Ket{\Psi_{el,m}}\chi_{k,m}\\
+\end{align*}
+The first term is again equivalent to $\hat{T}_n\chi_{k,m}$. Summarized the final equation is of the following form:
+\begin{align*}
+\hat{T}_n\chi_{k,m} +\sum_{m}\sum_{I}2\Bra{\Psi_{el,p}}\nabla_I\Ket{\Psi_{el,m}}\left(-\frac{1}{2M_I}\nabla_I \right)\chi_{k,m} +\\ \sum_{m}\sum_{I}\Bra{\Psi_{el,p}}\left(-\frac{1}{2M_I}\Delta_I \right)\Ket{\Psi_{el,m}}\chi_{k,m}
++ E_{el,m}\chi_{k,m}=E_k\chi_{k,m}
+\end{align*}
+The double sum is also called the non-adiabatic coupling term $\hat{C}_{pm}$.
+\begin{equation}
+\hat{C}_{pm} = \sum_{I}2\Bra{\Psi_{el,p}}\nabla_I\Ket{\Psi_{el,m}}\left(-\frac{1}{2M_I}\nabla_I\right)+\sum_I\Bra{\Psi_{el,p}} \left(-\frac{1}{2M_I}\Delta_I\right)\Ket{\Psi_{el,m}}
+\end{equation}
+And therefore the exact nuclear Schr\"odinger equation ca be written as:
+\begin{equation}
+\hat{T}_n\chi_{k,m} + \sum_{m}\hat{C}_{pm}\chi_{k,m}+E_{el,m}\chi_{k,m}=E_k\chi_{k,m}
+\label{eq:entise}
+\end{equation}
+The $\hat{C}_{pm} $ terms describe the resonance between oscillation levels of neighboring electronic states. Approximations therefore make only sense when the electronic states in a system are not coupled. There are two famous approximations. First the adiabatic approximation:
+\begin{align}
+\hat{C}_{pm}=0 \;  \forall m \neq n \; & \rightarrow \;\hat{T}_n\chi_{k,m}+\hat{C}_{mm}\chi_{k,m}+E_{el,m}\chi_{k,m}=E_k\chi_{k,m}
+\intertext{And second the Born-Oppenheimer approximation:}
+\hat{C}_{pm}=0 \; \forall m,p \; & \rightarrow \; \hat{T}_n\chi_{k,m} +E_{el,m}\chi_{k,m}=E_k\chi_{k,m}
+\end{align}
+Solution to the nuclear Schr\"odinger equation \ref{eq:entise} leads to the oscillation levels. Hence the nuclei are moving in a field of electrons. The next step to derive molecular dynamics is to approximate the nuclei as classical point particles which is done in the next section.
+
+\subsection{Approximation of nuclei as classical point particles}
+A well-known route to extract semiclassical mechanics from quantum mechanics in general starts with rewriting the corresponding wavefunction for nuclei
+\begin{equation}
+\chi_{k}(\{ \mathbf{R}_I\};t)=A_k(\{ \mathbf{R}_I\};t)\exp\left[ \frac{\mathrm{i}}{\hbar}S_k(\{ \mathbf{R}_I\};t) \right]
+\label{ansatz:pointparticle}
+\end{equation}
+in terms of an amplitude factor $A_k$ and a phase $S_k$ which are both considered to be real and $A_k > 0$ in this polar representation. This ansatz inserted into \ref{eq:nse} choosing electronic state $k$ and remembering that in time dependent case we use $E_k=\mathrm{i}\hbar\frac{\partial}{\partial t}$, results in equations for $A_k$ and $S_k$ respectively. Starting with
+\begin{align*}
+&\left[ \hat{T}_n+E_{el}\right]A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)=\mathrm{i}\hbar\frac{\partial }{\partial t}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)\\
+\intertext{inserting definition of kinetic operator \ref{def:nuclearkinetic} and apply product rule for time derivative}
+&\left[ \sum_I\frac{-\hbar^2}{2M_I}\nabla_I^2+E_{el}\right]A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)=\mathrm{i}\hbar(\frac{\partial A_k}{\partial t}\exp(\frac{\mathrm{i}}{\hbar}S_k)+\frac{\partial S_k}{\partial t}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)\frac{\mathrm{i}}{\hbar})\\
+\intertext{expand the laplace operator}
+&\sum_I\frac{-\hbar^2}{2M_I}\left[ A_k\Delta_I\exp(\frac{\mathrm{i}}{\hbar}S_k)+2(\nabla_I\exp(\frac{\mathrm{i}}{\hbar}S_k))\cdot(\nabla_IA_k)+\exp(\frac{\mathrm{i}}{\hbar}S_k)\Delta_IA_k\right]\\
+&+E_{el}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)=\mathrm{i}\hbar\frac{\partial A_k}{\partial t}\exp(\frac{\mathrm{i}}{\hbar}S_k)-\frac{\partial S_k}{\partial t}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)\\
+\intertext{apply gradient rules to the exponential}
+&\sum_I\frac{-\hbar^2}{2M_I}\left[ A_k\Delta_IS_k\exp(\frac{\mathrm{i}}{\hbar}S_k)\frac{-1}{\hbar^2}+2\nabla_IS_k\exp(\frac{\mathrm{i}}{\hbar}S_k))\frac{\mathrm{i}}{\hbar}\cdot(\nabla_IA_k)+\exp(\frac{\mathrm{i}}{\hbar}S_k)\Delta_IA_k\right]\\
+&+E_{el}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)=\mathrm{i}\hbar\frac{\partial A_k}{\partial t}\exp(\frac{\mathrm{i}}{\hbar}S_k)-\frac{\partial S_k}{\partial t}A_k\exp(\frac{\mathrm{i}}{\hbar}S_k)\\
+\intertext{the exponential can be cancelled out on each side}
+&\sum_I\frac{-\hbar^2}{2M_I}\left[ A_k\Delta_IS_k\frac{-1}{\hbar^2}+2\nabla_IS_k\frac{\mathrm{i}}{\hbar}\cdot(\nabla_IA_k)+\Delta_IA_k\right]+E_{el}A_k=\mathrm{i}\hbar\frac{\partial A_k}{\partial t}-\frac{\partial S_k}{\partial t}A_k\\
+\intertext{partition the sum to single terms and cancel factors}
+&\sum_I\frac{1}{2M_I}A_k\Delta_IS_k+\sum_I\frac{-\mathrm{i}\hbar}{M_I}(\nabla_IS_k)\cdot(\nabla_IA_k)+\sum_I\frac{-\hbar^2}{2M_I}\Delta_IA_k+E_{el}A_k\\
+&=\mathrm{i}\hbar\frac{\partial A_k}{\partial t}-\frac{\partial S_k}{\partial t}A_k\\
+\intertext{a coefficient comparison yields the final equations}
+&\implies\frac{\partial S_k}{\partial t} + \sum_I\frac{1}{2M_I}(\nabla_IS_k)^2+E_{el}=\hbar^2\sum_I\frac{1}{2M_I}\frac{\nabla_I^2A_k}{A_k} \\
+&\implies\frac{\partial A_k}{\partial t}+\sum_I\frac{1}{M_I}(\nabla_IA_k)(\nabla_IS_k)+\sum_I\frac{1}{2M_I}A_k(\nabla_I^2S_k)=0
+\end{align*}
+whereas the equation for the amplitude multiplied by $2A_k$ is also known as a first continuity equation
+\begin{equation}
+\frac{\partial A_k^2}{\partial t}+\sum_I\frac{1}{M_I}\nabla_I(A_k^2\nabla_IS_k)=0
+\end{equation}
+and with the definition of a current density $\mathbf{J}_{k,I}=A_k^2(\nabla_IS_k)/M_I$ and using the probability density function $\rho_k=|\chi_k|^2 \equiv A_k^2$ a second continuity equation
+\begin{equation}
+\frac{\partial \rho_k}{\partial t}+\sum_I\nabla_I\mathbf{J}_{k,I}=0.
+\end{equation}
+Note that these are independent of $\hbar$. More importantly for the classical limit $\hbar \to 0$ the equation for $S_k$ reduces to:
+\begin{align*}
+\frac{\partial S_k}{\partial t} + \sum_I\frac{1}{2M_I}(\nabla_IS_k)^2 + E_{el} = 0
+\intertext{which is equivalent to the Hamilton-Jacobian formulation of classical mechanics}
+\frac{\partial S_k}{\partial t} + H_k(\{ \mathbf{R}_I \},\{ \nabla_IS_k \}) = 0
+\intertext{with the classical Hamilton function}
+H_k(\{ \mathbf{R}_I \},\{\mathbf{P}_I  \}) =T(\{\mathbf{P}_I\})+V_k(\{ \mathbf{R}_I \})
+\intertext{for a given conserved energy $d E_{k}^{tot} /dt =0$ and hence}
+\frac{\partial S_k}{\partial t} =-(T+E_{el})=-E_k^{tot}=const.
+\intertext{defined in terms of generalized coordinates $\{ \mathbf{R}_I \}$ and their conjugate canonical momenta $\{ \mathbf{P}_I \}$. With the help of the connecting transformation}
+\{ \mathbf{P}_I \}\equiv \nabla_IS_k \left[=M_I\frac{\mathbf{J}_{k,I}}{\rho_k} \right]
+\intertext{the Newtonian equations of motion can be read off}
+M_I\ddot{\mathbf{R}}_I = -\nabla_IV_k^{BO}(\{ \mathbf{R}_I\})
+\end{align*}
+separately for each decoupled electronic state $k$. Thus, the nuclei move according to classical mechanics in an effective potential, $V_k^{BO}$ , which is given by the Born–Oppenheimer potential energy surface $E_k$ obtained by solving simultaneously the time-independent electronic Schrödinger equation for the $k$th state, \ref{eq:tiese}, at the given nuclear configuration $\{\mathbf{R}_I (t)\}$. Note that this result is based on ansatz \ref{ansatz:bo} and \ref{ansatz:pointparticle} but can be obtained directly when using the Lagrangian in \ref{lagrangian:BO}. The significant difference is that the Lagrangian was an educated guess whereas here it is physically motivated and derived.
+
+Vice versa one can insert the point particle ansatz \ref{ansatz:pointparticle} into the TDSCF framework given in equations \ref{eq:tdscfnuclear} and \ref{eq:tdscfelectronic}. In this derivation for simplicity only one term for the $\Phi$ product was used.
+\begin{align*}
+&\mathrm{i}\hbar \frac{\partial \chi}{\partial t} = \hat{T}_n\chi+  \Bra{\Phi} \hat{H}_{el}\Ket{\Phi} \chi\\
+&\mathrm{i}\hbar \frac{\partial\Phi}{\partial t}= \hat{T}_e \Phi + \Bra{\chi} \hat{V}_{n-e} \Ket{\chi} \Phi\\
+\intertext{inserting ansatz \ref{ansatz:pointparticle}}
+&\mathrm{i}\hbar \frac{\partial A\exp(\frac{\mathrm{i}}{\hbar}S)}{\partial t} = \hat{T}_nA\exp(\frac{\mathrm{i}}{\hbar}S)+  \Bra{\Phi} \hat{H}_{el}\Ket{\Phi} A\exp(\frac{\mathrm{i}}{\hbar}S)\\
+\intertext{inserting definitions of kinetic operator \ref{def:nuclearkinetic}}
+&\mathrm{i}\hbar \frac{\partial A\exp(\frac{\mathrm{i}}{\hbar}S)}{\partial t} = \sum_I \frac{-\hbar^2}{2M_I}\nabla_I^2 A\exp(\frac{\mathrm{i}}{\hbar}S)+  \Bra{\Phi} \hat{H}_{el}\Ket{\Phi} A\exp(\frac{\mathrm{i}}{\hbar}S)\\
+\intertext{the same reformulation as before can be used}
+&\mathrm{i}\hbar\frac{\partial A}{\partial t}-\frac{\partial S}{\partial t}A=\sum_I\frac{1}{2M_I}A\Delta_IS+\sum_I\frac{-\mathrm{i}\hbar}{M_I}(\nabla_IS)\cdot(\nabla_IA)\\
+&+\sum_I\frac{-\hbar^2}{2M_I}\Delta_IA+\Bra{\Phi} \hat{H}_{el}\Ket{\Phi} A\\
+&\implies\frac{\partial S}{\partial t} + \sum_I\frac{1}{2M_I}(\nabla_IS)^2+\Bra{\Phi} \hat{H}_{el}\Ket{\Phi}=\hbar^2\sum_I\frac{1}{2M_I}\frac{\nabla_I^2A}{A}\\
+&\implies\frac{\partial A}{\partial t}+\sum_I\frac{1}{M_I}(\nabla_IA)(\nabla_IS)+\sum_I\frac{1}{2M_I}A(\nabla_I^2S)=0
+\end{align*}
+Note that since the wavefunction is no longer divided into el
 
 
+%TODO
+HERE IS THE CATCH
 
-
-
-
-\subsubsection{time independent Schr\"odinger equation and BO-approximation}
-\subsection{time dependent Schr\"odinger equation with SCF ansatz}
 
 Iterative solution takes computational a lot of effort -> use information of the previous timestep to start optimization
 
@@ -373,6 +458,7 @@ Kohn-Sham orbitals are not unique
 problem of Energy drift
 artifacts because of dynamic propagation of electronic orbitals
 how to handle boundary condition?
+
 
 
 \bibliographystyle{plain}
