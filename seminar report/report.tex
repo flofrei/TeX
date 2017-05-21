@@ -440,15 +440,38 @@ Here, the nuclei move according to classical mechanics in an effective potential
 This means that feedback between the classical and quantum degrees of freedom is incorporated in both directions, although in a mean-field sense only. This approach is often called "Ehrenfest molecular dynamics" in honor of Paul Ehrenfest who was the first to address the essential question of how Newtonian classical dynamics of point particles can be derived from Schr\"odiner's time-dependent wave equation \cite{ehrenfest1927bemerkung}.
 
 \subsection{Recovering BOMD from EhrenfestMD}
-This can be done by expanding the electronic wave function $\Phi$ again into a basis of electronic states:
+One can transform Ehrenfest molecular dynamics by introducing a again basis into the electronic wavefunction. This basis has to be of the following form:
 \begin{align*}
 \Phi(\{ \mathbf{r}_i\},\{ \mathbf{R}_I\};t ) = \sum_{l=0}^{\infty} c_l(t)\Phi_l(\{ \mathbf{r}_i\};\{ \mathbf{R}_I\})
 \end{align*}
-with complex time-dependent coefficients $\{ c_l(t)\}$
+with complex time-dependent coefficients $\{ c_l(t)\}$ which describe the time evolution of occupations of different states $l$. One possible choice for the basis functions is again the adiabatic basis obtained by solving the time-independent Schr\"odinger equation. Furthermore the electronic adiabatic basis is restricted to the ground state $\Psi_{el,0}$ at each instant of time. This should be a good approximation as long as the difference between $\Psi_{el,0}$ and $\Psi_{el,1}$ is larger than $k_bT$ roughly speaking. Then the potential can be written as:
+\begin{equation}
+V_e^{E} = \int_{}^{} \Psi_{el,0}^*\hat{H}_{el}\Psi_{el,0}d \mathbf{r} \equiv E_0(\{\mathbf{R}_I\})
+\end{equation}
+which is equivalent to $V_0^{BO}(\{\mathbf{R}_I\})$.
 
 \subsection{Recapitulation}
-\subsection{Further Possibilities}
-extended lagrangian bomd, fock dynamics,
+Until now it was shown a structural derivation of two different ways to derive equations for a molecular dynamics simulation. Both are valid under their underlying assumptions and one could reproduce Born-Oppenheimer from Ehrenfest as shown. Both methods in the end need an underlying potential and orbital functions. These are acquired through different methods depending on the Hamiltonian. A possible way is to use the well-known method developed by Hartree Fock and Slater. Alternatively one could also use the method further developed by Rothaan and Hall \cite{roothaan1951new}. A complete different framework much later developed is the density functional theory which could also be used for calculation. In this framework the well-known Kohn-Sham equations \cite{kohn1965self} could be used to calculate the orbital functions and energies. Indifferent from the chosen method there will be a bottleneck in the calculation because physically electrons and their orbital functions have no "brain", meaning the state of the current timestep is independent of the previous timestep. This leads to a repetitive calculation of electronic orbitals in each timestep which causes a computational bottleneck.
+
+\subsection{Introducing Artificiality}
+One could significantly decrease the computational cost when one uses the orbitals from the previous timestep. This could be done in the following way numerically:
+\begin{align*}
+\phi_{t+1,m} = \phi_{t,m} + \delta\phi_{m}\cdot \Delta t
+\intertext{as a consequence one also has a numerical velocity}
+\dot{\phi_{m}}\approx \frac{\phi_{t+1,m}-\phi_{t,m}}{\Delta t} 
+\end{align*}
+Now the electronic wavefunctions use the previous state with a small perturbation as a starting point for the next timestep. This allows for example faster convergence in the self-consistent field method to the next set of orbitals. However since the electronic orbitals also have a velocity they provide a contribution to the kinetic energy. This lead to a new set of molecular dynamics methods. One of these is Car-Parinello molecular dynamics \cite{car1985unified} which uses Kohn-Sham equations and a plane wave basis ansatz. Therefore the Lagrangian of Car-Parinello molecular dynamics can be written as:
+\begin{equation}
+\mathcal{L}^{CP} = \sum_i \mu_i \Braket{\dot{\phi_i}|\dot{\phi_i}} + \sum_I\frac{1}{2M_I}\dot{\mathbf{R}}_I - \mathcal{E}^{KS}(\{ \phi_i\},\{ \mathbf{R}_I\})
+\end{equation}
+for example used in \cite{tangney2002well} where we used the Kohn-Sham energy functional $\mathcal{E}$ and a fictitious mass $\mu_i$. The mass has the role of keeping the electronic kinetic energy strictly small such that it is negligible in comparison to the nuclear kinetic energy. To keep the orbitals orthogonal the Lagrange multipliers can be used. Here one has to be careful because like in \cite{tangney2006theory} described there could be lost more due to artifacts created through such an approach than gained in computational speed. This idea could also be used in the Born-Oppenheimer framework for example shown in \cite{niklasson2009extended}.
+
+\subsection{Further Possibilities and Problems}
+
+
+Choice of basis? Atomic basis(physical), Gaussian type basis, Plane wave basis with pseudo potentials(see CP)
+Proposal is to extrapolate Fock matrix in time instead.
+
 \subsection{Conclusion}
 
 \newpage
@@ -460,46 +483,12 @@ extended lagrangian bomd, fock dynamics,
 \end{landscape}
 \newpage
 
-cites...
-\nocite{car1985unified} %car parinello MD
-\nocite{makri1987time} %tdscf
 \nocite{marx2009ab} %wichtigstes BUCH
-\nocite{niklasson2009extended} %extended lagrangian bomd
 \nocite{payne1992iterative} %iterative minimization techniques for ab inito
 \nocite{pulay2004fock} %fock matrix dynamics
-\nocite{tangney2002well} %car parinello vs bo surface
-\nocite{tangney2006theory} %theory car parinello fictous mass
-
-Iterative solution takes computational a lot of effort -> use information of the previous timestep to start optimization
-
--> introduce time fictitious dependence on previous timestep for good inital guess
-
-unphysical since electron have no memory
-
-
-Choice of basis? Atomic basis(physical), Gaussian type basis, Plane wave basis with pseudo potentials(see CP)
+\nocite{fischer1987general} %fock method
 
 It is of importance to note that depending on the choice of view on orbitals different thinking applies. When the person looking for a method to simulate a system also wants that the properties the algorithm uses have physical/chemical meaning then one should use Born-Oppenheimer molecular dynamics with a basis representation with atomic orbitals e.g. Gaussian type orbitals. Is the person also interested in methods with time reversal also more attention have to be paid to unphysical variables since electronic states don't have a "memory". The basic approach is that, in every time step look for the minimum on the electronic surface potential for the current nuclei configuration, and use the gradient to calculate the force used to move the nuclei to the next position. Another approach is to allow oscillation in the electronic degrees of freedom like in the Car-Parinello molecular dynamics 
-
-
-
-
-
-
-note:(Fock matrix)
-Car Parinello used local DFT: atomic cores -> pseudo potentials
-							  valence electrons -> plane wave basis set
-which allowed to use FFT for evaluating Coulomb operator(most expensive part). Replacing the exact forces with Hellman force.  Propagation of wavefunction rather than optimizing in each step (BOMD). CPMD to sensible on choosing correct fictitious mass which leads to artifacts. Proposal is to extrapolate Fock matrix in time instead.
-
-
-
-
-Kohn-Sham equations and fictious potentail
-Kohn-Sham orbitals are not unique
-problem of Energy drift
-artifacts because of dynamic propagation of electronic orbitals
-how to handle boundary condition?
-
 
 \newpage
 \bibliographystyle{plain}
