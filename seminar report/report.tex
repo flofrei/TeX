@@ -28,7 +28,8 @@
 \newpage
 
 \section{Derivation of ab-initio molecular dynamics}
-To understand where the computational bottleneck is coming from and why it is there one should start from the very beginning namely the Lagrangian and Hamilton formalism. These are essential that one does not forget the equivalence of these two views of the world. For the advanced reader it is recommended to skip these sections and start with derivation of classical molecular dynamics section \ref{sec:cmd}.
+This work is mostly based on the book of Domminik Marx and J\"urg Hutter \cite{marx2009ab} which is based on their published article in 2000, in which they did significant work in summarizing and structuring the molecular dynamics field with a categorical derivation and complete references on works done previously in this field. To understand where the computational bottleneck is coming from and why it is there one requires the tools to derive the equation which leads to it. Thus one should start namely with the Lagrangian and Hamilton formalism. These are essential that one does not forget the equivalence of these two views. 
+%For the advanced reader it is recommended to skip these sections and start with derivation of classical molecular dynamics section \ref{sec:cmd}.
 \subsection{Lagrangian of a system}
 The Lagrangian is defined by
 \begin{align}
@@ -65,8 +66,8 @@ is the momenta expressed with generalized coordinates $\mathbf{q}_i$ and velocit
 \implies \mathcal{H}^{BO}(\mathbf{q}_j,\mathbf{p}_j,t)&=\frac{1}{2} \sum_{I} M_I \dot{\mathbf{R}}_I^2+ \mathcal{V}(\{\mathbf{R}_I\},D)\\
 \iff \mathcal{H} &= \mathcal{T} + \mathcal{V}
 \end{align*}
-And additionally with looking at the total differential of the Lagrangian one can easily derive Hamiltonian's equations of motion.
-%TODO
+One look at the total differential of the Lagrangian and Hamiltonian lead to the coefficient comparison and consequently to the Hamiltonian equation of motion in absolute coordinates.
+
 \begin{align*}
 d\mathcal{L} &= \sum_{i} \left(  \frac{\partial \mathcal{L}}{\partial \mathbf{q}_i}d\mathbf{q}_i + \frac{\partial \mathcal{L}}{\partial \dot{\mathbf{q}}_i}d\dot{\mathbf{q}}_i  \right) + \frac{\partial \mathcal{L}}{\partial t} dt\\
 d\mathcal{L} &= \sum_{i} \left(  \frac{\partial \mathcal{L}}{\partial \mathbf{q}_i}d\mathbf{q}_i + \mathbf{p}_id\dot{\mathbf{q}}_i  \right) + \frac{\partial \mathcal{L}}{\partial t} dt\\
@@ -143,7 +144,7 @@ with matrix $\mathcal{M}$, eigenvector $\mathbf{v}$ and eigenvalue $\lambda$. He
 
 \section{Solving Schr\"odinger equation with two different Ansatz}
 \subsection{Ansatz for TDSCF}
-For solving the time-dependent Schr\"odinger equation \ref{eq:tdse} one has to use an ansatz. This ansatz is assumed to be true and in most cases an educated guess is made. The simplest case is to assume that electronic and nuclear part are separable in product form in the following way:
+For solving the time-dependent Schr\"odinger equation \ref{eq:tdse} one has to use an ansatz. The simplest case is to assume that the total wavefunction is separable in an electronic and nuclear part in the following way:
 \begin{equation}
 \Psi( \{ \mathbf{r}_i \}, \{ \mathbf{R}_I \};t) \approx \chi( \{ \mathbf{R}_I \};t) \prod_{k} \Phi_k( \{ \mathbf{r}_i \} ;t)
 \label{ansatz:tdscf}
@@ -253,37 +254,37 @@ Now lets return to a case with more than one electronic function. The equation t
 \intertext{With analogous reformulation one can derive:}
 &\chi \Phi_1 \Phi_2 \exp\left( \frac{\mathrm{i}}{\hbar} 2 \cdot \int_{t0}^{t}dt' \Bra{\chi\Phi_1\Phi_2}\hat{H}_{el}\Ket{\chi\Phi_1\Phi_2} \right)
 \end{align*}
-Now one can derive easily the formulas for the whole product:
+Now one can write easily generalized formulas for the whole product:
 \begin{align}
 &\mathrm{i}\hbar \frac{\partial \chi}{\partial t} = \hat{T}_n\chi+  \Bra{\Phi_i} \hat{H}_{el}\Ket{\Phi_i} \chi, \quad  i=1...N \label{eq:tdscfnuclear}\\
 &\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ket{\Phi_{k'}} \Phi_k + \Bra{\chi\Phi_{k'}} \hat{V}_{n-e} \Ket{\chi\Phi_{k'}} \Phi_k, \quad k,k'=1...N \wedge k'\neq k\label{eq:tdscfelectronic}\\
 &\Psi \approx \chi \prod_{k}\Phi_k \cdot \exp\left( \frac{\mathrm{i}}{\hbar} N \cdot \int_{t0}^{t}dt' \Bra{\chi\Phi_i}\hat{H}_{el}\Ket{\chi\Phi_i} \right),\quad  i=1...N \label{ansatz:tdscfwithphase}
 \end{align}
-Here one can easily see the interdependence of electronic and nuclear coordinates for the SCF method. In each timestep the orbital functions have to iteratively optimized until all equations are fulfilled. This is the computational bottleneck for choosing this method. Now let us have a look at an alternative method which will be derived from the Born-Oppenheimer approximation.
-%TODO
+Notable is the interdependence of electronic and nuclear coordinates for the self-consistent field method. The equation of the nuclear part is depending on an average over the electronic Hamiltonian and the electronic part also takes an average over the nuclear part. Here iterative methods have to be used to get a solution for both equations. As an alternative to a complete iterative scheme Born-Oppenheimer provides a different approach.
 
 \subsection{Ansatz for BOMD}
-As already briefly mentioned the big difference for this approximation is that we chose the electronic part time independent. Therefore one has to find a solution for the eigenvalue problem \ref{eigenvalueproblem}. This is a valid view because the motion of the nuclei dominate all motion of electrons because of significant mass differences. Meaning one has to integrate the nuclear motion on a energy surface which minimizes the electronic energy. Therefore one can introduce the electronic time independent Schr\"odinger equation where the nuclei are stationary parameters.
+In the Born-Oppenheimer framework first one does only look at the time independent Schr\"odinger equation since the mass of the nuclei is massive larger than the mass of electrons and therefore the motion of the electron can be viewed as instantaneous in comparison to the nuclei. Here one assumes that the total wavefunction can be expanded into its eigenstates since the time independent Schr\"odinger equation is similar to an eigenvalue problem \ref{eigenvalueproblem} where for each state $k$ has to fulfill it.
 \begin{equation}
-\hat{H}(\{\mathbf{r}_i\},\{\mathbf{R}_I\}) \Psi(\{\mathbf{r}_i\},\{\mathbf{R}_I\}) = E\Psi(\{\mathbf{r}_i\},\{\mathbf{R}_I\})
-\label{eq:tise}
+\hat{H}(\{\mathbf{r}_i\},\{\mathbf{R}_I\}) \Psi_k(\{\mathbf{r}_i\},\{\mathbf{R}_I\}) = E_k\Psi_k(\{\mathbf{r}_i\},\{\mathbf{R}_I\})\label{eq:tise}
 \end{equation}
-Using the eigenfunctions $\Psi_k$ with all possible configurations as a basis for the total wavefunction.
-Introducing a complete basis for $\Psi_K$ which uniquely describe the wavefunctions:
-\begin{align}
-&\Psi( \{ \mathbf{r}_i \}, \{ \mathbf{R}_I \};t) = \sum_{m=0}^{\infty} \chi_{k,m}( \{ \mathbf{R}_I \};t)\Psi_{el,m}( \{ \mathbf{r}_i \},\{ \mathbf{R}_I \})\label{basis:exact}
-\intertext{Whereas each basis function has to fulfill the electronic Schr\"odinger equation.}
-&\hat{H}_{el}\Psi_{el,m}^{\{\mathbf{R}_I\}}(\{\mathbf{r}_i\}) = E_{el,m} \Psi_{el,m}^{\{\mathbf{R}_I\}}(\{\mathbf{r}_i\})\label{eq:tiese}
-\end{align}
-%TODO
-In the Born-Oppenheimer approximation only one leading term will be used:
+In Born-Oppenheimer framework one assumes that each eigenstate $\Psi_k$ can be completely represented with electronic wavefunctions $\Psi_{el,m}$ as a basis.
 \begin{equation}
-\Psi(\{\mathbf{r}_i\},\{\mathbf{R}_I\}) \approx \chi_{k,m}(\{ \mathbf{R}_I\})\cdot \Psi_{el,m}^{\{ \mathbf{R}_I\}}(\{ \mathbf{r}_i\})
-\label{ansatz:bo}
+\Psi_k( \{ \mathbf{r}_i \}, \{ \mathbf{R}_I \};t) = \sum_{m=0}^{\infty} \chi_{k,m}( \{ \mathbf{R}_I \};t)\Psi_{el,m}( \{ \mathbf{r}_i \},\{ \mathbf{R}_I \})\label{basis:exact}
 \end{equation}
+To represent exactly the whole wavefunction for the $k$th state all electronical states $\{\Psi_{el,m}\}$ are needed. 
+The Born-Oppenheimer approximation in essence simplifies $\Psi_k$ as a single product of a nuclear and electronic wave function
+\begin{equation}
+\Psi_k( \{ \mathbf{r}_i \}, \{ \mathbf{R}_I \}) \to \Psi_{k,m}( \{ \mathbf{r}_i \}, \{ \mathbf{R}_I \})\approx \chi_{k,m}(\{ \mathbf{R}_I \})\cdot\Psi_{el,m}^{\mathbf{R}_I}(\{ \mathbf{r}_i \})\label{ansatz:bo}
+\end{equation}
+where the electronic wavefunctions solves the time independent electronic Schr\"odinger equation:
+\begin{equation}
+\hat{H}_{el}\Psi_{el,m}^{\{\mathbf{R}_I\}}(\{\mathbf{r}_i\}) = E_{el,m} \Psi_{el,m}^{\{\mathbf{R}_I\}}(\{\mathbf{r}_i\})\label{eq:tiese}
+\end{equation}
+
 Inserting ansatz \ref{ansatz:bo} into time independent Schr\"odinger equation \ref{eq:tise} gives:
 \begin{align*}
 \hat{H}(\chi_{k,m}\cdot \Psi_{el,m}) &= E_k\chi_{k,m}\Psi_{el,m}\\
+\intertext{using the definition \ref{def:electronichamilton}}
 \hat{T}_n\chi_{k,m}\Psi_{el,m}+\hat{H}_{el}\chi_{k,m}\Psi_{el,m} &= E_k\chi_{k,m}\Psi_{el,m}
 \intertext{$\hat{H}_{el}$ has no influence on $\chi_{k,m}$ and vice versa $\hat{T}_n$ has no influence on $\Psi_{el,m}$. Therefore a projection on to $\Psi_{el,m}$ yields:}
 \Bra{\Psi_{el,m}} \hat{T}_n\chi_{k,m}\Psi_{el,m}+\Bra{\Psi_{el,m}}\hat{H}_{el}\chi_{k,m}\Psi_{el,m} &= \Bra{\Psi_{el,m}}E_k\chi_{k,m}\Psi_{el,m}\\
@@ -294,7 +295,7 @@ Where $\Braket{\Psi_{el,m}|\Psi_{el,m}}=\delta_{mm}=1$ and $\Bra{\Psi_{el,m}}\ha
 \left[ \hat{T}_n+E_{el,m}(\{\mathbf{R}_I\})\right]\chi_{k,m}=E_k\chi_{k,m}
 \label{eq:nse}
 \end{equation}
-The structure of equation \ref{eq:nse} shows that this is again an eigenvalue problem but here for the nuclear orbital functions. Meaning that to solve this equation one has to first calculate the electronic energy for the given nuclear configuration $\{\mathbf{R}_I\}$ which is given by solving \ref{eq:tiese}. For completeness the general case where the exact representation \ref{basis:exact} is used will be derived next. Inserting \ref{basis:exact} into \ref{eq:tise} yields:
+The structure of equation \ref{eq:nse} shows that this is again an eigenvalue problem but here for the nuclear orbital functions. Meaning that to solve this equation one has to first calculate the electronic energy for the given nuclear configuration $\{\mathbf{R}_I\}$ which is given by solving \ref{eq:tiese}. For completeness the general case where the exact representation \ref{basis:exact} is used will be shown next. Inserting \ref{basis:exact} into \ref{eq:tise} yields:
 \begin{align*}
 \hat{H} \sum_{m}\chi_{k,m}\Psi_{el,m}&=E_k\sum_{m}\chi_{k,m}\Psi_{el,m}
 \intertext{Using again the definition \ref{def:electronichamilton}}
@@ -434,7 +435,7 @@ Here, the nuclei move according to classical mechanics in an effective potential
 \begin{align*}
 \int_{}^{} \chi^*(\{\mathbf{R}_I\};t) \mathbf{R}_I \chi(\{\mathbf{R}_I\};t)d\mathbf{R} \xrightarrow[]{\hbar \to 0} \mathbf{R}_I(t)
 \intertext{and therefore}
-\mathrm{i}\hbar \frac{\partial\Phi}{\partial t}= -\sum_i\frac{\hbar^2}{2m_e}\nabla_i \Phi + \hat{V}_{n-e}(\{\mathbf{r}_i\},\{\mathbf{R}_I(t)\})\Phi\\
+\mathrm{i}\hbar \frac{\partial\Phi}{\partial t}= -\sum_i\frac{\hbar^2}{2m_e}\nabla_i^2 \Phi + \hat{V}_{n-e}(\{\mathbf{r}_i\},\{\mathbf{R}_I(t)\})\Phi\\
 =\hat{H}_{el}(\{\mathbf{r}_i\},\{\mathbf{R}_I(t)\})\Phi(\{\mathbf{r}_i\},\{\mathbf{R}_I\};t)
 \end{align*}
 This means that feedback between the classical and quantum degrees of freedom is incorporated in both directions, although in a mean-field sense only. This approach is often called "Ehrenfest molecular dynamics" in honor of Paul Ehrenfest who was the first to address the essential question of how Newtonian classical dynamics of point particles can be derived from Schr\"odiner's time-dependent wave equation \cite{ehrenfest1927bemerkung}.
@@ -453,27 +454,24 @@ which is equivalent to $V_0^{BO}(\{\mathbf{R}_I\})$.
 \subsection{Recapitulation}
 Until now it was shown a structural derivation of two different ways to derive equations for a molecular dynamics simulation. Both are valid under their underlying assumptions and one could reproduce Born-Oppenheimer from Ehrenfest as shown. Both methods in the end need an underlying potential and orbital functions. These are acquired through different methods depending on the Hamiltonian. A possible way is to use the well-known method developed by Hartree Fock and Slater. Alternatively one could also use the method further developed by Rothaan and Hall \cite{roothaan1951new}. A complete different framework much later developed is the density functional theory which could also be used for calculation. In this framework the well-known Kohn-Sham equations \cite{kohn1965self} could be used to calculate the orbital functions and energies. Indifferent from the chosen method there will be a bottleneck in the calculation because physically electrons and their orbital functions have no "brain", meaning the state of the current timestep is independent of the previous timestep. This leads to a repetitive calculation of electronic orbitals in each timestep which causes a computational bottleneck.
 
-\subsection{Introducing Artificiality}
+\section{Introducing Artificiality}
 One could significantly decrease the computational cost when one uses the orbitals from the previous timestep. This could be done in the following way numerically:
 \begin{align*}
-\phi_{t+1,m} = \phi_{t,m} + \delta\phi_{m}\cdot \Delta t
-\intertext{as a consequence one also has a numerical velocity}
-\dot{\phi_{m}}\approx \frac{\phi_{t+1,m}-\phi_{t,m}}{\Delta t} 
+\phi_{t+1,m} &= \phi_{t,m} + \delta\phi_{m}
+\intertext{as a consequence one also has created a numerical velocity}
+\dot{\phi_{m}}&\approx \frac{\phi_{t+1,m}-\phi_{t,m}}{\Delta t} = \frac{\delta\phi_m}{\Delta t}
+\intertext{note that this a different contribution in comparison to the electronic kinetic energy used in solving the Schr\"odinger equation in the beginning.}
+\hat{T}_{e}\phi&=\sum_i\frac{-\hbar^2}{2m_e}\nabla_i^2\phi
 \end{align*}
-Now the electronic wavefunctions use the previous state with a small perturbation as a starting point for the next timestep. This allows for example faster convergence in the self-consistent field method to the next set of orbitals. However since the electronic orbitals also have a velocity they provide a contribution to the kinetic energy. This lead to a new set of molecular dynamics methods. One of these is Car-Parinello molecular dynamics \cite{car1985unified} which uses Kohn-Sham equations and a plane wave basis ansatz. Therefore the Lagrangian of Car-Parinello molecular dynamics can be written as:
+Now the electronic wavefunctions use the previous state with a small perturbation as a starting point for the next timestep. This means at the beginning the equations are solved exactly once so the starting point is the correct orbitals. This allows for example faster convergence in the self-consistent field method to the next set of orbitals for a new configuration $\{\mathbf{R}_I\}$. However since the electronic orbitals also have a numerical velocity they provide a artificial contribution to the kinetic energy. This leads to a possible extension of the already discussed molecular dynamics simulations. One famous thereof is Car-Parinello molecular dynamics \cite{car1985unified} which uses Kohn-Sham equations and a plane wave basis ansatz. We know the artificial velocity and thus can introduce it into the Lagrangian framework. Therefore the Lagrangian of Car-Parinello molecular dynamics mentioned in other articles, e.g. \cite{tangney2002well} \cite{hutter2012car}, takes the following form:
 \begin{equation}
 \mathcal{L}^{CP} = \sum_i \mu_i \Braket{\dot{\phi_i}|\dot{\phi_i}} + \sum_I\frac{1}{2M_I}\dot{\mathbf{R}}_I - \mathcal{E}^{KS}(\{ \phi_i\},\{ \mathbf{R}_I\})
 \end{equation}
-for example used in \cite{tangney2002well} where we used the Kohn-Sham energy functional $\mathcal{E}$ and a fictitious mass $\mu_i$. The mass has the role of keeping the electronic kinetic energy strictly small such that it is negligible in comparison to the nuclear kinetic energy. To keep the orbitals orthogonal the Lagrange multipliers can be used. Here one has to be careful because like in \cite{tangney2006theory} described there could be lost more due to artifacts created through such an approach than gained in computational speed. This idea could also be used in the Born-Oppenheimer framework for example shown in \cite{niklasson2009extended}.
+where $\mathcal{E}$ is the Kohn-Sham energy functional and $\mu_i$ the fictitious mass. The mass has the role of keeping the numerical kinetic energy strictly small such that it is negligible in comparison to the nuclear kinetic energy. It is of no surprise that this idea produced a lot of controversy. The reason thereof lies in the fact that one left the pure physical motivated world. For example when only doing Born-Oppenheimer molecular dynamics the energy differences calculated through such an approach can be matched with physical data from nano-spectroscopy or other types of measurements and therefore the simulation has physical meaning. This is no longer guaranteed in Car-Parinello molecular dynamics because non existing energy was introduced. One can only extract meaning under the assumption that $\mu$ is well chosen in a sense that the inaccuracy vanishes which then leads to the correct energy differences.
+Furthermore to keep the orbitals orthogonal in time the Lagrange multipliers are used in each timestep which increases the number of computation additionally but it is small in comparison from a full self-consistent field calculation. Furthermore one has to be careful because like in \cite{tangney2006theory} described there could be lost more due to artifacts created through such an approach than gained in computational speed. The main point is that one introduces new degrees of freedom, $\mu_i$ included, which increases the complexity of the problem but as a trade-off reduces computational time. The question how to choose $\mu_i$ correctly is dependent on the problem itself, meaning it could differ depending on the type of atoms and molecules one wants to simulate. The idea of orbital perturbation can also be introduced into the Born-Oppenheimer framework seen as in \cite{niklasson2009extended}.
 
-\subsection{Further Possibilities and Problems}
-
-
-Choice of basis? Atomic basis(physical), Gaussian type basis, Plane wave basis with pseudo potentials(see CP)
-Proposal is to extrapolate Fock matrix in time instead.
-
-\subsection{Conclusion}
-
+\section{Complete Picture}
+%As a summary and overview a complete picture is presented.
 \newpage
 \begin{landscape}
 \begin{figure}
@@ -483,12 +481,13 @@ Proposal is to extrapolate Fock matrix in time instead.
 \end{landscape}
 \newpage
 
+\section{Conclusion}
+As one can see the development of new molecular dynamic techniques never ended since they still come up with new ideas and through new computers with better performance more methods get feasible. For example in \cite{pulay2004fock} instead of propagating orbitals they propagate the Fock matrix directly. One should not forget that in all these methods there is an underlying choice of basis for orbitals. There are Gauss type orbitals(GTO), atomic type orbitals(ATO) or one could use a plane wave basis to name just a few. This choice not only influences the speed of the computation but also which properties can be extracted from the simulation. Further depending on the application different methods are preferred. For example simulating a solid system a different method is chosen in comparison to simulate a fluid or gas. In the end no molecular dynamics program can be perfect thus in different fields different choices and experiences are made. In conclusion Car-Parinello molecular dynamics is a viable option when the underlying system does not change significantly under the influence of an artificial kinetic energy.
+
 \nocite{marx2009ab} %wichtigstes BUCH
 \nocite{payne1992iterative} %iterative minimization techniques for ab inito
 \nocite{pulay2004fock} %fock matrix dynamics
 \nocite{fischer1987general} %fock method
-
-It is of importance to note that depending on the choice of view on orbitals different thinking applies. When the person looking for a method to simulate a system also wants that the properties the algorithm uses have physical/chemical meaning then one should use Born-Oppenheimer molecular dynamics with a basis representation with atomic orbitals e.g. Gaussian type orbitals. Is the person also interested in methods with time reversal also more attention have to be paid to unphysical variables since electronic states don't have a "memory". The basic approach is that, in every time step look for the minimum on the electronic surface potential for the current nuclei configuration, and use the gradient to calculate the force used to move the nuclei to the next position. Another approach is to allow oscillation in the electronic degrees of freedom like in the Car-Parinello molecular dynamics 
 
 \newpage
 \bibliographystyle{plain}
