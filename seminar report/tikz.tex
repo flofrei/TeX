@@ -38,9 +38,16 @@ $\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ke
     $\frac{\partial A}{\partial t}+\sum_I\frac{1}{M_I}(\nabla_IA)(\nabla_IS)+\sum_I\frac{1}{2M_I}A(\nabla_I^2S)=0$
     \end{tabular} };
     
-    \node[op,below=of scfsinglepp] (ehrenfestmd){$M_I\ddot{\mathbf{R}}_I=-\nabla_IV_e^{E}(\mathbf{R}_I(t))$};
+    \node[op,below=of scfsinglepp] (ehrenfestmd){\small \begin{tabular}{l}
+    $M_I\ddot{\mathbf{R}}_I=-\nabla_IV_e^{E}(\mathbf{R}_I(t))$\\
+    $\mathrm{i}\hbar\frac{\partial \Phi}{\partial t}=\hat{H}_{el}(\{\mathbf{r}_i\},\{\mathbf{R}_I(t)\})\Phi(\{\mathbf{r}_i\},\{\mathbf{R}_I(t)\};t)$
+    \end{tabular}
+    
+    };
+    
+    %\node[op,below=of ehrenfestmd] (modifelect)($\mathrm{i}\hbar\frac{\partial \Phi}{\partial t}=$);
      
-     %left side		
+     %right side		
      \node[op,right=of tdse,yshift=-0.8cm] (eigenfunc) {\small \begin{tabular}{l}
      $\hat{H}_{el}\Psi_{el,m}^{\{\mathbf{R}_I\}}=E_{el,m}\Psi_{el,m}^{\{\mathbf{R}_I\}}$\\
      $\left[-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2+E_{el}(\{\mathbf{R}_I\})\right]\chi_m+\sum_p\hat{C}_{mp}\chi_p=\mathrm{i}\hbar\frac{\partial \chi_m}{\partial t}$
@@ -82,6 +89,7 @@ $\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ke
     \draw[arrw] (tdse) -- node[xshift=-4.2cm,yshift=0.3cm] {$\Psi \approx \chi \prod_k \Phi_k \exp(\frac{\mathrm{i}}{\hbar}\int_{t0}^{t}dt'...)$} ++(-1.5,0) -| (scfa);
     \draw[arrw] (scfa) -- node[xshift=0.1cm,yshift=-1.3cm]{single configuration ansatz} ++(6,0) -| ++(0,-1.5) |- (scfsingle);
     \draw[arrw] (scfsingle) -- node[xshift=0cm,yshift=0cm]{point particle approx. $\chi=A(\{\mathbf{R}_I\};t)\exp\frac{\mathrm{i}}{\hbar}S(\{\mathbf{R}_I\};t)$} (scfsinglepp);
+    \draw[arrw] (scfsinglepp) -- node[xshift=0,yshift=0]{classical limit $\hbar \to 0$} (ehrenfestmd);
 \end{tikzpicture}
   
 \end{document}
