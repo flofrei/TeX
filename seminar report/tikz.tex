@@ -45,12 +45,16 @@ $\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ke
     
     };
     
-    %\node[op,below=of ehrenfestmd] (modifelect)($\mathrm{i}\hbar\frac{\partial \Phi}{\partial t}=$);
-     
+    \node[op,below=of ehrenfestmd,yshift=-2cm] (carparinello){
+    \small \begin{tabular}{l}
+    $M_I\ddot{\mathbf{R}_I}=-\nabla_I\Bra{\Psi_0}\hat{H}_{el}^{KS}\Ket{\Psi_0}$\\
+    $\mu\ddot{\phi}_i(t)=-\hat{H}_{el}^{KS}\phi_i+\sum_j\Lambda_{ij}\phi_j$
+    \end{tabular} };
+
      %right side		
      \node[op,right=of tdse,yshift=-0.8cm] (eigenfunc) {\small \begin{tabular}{l}
      $\hat{H}_{el}\Psi_{el,m}^{\{\mathbf{R}_I\}}=E_{el,m}\Psi_{el,m}^{\{\mathbf{R}_I\}}$\\
-     $\left[-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2+E_{el}(\{\mathbf{R}_I\})\right]\chi_m+\sum_p\hat{C}_{mp}\chi_p=\mathrm{i}\hbar\frac{\partial \chi_m}{\partial t}$
+     $\left[-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2+E_{el}(\{\mathbf{R}_I\})\right]\chi_m+\sum_p\hat{C}_{mp}\chi_p=E_k\chi_m$
      \end{tabular} };
      
      \node[op, below =of eigenfunc,yshift=0cm] (adiabatic) {\small $\left[-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2+E_{el}(\{\mathbf{R}_I\})+\hat{C}_{mm}(\{\mathbf{R}_I\})\right]\chi_m=\mathrm{i}\hbar\frac{\partial \chi_m}{\partial t}$};
@@ -64,32 +68,47 @@ $\mathrm{i}\hbar \frac{\partial\Phi_k}{\partial t}= \Bra{\Phi_{k'}} \hat{T}_e\Ke
      
      \node[op,below=of boapprpp] (bomd) {$M_I\ddot{\mathbf{R}}_I=-\nabla_IV_m^{BO}(\mathbf{R}_I(t))$};
      
-     \node[op,below=of bomd,yshift=0.4cm] (hfhamilton){Hartree-Fock framework};
-     \node[op,below=of bomd,yshift=-0.6cm] (kshamilton){Kohn-Sham framework};
+     %\node[op,below=of bomd,yshift=0.4cm] (hfhamilton){Hartree-Fock framework};
+     %\node[op,below=of bomd,yshift=-0.6cm] (kshamilton){Kohn-Sham framework};
      
-     \node[dt,below=of kshamilton] (boextension) {
+     \node[dt,left=of bomd,xshift=0.4cm] (boextension) {
      \begin{tabular}{l}
-     time reversible extended Lagrangian\\
-     time steps with Fock matrix\\
+     -introducing artificiality\\
+     -use pseudopotentials\\
      $\vdots$
      \end{tabular} };
+     
+     \node[dt,below=of boextension] (framework) {
+     \begin{tabular}{l}
+     Hartree-Fock\\
+     Kohn-Sham\\
+     Rothaan-Hall\\
+     $\vdots$
+     \end{tabular} };
+     
      
     % edges    
     \draw[->,line width=0.1] (root) -- node[xshift=-0.45cm]{\small correspondence principle } (tdse);
     %right side
-    \draw[arrw] (tdse) -- node[xshift=1cm,yshift=0.3cm]{$\Psi=\sum_{m=0}^{\infty}\chi_m\Psi_{el,m}$} ++(6,0) -| (eigenfunc);
+    \draw[arrw] (tdse) -- node[xshift=1cm,yshift=0.3cm]{$\Psi_k=\sum_{m=0}^{\infty}\chi_{k,m}\Psi_{el,m}$} ++(6,0) -| (eigenfunc);
     \draw[arrw] (eigenfunc) -- node[xshift=4.4cm,yshift=-1.1cm]{adiabatic approximation $\hat{C}_{mm}=-\sum_I\frac{\mathrm{\hbar^2}}{2M_I}\Bra{\Psi_{el}}\nabla_I^2\Ket{\Psi_{el}}$} ++(-4.5,0) -| ++(0,-2.0) |- (adiabatic);
     \draw[arrw] (eigenfunc) -- node[xshift=3.3cm,yshift=-2.8cm]{Born-Oppenheimer approximation $\hat{C}_{mp}=0$} ++(-4.5,0) -| ++(0,-3.5) |- (boapprox);
     \draw[arrw] (boapprox) -- node[xshift=0.15cm]{point particle approx. $\chi_m=A_m(\{\mathbf{R}_I\};t)\exp\frac{\mathrm{i}}{\hbar}S_m(\{\mathbf{R}_I\};t)$} (boapprpp);
     \draw[arrw] (boapprpp) -- node[xshift=0.3cm]{classical limit $\hbar \to 0$} (bomd);
-    \draw[arrw] (bomd) -- node[xshift=-0.25cm,yshift=-0.6cm]{solving for electronic energy with} ++(3,0) -| ++(0,-1.20) |- (hfhamilton);
-    \draw[arrw] (bomd) -- node[xshift=0.70cm,yshift=-1.6cm]{or using} ++(3,0) -| ++(0,-2.17) |- (kshamilton);
-    \draw[arrw,red] (boextension) --node[xshift=-0.05cm,yshift=1.3cm,black]{possible extensions} ++(-3.6,0)-| ++(0,4.0) |- (bomd);
+    %\draw[arrw] (bomd) -- node[xshift=-0.25cm,yshift=-0.6cm]{solving for electronic energy with} ++(3,0) -| ++(0,-1.20) |- (hfhamilton);
+    %\draw[arrw] (bomd) -- node[xshift=0.70cm,yshift=-1.6cm]{or using} ++(3,0) -| ++(0,-2.17) |- (kshamilton);\
+    \draw[arrw] (bomd) -- ++(0,-2.5)|- (framework);
+    \draw[arrw,red] (boextension) -- (bomd);
     %left side
     \draw[arrw] (tdse) -- node[xshift=-4.2cm,yshift=0.3cm] {$\Psi \approx \chi \prod_k \Phi_k \exp(\frac{\mathrm{i}}{\hbar}\int_{t0}^{t}dt'...)$} ++(-1.5,0) -| (scfa);
     \draw[arrw] (scfa) -- node[xshift=0.1cm,yshift=-1.3cm]{single configuration ansatz} ++(6,0) -| ++(0,-1.5) |- (scfsingle);
     \draw[arrw] (scfsingle) -- node[xshift=0cm,yshift=0cm]{point particle approx. $\chi=A(\{\mathbf{R}_I\};t)\exp\frac{\mathrm{i}}{\hbar}S(\{\mathbf{R}_I\};t)$} (scfsinglepp);
-    \draw[arrw] (scfsinglepp) -- node[xshift=0,yshift=0]{classical limit $\hbar \to 0$} (ehrenfestmd);
+    \draw[arrw] (scfsinglepp) -- node[xshift=0.3cm,yshift=0]{classical limit $\hbar \to 0$} (ehrenfestmd);
+    \draw[arrw,red] (boextension) -- ++(-2.8,0) -| ++(0,1.5)|- (ehrenfestmd);
+    \draw[arrw] (ehrenfestmd) -- ++(0,-1)|- ++(4,0)-| ++(0,-3.5)|- (framework);
+    \draw[arrw] (ehrenfestmd) --node[xshift=0.35cm,yshift=0cm]{Car-Parinello} node[yshift=-0.5cm]{$\phi_{i,t+1}=\phi_{i,t}+\delta\phi$} (carparinello);
+    
+
 \end{tikzpicture}
   
 \end{document}
