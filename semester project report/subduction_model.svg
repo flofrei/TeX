@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="subduction_model.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.2837891"
+     inkscape:cx="345.43049"
+     inkscape:cy="712.45941"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer4"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:window-width="1853"
+     inkscape:window-height="1056"
+     inkscape:window-x="67"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       position="667.55516,900.45947"
+       orientation="0,1"
+       id="guide4800"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="692.48137,850.60705"
+       orientation="0,1"
+       id="guide4802"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="100,800.00002"
+       orientation="0,1"
+       id="guide4804"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="100,400.00001"
+       orientation="0,1"
+       id="guide4806"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="100,650.00001"
+       orientation="0,1"
+       id="guide4808"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="100.245,733.11043"
+       orientation="1,0"
+       id="guide4812"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="600,800.00002"
+       orientation="1,0"
+       id="guide4814"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="530,800.00002"
+       orientation="1,0"
+       id="guide4846"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="470.38039,763.40424"
+       orientation="1,0"
+       id="guide4850"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="530,650.00001"
+       orientation="0.70710678,0.70710678"
+       id="guide4852"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="470.38039,650.00001"
+       orientation="0.70710678,0.70710678"
+       id="guide4854"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="123.07318,754.79691"
+       orientation="1,0"
+       id="guide4874" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="BG"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="L1"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 99.999999,152.3622 0,500 500.000001,0 0,-500 z"
+       id="path4816"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="L2"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       style="display:inline;fill:#0000cf;fill-opacity:0.20125786;fill-rule:evenodd;stroke:none;stroke-width:0.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.62264153"
+       d="m 99.999999,151.90275 0,50.45945 500.000001,0 0,-50.45945 z"
+       id="path4820"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4828"
+       style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-50.925844,-129.79578)"><flowRegion
+         id="flowRegion4830"><rect
+           id="rect4832"
+           width="123.37846"
+           height="42.962143"
+           x="172.95016"
+           y="290.61035" /></flowRegion><flowPara
+         id="flowPara4836">water</flowPara></flowRoot>  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="L3"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       style="display:inline;fill:#0000cf;fill-opacity:0.41509435;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 100.745,202.3622 0,50 500,0 0,-50 z"
+       id="path4844"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:#0000cf;fill-opacity:0.41509435;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 379.99999,252.3622 530,402.36221 l -59.61961,0 -150.00001,-150.00001 59.61961,0"
+       id="path4856"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4860"
+       style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-88.817934,-248.6869)"><flowRegion
+         id="flowRegion4862"><rect
+           id="rect4864"
+           width="193.17815"
+           height="113.72585"
+           x="209.53598"
+           y="458.0278" /></flowRegion><flowPara
+         id="flowPara4868">lithosphere</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4910"
+       style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,796.31395,-10.210144)"
+       inkscape:transform-center-x="24.785848"
+       inkscape:transform-center-y="-23.020674"><flowRegion
+         id="flowRegion4912"><rect
+           id="rect4914"
+           width="268.73575"
+           height="80.231247"
+           x="-95.031189"
+           y="488.40662" /></flowRegion><flowPara
+         id="flowPara4918">slab</flowPara></flowRoot>  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="L4"
+     sodipodi:insensitive="true"
+     style="display:inline">
+    <path
+       style="display:inline;fill:#6a0020;fill-opacity:0.41509435;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 100.245,252.3622 220.13538,0 150.00001,150.00001 59.61961,0 -150.00001,-150.00001 220.00001,0 0,400 -499.755,0 z"
+       id="path4895"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4898"
+       style="font-style:normal;font-weight:normal;font-size:25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(250.0971,88.698362)"><flowRegion
+         id="flowRegion4900"><rect
+           id="rect4902"
+           width="313.91449"
+           height="118.81789"
+           x="-128.52579"
+           y="283.54431" /></flowRegion><flowPara
+         id="flowPara4904">asthenosphere</flowPara></flowRoot>  </g>
+</svg>
