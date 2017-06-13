@@ -192,12 +192,20 @@ The second parameter $p_2$ is the angle $\gamma$ of the slab shown in green. The
 \caption{model of this project}
 \end{figure}
 
+A significant difference to the previous model is that in the rest of the domain where $p_3$ or $p_4$ is not used the $\sigma_{yield}$ strength is made pressure dependent. The function has the following form:
+\begin{equation}
+\sigma_{yield}(P) = 3\cdot 10^6+0.6 \cdot P
+\end{equation}
+This corresponds better to our intuition since rock under high pressure in equilibrium is sturdy until it is broken when the pressure exceeds the material threshold. For this model only the free slip boundary condition was considered in the Navier-Stokes solver since it is a refinement of the model before. Whereas for the temperature equation thermal insulation was used on all borders. This implies that the energy of the system will fall slowly since numerical diffusion is present in such simulations with finite difference schemes. Now is everything defined to start a simulation. How the simulation is structured is explained in implementation section \ref{seq:impl}.  
 
 
 \section{Implementation}
 \label{seq:impl}
+The actual implementation in matlab is to long to show the complete code. Therefore the functionality will be explained with the following flow diagram:
 
-flow diagram
+\begin{figure}
+\includegraphics[scale=1.0]{tikz.pdf}
+\end{figure}
 
 \section{Results}
 \section{Conclusion}
