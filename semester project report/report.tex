@@ -201,13 +201,165 @@ This corresponds better to our intuition since rock under high pressure in equil
 
 \section{Implementation}
 \label{seq:impl}
-The actual implementation in matlab is to long to show the complete code. Therefore the functionality will be explained with the following flow diagram:
+The actual implementation in matlab is to long to show the complete code. Therefore the functionality will be explained with the following flow diagram figure \ref{fig:flow}. The black boxes signifies the stages in the algorithm and the blue text the effect respectively which variable is now available for use.
 
-\begin{figure}
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{tikz.pdf}
+\caption{flow diagram of the algorithm}
+\label{fig:flow}
 \end{figure}
 
+Noteworthy in this framework is that two whole solvers for partial differential equations are used. To briefly mention the functionality they are based on solving the system of equations composed out of finite difference schemes and boundary conditions with the matlab internal backslash operator. In the first solver the velocity fields $v_x$ and $v_y$ are unknown together with the pressure $P$. In the second only the temperature $T$ is unknown and therefore the number of equations is three times smaller than in the Navier-Stokes solver. For a more detailed explanation on the functionality the same book \cite{gerya2009introduction} is recommended.
+
 \section{Results}
+The whole simulation time depending on the stability is approximately around 100-200 million years. In this context only the first two million years are considered relevant for matching the profile of the data. The rest of the data is a lookout for the longterm tendency. Of interest here are three things. First is the velocity profile of the plume dependent on the parameters. Second is the rotation of the plume dependent on the parameters. The third and last is the effect of pushing material in front of the plume like a bulldozer which can correspond to the data.
+\subsection{Initial State}
+Shown in figure \ref{fig:initial} are the initial states of the simulations for the reference position. In each of the figures six properties are presented. The top leftmost picture represent different types of materials. The light and dark blue represent the same type but is used to demonstrate rotation. Therefore one can see four different kinds of materials. The top middle figure is the temperature and top right is the viscosity. At the bottom there is on the left the shear heating, in the middle the second strain invariant, and on the right the $v_y$ velocity including arrows for both $v_x$ and $v_y$ velocities. At the bottom annotated is the next time step $\Delta t$ and the current absolute time.
+
+\begin{figure}
+\begin{minipage}[c]{1.0\textwidth}
+\begin{minipage}[t]{0.5\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob1posrefslab20s2e7s2e7r20.jpg}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob1posrefslab30s2e7s2e7r20.jpg}
+\end{minipage}
+\end{minipage}
+\begin{minipage}[c]{1.0\textwidth}
+\begin{minipage}[t]{0.5\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob1posrefslab45s2e7s2e7r20.jpg}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob1posrefslab60s2e7s2e7r20.jpg}
+\end{minipage}
+\end{minipage}
+\caption{Initial reference state for 20, 30, 45 and 60 degree slope}
+\label{fig:initial}
+\end{figure}
+Please note that in the case of 20 degree slope not much space is left to play with the position. Additionally in case of 60 degree slope there is enough space but would not collide with the plate. Therefore such scenarios also will not be considered. In figure \ref{fig:initial} only the reference radius of 20 kilometers is depicted and variation in the strength properties will not change these plots only their behavior. 
+
+\subsection{Equal strength of plate and plume}
+The first scenario to look at is when the strength of the plate and the plume is equal. Intuitively what is expected to happen is that the plume will be deflected and will glide over plate with some small deformations. And indeed this was the case as shown in figure \ref{fig:2m20}, \ref{fig:2m30}, \ref{fig:2m45} and \ref{fig:2m60}. The longterm results are shown afterwards in the figures \ref{fig:100t20}, \ref{fig:100t30}, \ref{fig:100t45} and \ref{fig:150t60}. Here one can see problems in the 20deg and 30deg case since the plate was deformed like a snake which is not physical real behavior and therefore such scenarios are considered impossibilities since they occur because of the limited model space. The reason of deformation is that there is not enough space where material can escape to and therefore when the plume moves pressure is build up on the plate until it deforms. Interestingly there is also a special case when the plate and plume have not an reference strength of $2\cdot 10^7$ but only $1\cdot 10^7$ and the plume has a radius of $10$ kilometers then the plume can dig through the plate shown in figure \ref{fig:150t2010km}.
+
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob51posrefslab20s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{2 million years later in scenario 20 degrees}
+\label{fig:2m20}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob63posrefslab30s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{2 million years later in scenario 30 degrees}
+\label{fig:2m30}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob92posrefslab45s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{2 million years later in scenario 45 degrees}
+\label{fig:2m45}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob101posrefslab60s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{2 million years later in scenario 60 degrees}
+\label{fig:2m60}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob100posrefslab20s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{100 timesteps later in scenario 20 degrees}
+\label{fig:100t20}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob100posrefslab30s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{100 timesteps later in scenario 30 degrees}
+\label{fig:100t30}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob100posrefslab45s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{100 timesteps later in scenario 45 degrees}
+\label{fig:100t45}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblob150posrefslab60s2e7s2e7r20.jpg}
+\end{minipage}
+\caption{150 timesteps later in scenario 60 degrees}
+\label{fig:150t60}
+\end{figure}
+\begin{figure}
+\begin{minipage}[t]{1.0\textwidth}
+\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposref150slab20s1e7r10.jpg}
+\end{minipage}
+\caption{150 timesteps later in scenario 20 degrees with radius 10km}
+\label{fig:150t2010km}
+\end{figure}
+
+\subsection{Rotation of the plume}
+
+\begin{figure}
+	\begin{minipage}[t]{1.0\textwidth}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab20s2e7s2e7r20rotation.eps}
+		\end{minipage}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab30s2e7s2e7r20rotation.eps}
+		\end{minipage}
+	\end{minipage}
+	\begin{minipage}[t]{1.0\textwidth}	
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab45s2e7s2e7r20rotation.eps}
+		\end{minipage}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab60s2e7s2e7r20rotation.eps}
+		\end{minipage}
+	\end{minipage}
+	\caption{rotation of the plume with 20, 30, 45 and 60 degree angle of the slab}
+\end{figure}
+
+
+\subsection{Velocity of the plume}
+\begin{figure}
+	\begin{minipage}[t]{1.0\textwidth}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab20s2e7s2e7r20velocity.eps}
+		\end{minipage}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab30s2e7s2e7r20velocity.eps}
+		\end{minipage}
+	\end{minipage}
+	\begin{minipage}[t]{1.0\textwidth}	
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab45s2e7s2e7r20velocity.eps}
+		\end{minipage}
+		\begin{minipage}[t]{0.5\textwidth}
+		\includegraphics[width=1.0\textwidth]{./Snapshots/ref/Subductionzonewithblobposrefslab60s2e7s2e7r20velocity.eps}
+		\end{minipage}
+	\end{minipage}
+	\caption{velocity of the plume with 20, 30, 45 and 60 degree angle of the slab}
+\end{figure}
+
+\subsection{Bulldozer effect}
+
+\subsection{Late stage development}
+4 tendencies?
+
+
+1 unphysical behavior bending of slab (glitch of blob at top of domain)
+2 unphysical behavior temperature field on long timescales
+
+
+
 \section{Conclusion}
 
 \nocite{vargas2013tearing}
