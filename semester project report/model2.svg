@@ -170,9 +170,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.3634986"
-     inkscape:cx="220.89678"
-     inkscape:cy="797.35854"
+     inkscape:zoom="3.0843019"
+     inkscape:cx="234.19797"
+     inkscape:cy="818.72761"
      inkscape:document-units="px"
      inkscape:current-layer="layer5"
      showgrid="false"
@@ -323,19 +323,18 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="L4"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <circle
        style="opacity:1;fill:#242424;fill-opacity:0.55686275;stroke:none;stroke-width:0.80000001;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4194"
-       cx="316.25351"
+       cx="274.3674"
        cy="183.50475"
        r="25.63262" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot4196"
        style="font-style:normal;font-weight:normal;font-size:13.42232323px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(263.84664,-71.176867)"><flowRegion
+       transform="translate(221.96052,-71.176867)"><flowRegion
          id="flowRegion4198"><rect
            id="rect4200"
            width="52.77005"
@@ -347,8 +346,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="L5"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.79514754;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker9176);marker-end:url(#marker9290)"
        d="m 101.5095,149.97002 246.97639,0"
@@ -361,7 +359,7 @@
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.77254981;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend)"
-       d="m 316.25351,183.26623 0,-23.90375"
+       d="m 274.36739,183.26623 0,-23.90375"
        id="path4210"
        inkscape:connector-curvature="0" />
     <path
@@ -374,24 +372,24 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:13.41034698px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="167.94867"
-       y="-318.18909"
+       y="-276.30298"
        id="text9158"
        sodipodi:linespacing="125%"
        transform="matrix(0,1,-1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan9160"
          x="167.94867"
-         y="-318.18909">r</tspan></text>
+         y="-276.30298">r</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.34952307px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="304.97598"
+       x="263.08987"
        y="191.74823"
        id="text9162"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan9164"
-         x="304.97598"
+         x="263.08987"
          y="191.74823">(xp,yp)</tspan></text>
     <text
        xml:space="preserve"
