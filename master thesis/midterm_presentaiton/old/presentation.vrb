@@ -1,0 +1,6 @@
+\frametitle{Problems}
+\includegraphics[scale=0.5]{term_problem.pdf}
+\begin{itemize}
+\item 1-step options \pause \qquad -> instantaneous termination \pause
+\item no specialization
+\end{itemize}
