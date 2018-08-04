@@ -1,0 +1,135 @@
+\documentclass[a4paper, oneside]{discothesis}
+
+% use utf8 instead of latin1 when using LaTeX in windows
+\usepackage[latin1]{inputenc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT METADATA
+
+\thesistype{Master Thesis}
+\title{Adabtive Hierarchical Deep Reinforcement Learning}
+
+\author{Florian Frei}
+\email{flofrei@student.ethz.ch}
+\institute{Distributed Computing Group \\[2pt]
+Computer Engineering and Networks Laboratory \\[2pt]
+ETH Zürich}
+
+% You can put in your own logo here "\includegraphics{...}" or just comment the command
+\logo{}
+
+\supervisors{Gino Brunner, Oliver Richter\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
+
+% You can comment the following two commands if you don't need them
+% \keywords{Keywords go here.}
+% \categories{ACM categories go here.}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\frontmatter % do not remove this line
+\maketitle
+
+\cleardoublepage
+
+\begin{acknowledgements}
+	I thank Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\end{acknowledgements}
+
+
+\begin{abstract}
+	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\end{abstract}
+
+\tableofcontents
+
+\mainmatter % do not remove this line
+
+% Start writing here
+\chapter{Overview}
+$\bullet$ basic actor critic with td error on an 1D environment multithreaded \\
+$\bullet$ learning tensorflow with python \\
+$\bullet$ options paper \\
+$\bullet$ learning about gym for definition of own environment \\
+$\bullet$ implement option critic on multithreaded own environment \\
+
+fast and easy environment for testing the abstraction levels and depth
+
+
+
+\chapter{Motivation}
+The human capability to learn things is well-known but not well understood. Our brain is the most complex organ in our body and its size is the most significant difference to other species. It allows us to be self-aware and defines our individuality. Hence it is of significant importance to understand how it works for creating artificial intelligence. One aspect of it is the brains capability of high level abstraction. This could be temporal or objective in nature. Meaning that we learn automatically to tackle difficult tasks by dividing them into manageable subtasks. Additionally the function of dopamine allows us to handle delayed gratification. Meaning that for example no immediate reward is needed for pursuing a goal in life. The journey is a sufficient inner motivator regardless if we can reach the set goal. The high complexity of games in the world today such as league of legends, dota or starcraft require a more sophisticated abstraction of the strategy in order to win. Thus it is of importance to understand how abstraction can be achieved by using deep neural networks. 
+
+\chapter{Introduction}
+%Reinforcment Learning
+Reinforcement Learning is besides supervised and unsupervised learning one of the big three themes in machine learning. Without going into details this research field is mostly based on the theory of Markov and semi-Markov decision processes. For the interested reader on the history and formation of reinforcement learning we refer to the well-known survey of Kaelbling et al. (1996) \cite{kaelbling1996reinforcement} were everything can be found. In this work we concentrate on one aspect of reinforcement learning namely hierarchical reinforcement learning. We think a good start where most frameworks are well summarized is in Barto et al.(2003) \cite{barto2003recent}. 
+%Hierarchical reinforcement learning
+The idea of using a hierarchy in reinforcement learning to increase efficiency is well established and goes back to the nineties. To summarize there are three major frameworks which were developed namely, the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}. 
+
+
+
+The idea of options came from planning literature were macro actions were defined as a cumulation of simple actions put together and looked at as a single action
+
+Options can be looked at as an encapsulated policy
+The problem with micro actions generally is to tell when to apply a micro action and when to stop
+An options is composed of an initation set, a policy and a termination function
+
+asynchronous advange actor critic (A3C) 
+
+asynchronous advantage option critic architecture (A2OC)
+
+temporally abstracted actions
+
+
+tensorflow library \cite{abadi2016tensorflow}
+activity in HAM \cite{bai2017efficient}
+
+\chapter{Preliminaries}
+
+\chapter{Baseline}
+
+\chapter{Actor Critic}
+
+\chapter{Option Critic}
+\TODO{Not finished}
+
+\chapter{Experiments}
+
+
+
+
+\section{Thoughts}
+
+The option critic has a significant overhead in comparison to the actor critic implementation.
+The option critic architecture consists of 3 network types, namely an option network, a Q value model and a termination model.
+The actor critic model as the name implies consists only of an actor and a critic model hence two networks.
+The Q value model describe how a state is for the given options.
+The options describe action probabilities for a given state and can be understood as a strategy.
+The termination model characterized how likely a given option terminates given the state as input. 
+
+\begin{theorem}[First Theorem] \label{thm:first theorem}
+	This is our first theorem.
+\end{theorem}
+
+\begin{proof}
+	And this is the proof of the first theorem with a complicated formula and a reference to Theorem \ref{thm:first theorem}. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+	\begin{equation}
+		{\frac {\mathrm d}{\mathrm dx}}\arctan(\sin({x}^{2}))=-2 \cdot {\frac {\cos({x}^{2})x}{-2+\left (\cos({x}^{2})\right )^{2}}}
+	\end{equation}	
+\end{proof}
+
+And here we cite an external document~\cite{TestReference}.
+
+% This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
+\bibliographystyle{splncs}
+\bibliography{references}
+
+% This creates an appendix chapter, comment if not needed.
+\appendix
+\chapter{Appendix Chapter}
+
+\end{document}
