@@ -66,13 +66,28 @@ The human capability to learn things is well-known but not well understood. Our 
 
 \chapter{Introduction}
 %Reinforcment Learning
-Reinforcement Learning is besides supervised and unsupervised learning one of the big three themes in machine learning. Without going into details this research field is mostly based on the theory of Markov and semi-Markov decision processes. For the interested reader on the history and formation of reinforcement learning we refer to the well-known survey of Kaelbling et al. (1996) \cite{kaelbling1996reinforcement} were everything can be found. In this work we concentrate on one aspect of reinforcement learning namely hierarchical reinforcement learning. We think a good start where most frameworks are well summarized is in Barto et al.(2003) \cite{barto2003recent}. 
+Reinforcement Learning(RL) is besides supervised and unsupervised learning one of the big three themes in machine learning. Without going into details this research field is mostly based on the theory of Markov and semi-Markov decision processes. There are other types of approaches worth mentioning but we don't want to go into to much detail. For the interested reader on the history and formation of reinforcement learning we refer to the well-known survey of Kaelbling et al. (1996) \cite{kaelbling1996reinforcement} were everything can be found. In this work we concentrate on one aspect of reinforcement learning namely hierarchical reinforcement learning. We think a good start where most frameworks are well summarized is in Barto et al.(2003) \cite{barto2003recent} and it also gives a brief introduction to Markov decision processes.
+Another noteworthy introduction we think is the reinforcement course by David Silver free available online on youtube. \\
 %Hierarchical reinforcement learning
-The idea of using a hierarchy in reinforcement learning to increase efficiency is well established and goes back to the nineties. To summarize there are three major frameworks which were developed namely, the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}. 
+The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approaches was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today were proposed in the nineties. To summarize these three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}.
+This work is based on the options framework and hence we concentrate only on this type of framework but this does not mean the others are not worth consideration. \\
+Another big aspect in the development of machine learning is due to the rapid improvement of the hardware. More memory and CPU capacity allows faster exploration and tackling more complex tasks. This allowed the realization of neural networks. Neural networks also have a rich history of development and we refer for further reading to Funahashi (1989) \cite{funahashi1989approximate} where one can get an impression on the history. Neural networks form the basis of most deep reinforcement algorithms today and also used for this work. A good starting point into this topic is the work of Mnih et al. (2015) \cite{mnih2015human} which shows that a high level of control can be achieved. 
+ 
+
+At the beginning an experience buffer was used to store all transitions in a given environment.
+the states, actions, and rewards were saved to a memory location.  
 
 
 
-The idea of options came from planning literature were macro actions were defined as a cumulation of simple actions put together and looked at as a single action
+experience replay vs asynchronous training
+Q learning, policy gradient, monte carlo roll out
+on vs off policy algorithms
+eligible traces, temporal difference errors, efficient data sampling  
+
+
+\cite{mnih2016asynchronous} 
+
+
 
 Options can be looked at as an encapsulated policy
 The problem with micro actions generally is to tell when to apply a micro action and when to stop
