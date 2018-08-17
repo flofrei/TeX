@@ -130,12 +130,33 @@ where $d^{\pi}(s)$ is defined as the discounted weighting of states encountered 
 \frac{\partial V^{\pi}(s)}{\partial \theta} = \sum_{s}^{} d^{\pi}(s) { \sum_{a}^{} { \frac{\partial \pi(a|s) }{\partial \theta}  \left[ Q^{\pi}(s,a) - V(s) \right] } } \\
 =\sum_{s}^{}{d^{\pi}(s)} \mathbb{E} \left[  \frac{\partial \log{ \pi(a|s) } }{\partial \theta} \left( Q^{\pi}(s,a) - V(s) \right) \right]
 \end{gather*}
-The last term in the expectation is also known as advantage function. The actor critic algorithm 
-
-
-In this thesis the actor critic architecture is of relevance since the option critic architecture from Bacon et al. (2017) \cite{bacon2017option} is based on it. The training in actor critic is a combination of value (critic) and policy (actor) based approach. \\
+Note that $V(s)$ in the expectation does not contribute anything so $A(s,a) = Q^{\pi}(s,a) - V(s)$ is often used and known as advantage function. The actor-critic algorithm is composed of an actor which learns a policy and a critic which learns a value function. The policy is learned similar to REINFORCE but learned with the value function instead of a sample trajectory. The value function off the current policy is learned via TD approximation. The resulting equations are listed below.  
+\begin{gather*}
+\frac{\partial \rho}{\partial \vartheta} = \sum_{s} d^{\pi}(s) \sum_{a} \frac{\partial \pi(s,a)}{\partial \vartheta } Q^{\pi}(s,a)= \sum_{s} d^{\pi}(s) \mathbb{E}_a \left[  \frac{\partial \log(\pi(a|s) ) }{\partial \vartheta } Q^{\pi}(s,a) \right] \\
+\frac{\partial Q(s,a)}{\partial \theta} = \frac{\partial \left( R(s,a) + \gamma \mathbb{E}_{s'\sim P(s'|s,a)}[V(s')]-Q(s,a) \right)^2 }{\partial \theta} = - \sigma \ast \frac{\partial Q(s,a)}{\partial \theta}
+\end{gather*}
 
 \TODO{graphic for actor critic}
+
+The next step is to incorporate temporal abstraction into an algorithm. This is no longer possible with simple MDP's and thus the concept was generalized to Semi Markov Decision Processes(SMPD) and we refer to \cite{puterman2014markov} for further reading.
+
+\TODO{SMPD graphic}
+
+This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super policy can again be an $\epsilon$-greedy policy.%but now we act greedily based on the estimated $Q$-value belonging to the options. 
+
+\TODO{graphic option critic}
+
+The option-critic architecture is similar to the actor-critic algorithm hence the name. For a complete mathematical derivation we refer to Bacon et al. (2017) \cite{bacon2017option} where everything can be found and we only highlight the resulting equations. In this architecture the super-policy acts $\epsilon$-greedy based on $Q$-values learned by $Q$-learning. The super-policy selects an option which is as already mentioned just a stochastic sub-policy and returns basic actions until termination. As one can imagine this model allows in a sense temporally extended sub-strategies. When the termination function is to high for all states the algorithm collapses to basic actions but chosen indirectly over options. The initiation set is generally given by the set of all states meaning any option can start from any state. The function for the $Q$-values used by the super-policy is given by the following equation:
+\begin{equation*}
+Q_{\Omega}(s,\omega) = \sum_{a} \pi_{\omega,\theta}(a|s) Q_{U}(s,\omega,a)
+\end{equation*}
+It is simply the expectation over all actions an option $\omega$ can take and a corresponding state-option-action value given by the sub-policy. The state-option-action value function is defined as follows:
+\begin{gather*}
+Q_{U}(s,\omega,a) r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s') \\
+U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\omega,\vartheta}(s') V_{\Omega}(s')
+\end{gather*}
+where $U(\omega,s')$ is an utility term calculated for the two cases. When the option $\omega$ does not terminate we use the $Q$-value from before for the new state $s'$ otherwise use an estimation $V_{\Omega}(s')$ over all options. Note that this recursion has the same structure as the Bellman equation and hence TD estimation is also applicable.  
+
 
 
 \chapter{Experiments}
