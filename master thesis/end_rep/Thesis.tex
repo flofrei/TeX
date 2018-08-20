@@ -70,7 +70,7 @@ The state of the art algorithm A3C(asynchronous advantage actor critic) can be f
 
 % The toolkit we use to compare algorithms fairly on different environments is given by the OpenAI gym from Brockman et al. \cite{brockman2016openai} and will be used as a base in this work to implement our own environments. \\
 %To implement neural networks we refer to two libraries namely the overworked theano framework \cite{bergstra2011theano} from Bastien et al. (2012) \cite{bastien2012theano} and tensorflow from Abadi et al. (2016) \cite{abadi2016tensorflow}. In this work we will exclusively use tensorflow in python.
-In this work we concentrate on the proposed hybrid algorithm between the options framework and asynchronous advantage actor critic named option critic from \cite{harb2017waiting} where a deliberation cost was additionally introduced.
+%In this work we concentrate on the proposed hybrid algorithm between the options framework and asynchronous advantage actor critic named option critic from \cite{harb2017waiting} where a deliberation cost was additionally introduced.
 
 \chapter{Preliminaries}
 %For the complete theory on MDP's we refer to the literature.
@@ -79,7 +79,7 @@ Most theory of reinforcement learning research is based on Markov Decision Proce
 A policy $\pi(s) : \mathcal{S} \to \mathcal{A} $ is a description of behavior. Meaning in a deterministic setting the action taken is always the same given the same state. In a stochastic setting the policy $\pi(a | s) : \mathcal{S} \times \mathcal{A} \to [0,1]$ is a distribution given a state. This means an action is sampled from this distribution where each action has a probability of getting selected. \\
 Since a reward can be assigned to each state a value function can be calculated from start state $s$ with a given stochastic policy as follows:
 \begin{equation*}
-V^{\pi}(s) = \mathbb{E} \left[ \sum_{t=0}^{\infty} \gamma^{t} r_t(s_t,a=\pi(s_t)) \right]
+V^{\pi}(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty} \gamma^{t} r_t(s_t,a=\pi(s_t)) \right]
 \end{equation*}
 This value can be used to compare different policies given start state $s$. With the same concept in mind a value can be calculated when the first action is additionally separated from the rest of the policy. This yields a state-action function $Q_{\pi}(s,a):\mathcal{S}\times\mathcal{A} \to \mathbb{R}$ which can be used to compare different initial actions $a$ from a given start state $s$.\\
 Now instead looking at the whole trajectory of a policy the Bellman equation \eqref{eq:bellman} from \cite{bellman1956dynamic} (1956) allows one to view it in a recursive manner using the value function as follows:
@@ -111,7 +111,7 @@ In this recursion we only talked about improving the value function but we are a
 An example for an on-policy algorithm is SARSA \cite{rummery1994line} which stands abbreviated for state action reward state action meaning it uses one transition and the next action to approximate the TD-error. The policy used is $\epsilon$-greedy based on the state-action function $Q$. Meaning with probability $\epsilon$ a random action is taken otherwise the action with the maximum $Q$-value is used. The counterpart to SARSA using off-policy updates is Q-Learning \cite{watkins1992q}.\\
 As we have seen either $\epsilon$-greedy policy was used based on action-value function $Q(s,a)$ to act or another entire policy based on experience. The functions $V(s)$ and $Q(s,a)$ helped to decide which actions are better in the environment in given state and hence improve the policy. But the policy also can be learned directly and are named policy gradient methods. The first method introduces was REINFORCE from Williams (1992) \cite{williams1992simple} where a whole trajectory like in the Monte Carlo method was utilized to improve the policy. The objective is still to maximize the expected cumulative reward.
 \begin{equation*}
-\rho(s) = \mathbb{E} \left[ \sum_{t=0}^{\infty}{\gamma^{t-1} R_t \Bigg| s} \right]
+\rho(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty}{\gamma^{t-1} R_t \Bigg| s} \right]
 \end{equation*}
 When we define $\tau$ as a complete trajectory and $R(\tau)$ as the reward corresponding to this trajectory the equation can be reformulated as:
 \begin{equation*}
@@ -119,7 +119,7 @@ When we define $\tau$ as a complete trajectory and $R(\tau)$ as the reward corre
 \end{equation*}
 where $\theta$ represent the parameters of our policy $\pi$. Instead of using the whole trajectory one can again use an value estimation. This can be learned with TD and reformulated as maximizing:
 \begin{equation*}
-\rho(s) = \mathbb{E} \left[ \sum_{t=0}^{\infty}{\gamma^{t-1} R_t \Bigg| s} \right] = \sum_{a}^{}{\pi(a|s)Q^{\pi}(s,a)=V^{\pi}(s)}
+\rho(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty}{\gamma^{t-1} R_t \Bigg| s} \right] = \sum_{a}^{}{\pi(a|s)Q^{\pi}(s,a)=V^{\pi}(s)}
 \end{equation*}
 We will not go into detail for the derivation and refer to Sutton et al. (2000) \cite{sutton2000policy} and just present the resulting gradient.
 \begin{equation*}
@@ -142,7 +142,7 @@ The next step is to incorporate temporal abstraction into an algorithm. This is 
 
 \TODO{SMPD graphic}
 
-This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super policy can again be an $\epsilon$-greedy policy.%but now we act greedily based on the estimated $Q$-value belonging to the options. 
+This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super-policy can again be an $\epsilon$-greedy policy.%but now we act greedily based on the estimated $Q$-value belonging to the options. 
 
 \TODO{graphic option critic}
 
@@ -152,14 +152,95 @@ Q_{\Omega}(s,\omega) = \sum_{a} \pi_{\omega,\theta}(a|s) Q_{U}(s,\omega,a)
 \end{equation*}
 It is simply the expectation over all actions an option $\omega$ can take and a corresponding state-option-action value given by the sub-policy. The state-option-action value function is defined as follows:
 \begin{gather*}
-Q_{U}(s,\omega,a) r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s') \\
+Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s') \\
 U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\omega,\vartheta}(s') V_{\Omega}(s')
 \end{gather*}
-where $U(\omega,s')$ is an utility term calculated for the two cases. When the option $\omega$ does not terminate we use the $Q$-value from before for the new state $s'$ otherwise use an estimation $V_{\Omega}(s')$ over all options. Note that this recursion has the same structure as the Bellman equation and hence TD estimation is also applicable.  
+where $U(\omega,s')$ is an utility term calculated for the two cases. When the option $\omega$ does not terminate we use the $Q$-value from before for the new state $s'$ otherwise use an estimation $V_{\Omega}(s')$ over all options. Note that this recursion has the same structure as the Bellman equation and hence TD estimation is also applicable. The derivation is the same as before by taking the gradients with respect to $\theta$ and $\vartheta$ as to maximize the expected return for all states. First we show the policy gradient of the sub-policies also called intra-option gradient. 
 
+\begin{gather*}
+\rho(\theta) = \mathbb{E}\left[  \sum_{t=1}^{\infty} \gamma^{t-1} R_t \bigg| s_0,\omega_0,\Omega \right]=Q_{\Omega}(s_0,\omega_0) \\
+\frac{\partial Q_{\Omega}(s,\omega) }{\partial \theta} = \sum_{s} \sum_{\omega} d_{\Omega}(s,w) \sum_{a} \frac{\partial \pi_{\omega,\theta}(a|s) }{\partial \theta } Q_{U}(s,\omega,a)
+\end{gather*}
+Note that here the same old trick with the log transformation and using action sampling can be made. Also $d_{\Omega}(s,w)$ is again the discounted weighting of states along an option. Next is the gradient from the termination where we want to maximize the utility function. 
+\begin{gather*}
+\rho(\vartheta) = \mathbb{E}\left[  \sum_{t=1}^{\infty} \gamma^{t-1} R_t \bigg| s',\omega,\Omega \right]=U(s',\omega) \\
+\frac{\partial U_{\omega, s'} }{\partial \vartheta} = \sum_{\omega'} \sum_{s''} d_{\Omega}(s',\omega ) \frac{\partial \beta_{\omega',\vartheta}(s'') }{\partial \vartheta} \left( V_{\Omega}(s'') - Q_{\Omega}(s'',\omega') \right)
+\end{gather*} 
+where $A_{\Omega}(s',\omega) = Q_{\Omega}(s',\omega')- V_{\Omega}(s') $ is the already seen advantage function with respect to option $\omega$. This makes intuitively sense because $V_{\Omega}(s')$ is estimated from all options. Hence when there is a better option this value is higher than the current state-option value and the advantage function is negative. Thus the sum is positive and we increase the termination probability. The same logic applies for the reverse case where we want to decrease the termination probability in case the state-option value is higher than value estimation from all options. \\
+In case that the action space is to large and therefore $N_{\Omega} \cdot N_{\mathcal{A}}$ huge we can estimate $Q_U$ from $Q_{\Omega}$ as shown below:
+\begin{equation*}
+Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s')=r(s,a)+\gamma \mathbb{E}_{s' \sim P } \left[ U(\omega,s') \big| s,a \right]
+\end{equation*}
+\TODO{pseudo code for option critic?}
+{\Large \textbf{Regularization}}\\
+As often used in state of the art algorithms some regularization is added to some gradients. This can prevent over-fitting to a local optimum by adding randomness to actions such as in entropy regularization. In regard to the termination gradient a small constant term is added since using $\epsilon$-greedy super-policy leads mostly to termination probability of 100\%. This is caused by the value function since
+\begin{gather*}
+V(s) = \displaystyle \max_{\omega} Q_{\Omega}(s',\omega)
+\intertext{and hence}
+Q_{\Omega }(s',\omega) - \max_{\omega} Q_{\Omega}(s',\omega) \leq 0 \\
+\intertext{and thus the new termination gradient is given by}
+\frac{ \partial \beta_{\omega,\vartheta(s')} }{\partial \vartheta} \left( Q_{\Omega}(s',\omega) - \max_\omega Q_\Omega(s,\omega) + \eta_\beta \right)
+\end{gather*}
+and therefore we allow $\eta_\beta$ margin error between the maximum $Q$-value and the current one given with option $\omega$. As already mentioned there could be a problem with the options where their policy get stuck in a deterministic action distribution. To counter this behavior an entropy is added to the intra-option gradient as shown in the A3C algorithm in Mnih et al. (2016) \cite{mnih2016asynchronous} The entropy is calculated as follows:
+\begin{gather*}
+H( \pi_{\omega,\theta}(\cdot |s) ) = -\sum_{a} \pi_{\omega,\theta}(a|s)\log(\pi_{\omega,\theta}) \\
+\intertext{And hence the new gradient has the following form:}
+\frac{\partial Q_{\Omega}(s,\omega) }{\partial \theta} = \frac{\partial \log(\pi_{\omega,\theta}(a|s) )}{\partial \theta} Q_U(s,\omega,a) + \eta_H \cdot \frac{\partial H( \pi_{\omega,\theta}(\cdot |s) )}{\partial \theta}
+\end{gather*}
+{\Large \textbf{Deliberation Cost}}\\
 
 
 \chapter{Experiments}
+
+\section{Implementation}
+
+We based our implementation on the UNREAL \cite{miyoshigithubunreal} implementation of Jaderberg et al. (2016) \cite{jaderberg2016reinforcement} which uses the Asynchronous Advantage Actor Critic(A3C) algorithm from Mnih et al (2016) \cite{mnih2016asynchronous}. Next we implemented Asynchronous Advantage Option Critic(A2OC) from Harb et al. (2017) \cite{harb2017waiting} where a theano based implementation can be found here \cite{harbgithuba2oc}.
+
+\subsection{Environment}
+Most interesting learn environments used such as the Arcade Learning Environment (ALE) \cite{brockman2016openai} or the DeepMind Lab \cite{beattie2016deepmind} where complicated tasks are learned from pixel inputs are harder to study. The simple reason is that the network heavily relies on GPU's and their ability to fast transform pixel inputs in the convolution layer to features usable for training. Hence the training time until reasonable performance can easily take days. This is unsuitable for scientific analysis of the algorithm where we want to study the effect of each small change in the model, hyper-parameters or environment. Therefore since we repeat all simulation very often we want fast convergence. Thus we implemented simple grid worlds where we can easily control the world size and hence the input dimension to the network. The OpenAI gym toolkit from Brockman et al. \cite{brockman2016openai} allowed easy implementation of our grid-world through inheritance of their environment classes. Also there is a tutorial online on github which explains how to accomplish that.
+
+\subsection{Multithreading}
+We used an on-policy approach where multiple threads like in Mnih et al. \cite{mnih2016asynchronous} make small batches of data, apply the gradients from this data then resynchronize the networks. For this we used the python multiprocessing tools namely Process and Pipe. This handled multiple instances of the same environments and their communication and was used in the UNREAL implementation. Since multiple threads also have their own instances of the neural networks the total resulting graph is relatively huge.
+\TODO{input the graphic for graph}
+
+\subsection{Neural Networks}
+To implement all neural networks we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} in python. In essence tensorflow constructs a direct acyclic graph for the flow of information through the layers. Elements in this graph are variables such as weights and biases but also all operations such as multiplication and addition. The nice thing about that is that the library takes care for computing backwards and forwards propagation within the network since it computes and applies the gradients itself. When $N_{\omega}$ is the number of options then we needed $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the $Q$-value model and the convolution layer.
+
+\subsection{Sensitivity of Reward function}
+The reward function of the environment can not only influence the learning behavior but can be decisive if learning is possible. For example in case of Monte Carlo learning the trajectories have to be short enough otherwise learning is impossible because of the probability of the trajectory. Another type of problem is when the reward function has a local optima where the algorithm can get stuck. Also when the rewards are not scaled to $[-1,1]$ then the imbalance can lead to unwanted behavior because the losses get skewed in one direction. In the two dimensional grid world we only have to describe three types of rewards. Namely walking out of the world boundary, doing a step, and reaching the goal. Additionally a boolean flag is needed to decide if the episode is terminated or not. Hence we write the different reward functions with the following sets:\\
+$S_1$ = \{\{-1,True\}, \{0,False\}, \{1,True\} \} \\
+$S_2$ = \{\{-1,True\}, \{-0.1,False\}, \{1,True\} \} \\
+$S_3$ = \{\{0,True\}, \{0,False\}, \{1,True\} \} \\
+$S_4$ = \{\{0,False\}, \{0,False\}, \{1,True\} \} \\
+$S_5$ = \{\{-0.1,False\}, \{-0.1,False\}, \{1,True\} \} \\
+As one can see the sets $S_1$ and $S_2$ have local optima. Note that in $S_2$ the local optima occurs when the agent makes more the $10$ steps in the world which is worse than walking into a wall since this terminates the episode. Furthermore when whole trajectories are used to learn like in Monte Carlo, utilizing the sets $S_4$ and $S_5$ as rewards lead with high probability that the network will not converge. Later on we introduce an additional barrier namely a key which has to picked up first before reaching the goal is possible. Picking up the key gives \{0,False\} or \{1,False\} reward and could potentially add a local optima.
+
+\subsection{Epsilon annealing vs. constant high epsilon}
+Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. We tested two scenarios and looked at their development. First scenario is were start with the highest value of $\epsilon = 1.0$ and then anneal epsilon linearly down to $0.1$ or $0.01$ over constant number of steps. The second scenario is to let be epsilon constant $\epsilon=0.1$ or $\epsilon=0.01$ and hope that this applies enough randomness.
+
+\subsection{Deliberation cost annealing}  
+
+
+
+
+\subsection{Abstraction}
+With an option we want to accomplish that knowledge is divided across the different option networks. 
+
+problem of knowledge capture in one option
+
+\subsection{missing experiments}
+reward sets swapping
+4 options 4 experts for 4 directions with small local rollout
+4 options 2 experts for parallel directions with 2 xavier init with small local rollout
+4 options 2 experts for orthogonal directions with 2 xavier init with small local rollout
+
+increasing world size to look at convergence time
+learning rate hyper-parameter search
+
+4 options 1 key expert 3 xavier init score function?
+
+\subsection{brainstorm}
+
 many experiments
 much data
 
@@ -214,7 +295,7 @@ hyoerparameters?
 \section{Asynchronous Advantage Option Critic (A2OC)}
 
 
-Bacon et al. 2017 \cite{bacon2017option} has shown that learning options in an end-end fashion is possible but frequent termination is an issue. The introduction of a delibration cost in \cite{harb2017waiting} helped but again is a sensitive hyperparameter. 
+Bacon et al. 2017 \cite{bacon2017option} has shown that learning options in an end-end fashion is possible but frequent termination is an issue. The introduction of a deliberation cost in \cite{harb2017waiting} helped but again is a sensitive hyperparameter. 
 
 
 In case that the environment is changed to something simpler than ALE
