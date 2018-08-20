@@ -39,12 +39,12 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-	I thank Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+	I thank you.
 \end{acknowledgements}
 
 
 \begin{abstract}
-	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+	smart short recapitulation of stuff done
 \end{abstract}
 
 \tableofcontents
@@ -53,19 +53,23 @@ ETH Zürich}
 
 % Start writing here
 \chapter{Motivation}
-The human capability to learn things is well-known but not well understood. Our brain is the most complex organ in our body and its size is the most significant difference to other species. It allows us to be self-aware and defines our individuality. Hence it is of significant importance to understand how it works for creating artificial intelligence. One aspect of it is the brains capability of high level abstraction. This could be temporal or objective in nature. Meaning that we learn automatically to tackle difficult tasks by dividing them into manageable subtasks. Additionally the function of dopamine allows us to handle delayed gratification. Meaning that for example no immediate reward is needed for pursuing a goal in life. The journey is a sufficient inner motivator regardless if we can reach the set goal. The high complexity of games in the world today such as league of legends, dota or starcraft require a more sophisticated abstraction of the strategy in order to win. Thus it is of importance to understand how abstraction can be achieved by using deep neural networks. 
+The human capability to learn abstract concepts is well-known but not well understood. Our brain is the most complex organ in our body and its size is the most significant difference to other species. It allows us to be self-aware and defines our individuality. Hence it could be of significant importance to understand how it works for creating artificial intelligence. One aspect of it is the brains capability of high level abstraction. This could be temporal or objective in nature. Meaning that we learn automatically to tackle difficult tasks by dividing them into manageable subtasks. Additionally the function of dopamine allows us to handle delayed gratification. Meaning that for example no immediate reward is needed for pursuing a goal in life. The journey is a sufficient inner motivator regardless if we can reach the set goal. The high complexity of games in the world today such as League of Legends, Dota 2 or Starcraft require a more sophisticated abstraction of the strategy in order to win. Recently they achieved more than human level performance in Dota 2 with training a neural network over half a year but no abstraction levels were used. Thus it is important to better understand abstraction such that it is possible to incorporate abstraction into neural networks to allow better performance. 
 
 \chapter{Introduction}
 %Reinforcment Learning
+\section*{Reinforcement Learning}
 Reinforcement Learning(RL) is besides supervised and unsupervised learning one of the big three themes in machine learning. Without going into details this research field is mostly based on the theory of Markov Decision Processes. There are other types of approaches worth mentioning but we don't want to go into to much detail. For the interested reader or for a complete beginner in this kind of field we refer to we refer Sutton et al. (1998) \cite{sutton1998introduction} and Kaelbling et al. (1996) \cite{kaelbling1996reinforcement} where most on theory and history of this research field with all references can be found.\\
-In this work we concentrate on one subfield of reinforcement learning namely hierarchical reinforcement learning. We think a good start where most frameworks are well summarized is in Barto et al.(2003) \cite{barto2003recent} and it also gives a brief introduction to the theory of Markov Decision Processes abbreviated as MDP. For the interested reader which is not particularly fond of reading papers we refer to video course by David Silver free available online on youtube.\\
+In this work we concentrate on one subfield of reinforcement learning namely hierarchical reinforcement learning. We think a good start where most frameworks are well summarized is in Barto et al.(2003) \cite{barto2003recent} and it also gives a brief introduction to the theory of Markov Decision Processes abbreviated as MDP. For the interested reader which is not particularly fond of reading papers we refer to video course by David Silver free available online on youtube.
+
+\section*{Hierarchical Reinforcement Learning}
 %Hierarchical reinforcement learning
-The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approaches was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today were proposed in the nineties. To summarize these three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}. This thesis is based on the options framework and hence we concentrate only on this type of framework but this does not mean the others are not worth consideration. \\
+The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approaches was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today were proposed in the nineties. To summarize these three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}. This thesis is based on the options framework and hence we concentrate only on this type of framework but this does not mean the others are not worth consideration.
+
+\section*{Deep Reinforcement Learning}
 Another big aspect in the development of machine learning is due to the rapid improvement of the hardware. More memory and CPU capacity allows faster exploration and tackling more complex tasks. This allowed the realization of neural networks and hence the field of deep reinforcement learning. For a reader which never heard of neural networks we refer to Funahashi (1989) \cite{funahashi1989approximate} where the theory and research references can be found. Neural networks form the basis of most deep reinforcement algorithms today and are used extensively. 
 
 %Bad start reference to randomly sampled replay buffer in RL
 %A good starting point into this topic is the work of Mnih et al. (2015) \cite{mnih2015human} which shows that a high level of control can be achieved. 
-
 The state of the art algorithm A3C(asynchronous advantage actor critic) can be found in Mnih et al.(2016) \cite{mnih2016asynchronous} which is often used as a baseline to compare the performance of new developed techniques and algorithms.
 
 % The toolkit we use to compare algorithms fairly on different environments is given by the OpenAI gym from Brockman et al. \cite{brockman2016openai} and will be used as a base in this work to implement our own environments. \\
@@ -74,14 +78,18 @@ The state of the art algorithm A3C(asynchronous advantage actor critic) can be f
 
 \chapter{Preliminaries}
 %For the complete theory on MDP's we refer to the literature.
-
+\section*{Markov Decision Process}
 Most theory of reinforcement learning research is based on Markov Decision Processes(MDP) since it provides the simplest framework which allows us to study basic algorithms and their properties. A finite discounted MDP $\mathcal{M}$ is a tuple $\mathcal{M} \doteq (\mathcal{S},\mathcal{A},\gamma,r,P)$ encapsulating a state space $\mathcal{S}$, an action space $\mathcal{A}$, a discount factor $\gamma$ where $\gamma \in [0,1)$, a reward function $r(s,a): \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ which maps a state-action pair to a real number and state transition probability function $P(s,a):\mathcal{S} \times \mathcal{A} \to \mathbb{S} $ which maps old states with actions to new states.\\
-A policy $\pi(s) : \mathcal{S} \to \mathcal{A} $ is a description of behavior. Meaning in a deterministic setting the action taken is always the same given the same state. In a stochastic setting the policy $\pi(a | s) : \mathcal{S} \times \mathcal{A} \to [0,1]$ is a distribution given a state. This means an action is sampled from this distribution where each action has a probability of getting selected. \\
+A policy $\pi(s) : \mathcal{S} \to \mathcal{A} $ is a description of behavior. Meaning in a deterministic setting the action taken is always the same given the same state. In a stochastic setting the policy $\pi(a | s) : \mathcal{S} \times \mathcal{A} \to [0,1]$ is a distribution given a state. This means an action is sampled from this distribution where each action has a probability of getting selected.
+
+\section*{Value Function}
 Since a reward can be assigned to each state a value function can be calculated from start state $s$ with a given stochastic policy as follows:
 \begin{equation*}
 V^{\pi}(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty} \gamma^{t} r_t(s_t,a=\pi(s_t)) \right]
 \end{equation*}
-This value can be used to compare different policies given start state $s$. With the same concept in mind a value can be calculated when the first action is additionally separated from the rest of the policy. This yields a state-action function $Q_{\pi}(s,a):\mathcal{S}\times\mathcal{A} \to \mathbb{R}$ which can be used to compare different initial actions $a$ from a given start state $s$.\\
+This value can be used to compare different policies given start state $s$. With the same concept in mind a value can be calculated when the first action is additionally separated from the rest of the policy. This yields a state-action function $Q_{\pi}(s,a):\mathcal{S}\times\mathcal{A} \to \mathbb{R}$ which can be used to compare different initial actions $a$ from a given start state $s$.
+
+\section*{Bellman Equation}
 Now instead looking at the whole trajectory of a policy the Bellman equation \eqref{eq:bellman} from \cite{bellman1956dynamic} (1956) allows one to view it in a recursive manner using the value function as follows:
 \begin{equation}
 \label{eq:bellman}
@@ -102,13 +110,21 @@ Whereas in policy iteration a random policy $\pi$ is initialized and then learne
 V^{\pi_t}_{t+1}(s) = r(s,\pi_t(s))+\gamma \sum_{s' \in \mathcal{S}}^{}{P(s'|s,\pi_t(s))V^{\pi_t}_{t+1}(s')}\\
 \pi_{t+1}(s) = \argmax_{a} \left( r(s,a) + \gamma \sum_{s'}^{}{P(s'|s,a)V^{\pi_t}_{t+1}(s')} \right)
 \end{gather*}
+
+\section*{Temporal Difference}
 As one can imagine in reinforcement learning the Bellman equation allows different lengths of recursion. An algorithm using the whole trajectory in an environment are categorized under Monte Carlo methods. The alternative is Temporal Difference (TD) \cite{sutton1988learning} methods which use the Bellman equation and instead of calculating the expectation they estimate the difference from sampling. Hence the temporal difference error resulting is written as:
 \begin{equation*}
 \operatorname{TD}(0) = R(s,\pi(s))+\gamma V_{\pi}(s') -\gamma V_{\pi}(s) 
 \end{equation*}
-Notice that $s'$ was sampled from the transition probabilities and can be looked at as a zero order scheme. One can repeat the process and use the same equation to approximate the next value $V_{\pi}(s')$ and so forth. Thus arbitrary recursion schemes can be chosen for this approximation which is a design decision depending on the environment or problem respectively.\\
-In this recursion we only talked about improving the value function but we are also interested in improving the policy $\pi$ along the way. This can be done in two manners namely on-policy or off-policy. On-policy means that only one policy is used and directly improved with the environment. Off-policy means that there are two policies. One used for exploration with generates data whereas the other policy uses this data to improve itself. Since the policies have different acting distributions sampling methods like importance sampling has to be used to eliminate bias from the action and state samples. This means that in the off-policy case an experience buffer is filled with transitions and then sampled from it to improve the policy.\\
-An example for an on-policy algorithm is SARSA \cite{rummery1994line} which stands abbreviated for state action reward state action meaning it uses one transition and the next action to approximate the TD-error. The policy used is $\epsilon$-greedy based on the state-action function $Q$. Meaning with probability $\epsilon$ a random action is taken otherwise the action with the maximum $Q$-value is used. The counterpart to SARSA using off-policy updates is Q-Learning \cite{watkins1992q}.\\
+Notice that $s'$ was sampled from the transition probabilities and can be looked at as a zero order scheme. One can repeat the process and use the same equation to approximate the next value $V_{\pi}(s')$ and so forth. Thus arbitrary recursion schemes can be chosen for this approximation which is a design decision depending on the environment or problem respectively.
+
+\section*{On-policy vs off-policy}
+In this recursion we only talked about improving the value function but we are also interested in improving the policy $\pi$ along the way. This can be done in two manners namely on-policy or off-policy. On-policy means that only one policy is used and directly improved with the environment. Off-policy means that there are two policies. One used for exploration with generates data whereas the other policy uses this data to improve itself. Since the policies have different acting distributions sampling methods like importance sampling has to be used to eliminate bias from the action and state samples. This means that in the off-policy case an experience buffer is filled with transitions and then sampled from it to improve the policy.
+
+\section*{SARSA and Q-Learning}
+An example for an on-policy algorithm is SARSA \cite{rummery1994line} which stands abbreviated for state action reward state action meaning it uses one transition and the next action to approximate the TD-error. The policy used is $\epsilon$-greedy based on the state-action function $Q$. Meaning with probability $\epsilon$ a random action is taken otherwise the action with the maximum $Q$-value is used. The counterpart to SARSA using off-policy updates is Q-Learning \cite{watkins1992q}.
+
+\section*{REINFORCE}
 As we have seen either $\epsilon$-greedy policy was used based on action-value function $Q(s,a)$ to act or another entire policy based on experience. The functions $V(s)$ and $Q(s,a)$ helped to decide which actions are better in the environment in given state and hence improve the policy. But the policy also can be learned directly and are named policy gradient methods. The first method introduces was REINFORCE from Williams (1992) \cite{williams1992simple} where a whole trajectory like in the Monte Carlo method was utilized to improve the policy. The objective is still to maximize the expected cumulative reward.
 \begin{equation*}
 \rho(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty}{\gamma^{t-1} R_t \Bigg| s} \right]
@@ -130,7 +146,10 @@ where $d^{\pi}(s)$ is defined as the discounted weighting of states encountered 
 \frac{\partial V^{\pi}(s)}{\partial \theta} = \sum_{s}^{} d^{\pi}(s) { \sum_{a}^{} { \frac{\partial \pi(a|s) }{\partial \theta}  \left[ Q^{\pi}(s,a) - V(s) \right] } } \\
 =\sum_{s}^{}{d^{\pi}(s)} \mathbb{E} \left[  \frac{\partial \log{ \pi(a|s) } }{\partial \theta} \left( Q^{\pi}(s,a) - V(s) \right) \right]
 \end{gather*}
-Note that $V(s)$ in the expectation does not contribute anything so $A(s,a) = Q^{\pi}(s,a) - V(s)$ is often used and known as advantage function. The actor-critic algorithm is composed of an actor which learns a policy and a critic which learns a value function. The policy is learned similar to REINFORCE but learned with the value function instead of a sample trajectory. The value function off the current policy is learned via TD approximation. The resulting equations are listed below.  
+Note that $V(s)$ in the expectation does not contribute anything so $A(s,a) = Q^{\pi}(s,a) - V(s)$ is often used and known as advantage function. 
+
+\section*{Actor-critic}
+The actor-critic algorithm is composed of an actor which learns a policy and a critic which learns a value function. The policy is learned similar to REINFORCE but learned with the value function instead of a sample trajectory. The value function off the current policy is learned via TD approximation. The resulting equations are listed below.  
 \begin{gather*}
 \frac{\partial \rho}{\partial \vartheta} = \sum_{s} d^{\pi}(s) \sum_{a} \frac{\partial \pi(s,a)}{\partial \vartheta } Q^{\pi}(s,a)= \sum_{s} d^{\pi}(s) \mathbb{E}_a \left[  \frac{\partial \log(\pi(a|s) ) }{\partial \vartheta } Q^{\pi}(s,a) \right] \\
 \frac{\partial Q(s,a)}{\partial \theta} = \frac{\partial \left( R(s,a) + \gamma \mathbb{E}_{s'\sim P(s'|s,a)}[V(s')]-Q(s,a) \right)^2 }{\partial \theta} = - \sigma \ast \frac{\partial Q(s,a)}{\partial \theta}
@@ -142,6 +161,7 @@ The next step is to incorporate temporal abstraction into an algorithm. This is 
 
 \TODO{SMPD graphic}
 
+\section*{Option-critic}
 This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super-policy can again be an $\epsilon$-greedy policy.%but now we act greedily based on the estimated $Q$-value belonging to the options. 
 
 \TODO{graphic option critic}
@@ -155,13 +175,19 @@ It is simply the expectation over all actions an option $\omega$ can take and a 
 Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s') \\
 U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\omega,\vartheta}(s') V_{\Omega}(s')
 \end{gather*}
-where $U(\omega,s')$ is an utility term calculated for the two cases. When the option $\omega$ does not terminate we use the $Q$-value from before for the new state $s'$ otherwise use an estimation $V_{\Omega}(s')$ over all options. Note that this recursion has the same structure as the Bellman equation and hence TD estimation is also applicable. The derivation is the same as before by taking the gradients with respect to $\theta$ and $\vartheta$ as to maximize the expected return for all states. First we show the policy gradient of the sub-policies also called intra-option gradient. 
+where $U(\omega,s')$ is an utility term calculated for the two cases. When the option $\omega$ does not terminate we use the $Q$-value from before for the new state $s'$ otherwise use an estimation $V_{\Omega}(s')$ over all options. Note that this recursion has the same structure as the Bellman equation and hence TD estimation is also applicable. The derivation is the same as before by taking the gradients with respect to $\theta$ and $\vartheta$ as to maximize the expected return for all states. 
+
+\subsection*{Intra-option gradient}
+First we show the policy gradient of the sub-policies also called intra-option gradient. 
 
 \begin{gather*}
 \rho(\theta) = \mathbb{E}\left[  \sum_{t=1}^{\infty} \gamma^{t-1} R_t \bigg| s_0,\omega_0,\Omega \right]=Q_{\Omega}(s_0,\omega_0) \\
 \frac{\partial Q_{\Omega}(s,\omega) }{\partial \theta} = \sum_{s} \sum_{\omega} d_{\Omega}(s,w) \sum_{a} \frac{\partial \pi_{\omega,\theta}(a|s) }{\partial \theta } Q_{U}(s,\omega,a)
 \end{gather*}
-Note that here the same old trick with the log transformation and using action sampling can be made. Also $d_{\Omega}(s,w)$ is again the discounted weighting of states along an option. Next is the gradient from the termination where we want to maximize the utility function. 
+Note that here the same old trick with the log transformation and using action sampling can be made. Also $d_{\Omega}(s,w)$ is again the discounted weighting of states along an option.
+
+\subsection*{Termination gradient}
+Next is the gradient from the termination where we want to maximize the utility function. 
 \begin{gather*}
 \rho(\vartheta) = \mathbb{E}\left[  \sum_{t=1}^{\infty} \gamma^{t-1} R_t \bigg| s',\omega,\Omega \right]=U(s',\omega) \\
 \frac{\partial U_{\omega, s'} }{\partial \vartheta} = \sum_{\omega'} \sum_{s''} d_{\Omega}(s',\omega ) \frac{\partial \beta_{\omega',\vartheta}(s'') }{\partial \vartheta} \left( V_{\Omega}(s'') - Q_{\Omega}(s'',\omega') \right)
@@ -172,7 +198,9 @@ In case that the action space is to large and therefore $N_{\Omega} \cdot N_{\ma
 Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s')=r(s,a)+\gamma \mathbb{E}_{s' \sim P } \left[ U(\omega,s') \big| s,a \right]
 \end{equation*}
 \TODO{pseudo code for option critic?}
-{\Large \textbf{Regularization}}\\
+
+\subsection*{Regularization}
+
 As often used in state of the art algorithms some regularization is added to some gradients. This can prevent over-fitting to a local optimum by adding randomness to actions such as in entropy regularization. In regard to the termination gradient a small constant term is added since using $\epsilon$-greedy super-policy leads mostly to termination probability of 100\%. This is caused by the value function since
 \begin{gather*}
 V(s) = \displaystyle \max_{\omega} Q_{\Omega}(s',\omega)
@@ -187,26 +215,29 @@ H( \pi_{\omega,\theta}(\cdot |s) ) = -\sum_{a} \pi_{\omega,\theta}(a|s)\log(\pi_
 \intertext{And hence the new gradient has the following form:}
 \frac{\partial Q_{\Omega}(s,\omega) }{\partial \theta} = \frac{\partial \log(\pi_{\omega,\theta}(a|s) )}{\partial \theta} Q_U(s,\omega,a) + \eta_H \cdot \frac{\partial H( \pi_{\omega,\theta}(\cdot |s) )}{\partial \theta}
 \end{gather*}
-{\Large \textbf{Deliberation Cost}}\\
+
+\subsection*{Deliberation Cost}
+
+\TODO{graphic from paper}
 
 
-\chapter{Experiments}
+\chapter{Implementation}
 
-\section{Implementation}
+\section{Implementation details}
 
 We based our implementation on the UNREAL \cite{miyoshigithubunreal} implementation of Jaderberg et al. (2016) \cite{jaderberg2016reinforcement} which uses the Asynchronous Advantage Actor Critic(A3C) algorithm from Mnih et al (2016) \cite{mnih2016asynchronous}. Next we implemented Asynchronous Advantage Option Critic(A2OC) from Harb et al. (2017) \cite{harb2017waiting} where a theano based implementation can be found here \cite{harbgithuba2oc}.
 
-\subsection{Environment}
+\subsection*{Environment}
 Most interesting learn environments used such as the Arcade Learning Environment (ALE) \cite{brockman2016openai} or the DeepMind Lab \cite{beattie2016deepmind} where complicated tasks are learned from pixel inputs are harder to study. The simple reason is that the network heavily relies on GPU's and their ability to fast transform pixel inputs in the convolution layer to features usable for training. Hence the training time until reasonable performance can easily take days. This is unsuitable for scientific analysis of the algorithm where we want to study the effect of each small change in the model, hyper-parameters or environment. Therefore since we repeat all simulation very often we want fast convergence. Thus we implemented simple grid worlds where we can easily control the world size and hence the input dimension to the network. The OpenAI gym toolkit from Brockman et al. \cite{brockman2016openai} allowed easy implementation of our grid-world through inheritance of their environment classes. Also there is a tutorial online on github which explains how to accomplish that.
 
-\subsection{Multithreading}
+\subsection*{Multithreading}
 We used an on-policy approach where multiple threads like in Mnih et al. \cite{mnih2016asynchronous} make small batches of data, apply the gradients from this data then resynchronize the networks. For this we used the python multiprocessing tools namely Process and Pipe. This handled multiple instances of the same environments and their communication and was used in the UNREAL implementation. Since multiple threads also have their own instances of the neural networks the total resulting graph is relatively huge.
 \TODO{input the graphic for graph}
 
-\subsection{Neural Networks}
+\subsection*{Neural Networks}
 To implement all neural networks we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} in python. In essence tensorflow constructs a direct acyclic graph for the flow of information through the layers. Elements in this graph are variables such as weights and biases but also all operations such as multiplication and addition. The nice thing about that is that the library takes care for computing backwards and forwards propagation within the network since it computes and applies the gradients itself. When $N_{\omega}$ is the number of options then we needed $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the $Q$-value model and the convolution layer.
 
-\subsection{Sensitivity of Reward function}
+\subsection*{Sensitivity of Reward function}
 The reward function of the environment can not only influence the learning behavior but can be decisive if learning is possible. For example in case of Monte Carlo learning the trajectories have to be short enough otherwise learning is impossible because of the probability of the trajectory. Another type of problem is when the reward function has a local optima where the algorithm can get stuck. Also when the rewards are not scaled to $[-1,1]$ then the imbalance can lead to unwanted behavior because the losses get skewed in one direction. In the two dimensional grid world we only have to describe three types of rewards. Namely walking out of the world boundary, doing a step, and reaching the goal. Additionally a boolean flag is needed to decide if the episode is terminated or not. Hence we write the different reward functions with the following sets:\\
 $S_1$ = \{\{-1,True\}, \{0,False\}, \{1,True\} \} \\
 $S_2$ = \{\{-1,True\}, \{-0.1,False\}, \{1,True\} \} \\
@@ -215,18 +246,22 @@ $S_4$ = \{\{0,False\}, \{0,False\}, \{1,True\} \} \\
 $S_5$ = \{\{-0.1,False\}, \{-0.1,False\}, \{1,True\} \} \\
 As one can see the sets $S_1$ and $S_2$ have local optima. Note that in $S_2$ the local optima occurs when the agent makes more the $10$ steps in the world which is worse than walking into a wall since this terminates the episode. Furthermore when whole trajectories are used to learn like in Monte Carlo, utilizing the sets $S_4$ and $S_5$ as rewards lead with high probability that the network will not converge. Later on we introduce an additional barrier namely a key which has to picked up first before reaching the goal is possible. Picking up the key gives \{0,False\} or \{1,False\} reward and could potentially add a local optima.
 
-\subsection{Epsilon annealing vs. constant high epsilon}
-Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. We tested two scenarios and looked at their development. First scenario is were start with the highest value of $\epsilon = 1.0$ and then anneal epsilon linearly down to $0.1$ or $0.01$ over constant number of steps. The second scenario is to let be epsilon constant $\epsilon=0.1$ or $\epsilon=0.01$ and hope that this applies enough randomness.
-
-\subsection{Deliberation cost annealing}  
+\subsection*{Epsilon annealing vs. constant epsilon}
+Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. We tested two scenarios and looked at their development. First scenario is were start with the highest value of $\epsilon = 1.0$ and then anneal epsilon linearly down to $0.1$ or $0.01$ over constant number of steps. The second scenario is to let be epsilon constant $\epsilon=0.1$ or $\epsilon=0.01$ and hope that this randomness is enough over long time for convergence. 
 
 
+\subsection*{Deliberation cost annealing}  
 
-
-\subsection{Abstraction}
+\subsection*{Knowledge distillation}
 With an option we want to accomplish that knowledge is divided across the different option networks. 
 
 problem of knowledge capture in one option
+
+\chapter{Experiments}
+
+\section*{Bias option}
+
+\section*{Key Pickup}
 
 \subsection{missing experiments}
 reward sets swapping
