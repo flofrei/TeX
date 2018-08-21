@@ -3,7 +3,7 @@
 % use utf8 instead of latin1 when using LaTeX in windows
 \usepackage[latin1]{inputenc}
 \usepackage{mathtools}
-
+\usepackage{comment}
 \DeclareMathOperator*{\argmax}{\operatorname{argmax}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,7 +155,7 @@ The actor-critic algorithm is composed of an actor which learns a policy and a c
 \frac{\partial Q(s,a)}{\partial \theta} = \frac{\partial \left( R(s,a) + \gamma \mathbb{E}_{s'\sim P(s'|s,a)}[V(s')]-Q(s,a) \right)^2 }{\partial \theta} = - \sigma \ast \frac{\partial Q(s,a)}{\partial \theta}
 \end{gather*}
 
-\TODO{graphic for actor critic}
+\includegraphics[scale=1.3]{actor_critic_arch.pdf}
 
 The next step is to incorporate temporal abstraction into an algorithm. This is no longer possible with simple MDP's and thus the concept was generalized to Semi Markov Decision Processes(SMPD) and we refer to \cite{puterman2014markov} for further reading.
 
@@ -164,7 +164,7 @@ The next step is to incorporate temporal abstraction into an algorithm. This is 
 \section*{Option-critic}
 This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super-policy can again be an $\epsilon$-greedy policy.%but now we act greedily based on the estimated $Q$-value belonging to the options. 
 
-\TODO{graphic option critic}
+\includegraphics[scale=1.3]{option_critic_arch.pdf}
 
 The option-critic architecture is similar to the actor-critic algorithm hence the name. For a complete mathematical derivation we refer to Bacon et al. (2017) \cite{bacon2017option} where everything can be found and we only highlight the resulting equations. In this architecture the super-policy acts $\epsilon$-greedy based on $Q$-values learned by $Q$-learning. The super-policy selects an option which is as already mentioned just a stochastic sub-policy and returns basic actions until termination. As one can imagine this model allows in a sense temporally extended sub-strategies. When the termination function is to high for all states the algorithm collapses to basic actions but chosen indirectly over options. The initiation set is generally given by the set of all states meaning any option can start from any state. The function for the $Q$-values used by the super-policy is given by the following equation:
 \begin{equation*}
@@ -235,7 +235,22 @@ We used an on-policy approach where multiple threads like in Mnih et al. \cite{m
 \TODO{input the graphic for graph}
 
 \subsection*{Neural Networks}
-To implement all neural networks we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} in python. In essence tensorflow constructs a direct acyclic graph for the flow of information through the layers. Elements in this graph are variables such as weights and biases but also all operations such as multiplication and addition. The nice thing about that is that the library takes care for computing backwards and forwards propagation within the network since it computes and applies the gradients itself. When $N_{\omega}$ is the number of options then we needed $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the $Q$-value model and the convolution layer.
+To implement all neural networks we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} in python. In essence tensorflow constructs a direct acyclic graph for the flow of information through the layers. Elements in this graph are variables such as weights and biases but also all operations such as multiplication and addition. The nice thing about that is that the library takes care for computing backwards and forwards propagation within the network since it computes and applies the gradients itself. When $N_{\omega}$ is the number of options then we needed $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the $Q$-value model and the convolution layer. Before the input gets fed into the convolution layer the input is rescaled to $[0,1]$.
+
+\includegraphics[scale=0.74]{option_critic.pdf}
+
+\subsection*{Convolution}
+Since our world is relatively simple we choose one layer of convolution followed by two fully connected layers. The number of filters we choose was $64$ and the filter size was chosen the same as the world size. Meaning a $4 \times 4$ grid world gets a $4 \times 4$ filter since we didn't wanted to loose any information. We used padding such that the dimension stays the same meaning an input of $4 \times 4$ gets transformed to an output of $4 \times 4 \times 64$. For initialization the standard Xavier initializer for weights and Zero initializer for biases were used. For both fully connected layers Rectified Linear Units(ReLUs) were utilized as activation functions. The second fully connected layer has a dimension of $32$ units. 
+
+\subsection*{Options}
+We utilize different deep networks of options depending on the experiment. The input comes from the convolution layer and the output is fixed to the number of possible actions. Since we use stochastic policies we need a probability vector as output which is simple achieved by using softmax as the activation function. First type was just using a bias term in the network. Meaning the output of the network is input independent. This makes sense when we want to test if everything is learnable using only the super-policy. The next type of network is adding the weights and hence is a linear combination of features. Both weights and biases are standard initialized with Xavier or Zero initializers. The last type is generated by adding one more layer with a Rectified Linear Unit as activation function with $32$ units.
+
+\subsection*{Q-value model}
+As already talked about the $Q$-value model is the basis for the super-policy for making decisions. 
+
+\subsection*{Termination model}
+
+
 
 \subsection*{Sensitivity of Reward function}
 The reward function of the environment can not only influence the learning behavior but can be decisive if learning is possible. For example in case of Monte Carlo learning the trajectories have to be short enough otherwise learning is impossible because of the probability of the trajectory. Another type of problem is when the reward function has a local optima where the algorithm can get stuck. Also when the rewards are not scaled to $[-1,1]$ then the imbalance can lead to unwanted behavior because the losses get skewed in one direction. In the two dimensional grid world we only have to describe three types of rewards. Namely walking out of the world boundary, doing a step, and reaching the goal. Additionally a boolean flag is needed to decide if the episode is terminated or not. Hence we write the different reward functions with the following sets:\\
@@ -249,8 +264,10 @@ As one can see the sets $S_1$ and $S_2$ have local optima. Note that in $S_2$ th
 \subsection*{Epsilon annealing vs. constant epsilon}
 Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. We tested two scenarios and looked at their development. First scenario is were start with the highest value of $\epsilon = 1.0$ and then anneal epsilon linearly down to $0.1$ or $0.01$ over constant number of steps. The second scenario is to let be epsilon constant $\epsilon=0.1$ or $\epsilon=0.01$ and hope that this randomness is enough over long time for convergence. 
 
+\subsection*{Deliberation cost annealing}
+The deliberation cost is mainly used to steer the termination network. For example when the termination get stuck on 0\% or 100\% but it is a local optima instead of restarting the networks the deliberation cost can be used to increase or decrease termination. 
 
-\subsection*{Deliberation cost annealing}  
+\TODO{graphic stuck optima from paper}  
 
 \subsection*{Knowledge distillation}
 With an option we want to accomplish that knowledge is divided across the different option networks. 
@@ -259,10 +276,12 @@ problem of knowledge capture in one option
 
 \chapter{Experiments}
 
+
 \section*{Bias option}
 
 \section*{Key Pickup}
 
+\begin{comment}
 \subsection{missing experiments}
 reward sets swapping
 4 options 4 experts for 4 directions with small local rollout
@@ -353,7 +372,7 @@ The actor critic model as the name implies consists only of an actor and a criti
 The Q value model describe how a state is for the given options.
 The options describe action probabilities for a given state and can be understood as a strategy.
 The termination model characterized how likely a given option terminates given the state as input. 
-
+\end{comment}
 
 % This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
 \bibliographystyle{splncs}
