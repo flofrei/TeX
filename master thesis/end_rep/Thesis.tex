@@ -4,6 +4,7 @@
 \usepackage[latin1]{inputenc}
 \usepackage{mathtools}
 \usepackage{comment}
+\usepackage{makecell}
 \DeclareMathOperator*{\argmax}{\operatorname{argmax}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,14 +53,14 @@ ETH Zürich}
 
 \mainmatter % do not remove this line
 
-Main reference deep learning \cite{goodfellow2016deep}
-Proximal Policy Approximation for OpenAI five \cite{schulman2017proximal}
+%Main reference deep learning \cite{goodfellow2016deep}
+%Proximal Policy Approximation for OpenAI five \cite{schulman2017proximal}
 
 \chapter{Introduction}
-In 2017 an artificial intelligence named Alpha Go \cite{silver2017mastering} beat the worlds known strongest player. This was achieved without using human knowledge but rather only with playing against itself. Hence reinforcement learning has high potential to learn more complex tasks and thus help humans in the next breakthrough in technology. Maybe this comes by enabling neural networks to do temporal abstraction on its objective. Therefore in this work we want to test the adaptability and limitations of the option-critic architecture from Harb et al. (2017) \cite{harb2017waiting} and the usability of deliberation cost. 
+In 2017 an artificial intelligence named Alpha Go \cite{silver2017mastering} beat the worlds known strongest player. This was achieved without using human knowledge but rather only with playing against itself. Hence reinforcement learning has high potential to learn more complex tasks and thus help humans in the next breakthrough in technology. Maybe this comes by enabling neural networks to do temporal abstraction on its objective. Therefore in this work we want to test the \emph{adaptability} and \emph{limitations} of the option-critic architecture from Harb et al. (2017) \cite{harb2017waiting} and the usability of deliberation cost. 
 
 \section*{Background}
-The research topic of artificial intelligence or machine learning respectively is huge and also really old. We don't mention the basics and concentrate on the aspect of deep learning. We recommend the book from Goodfellow et al. (2016) \cite{goodfellow2016deep} as an introduction and we will assume the reader has a basic understanding of its content. Two algorithms worth mentioning is the deep Q-network(DQN) algorithm from Mnih et al. (2015) \cite{mnih2015human} and the asynchronous actor critic(A3C) from Mnih et al. (2016) \cite{mnih2016asynchronous}.
+The research topic of machine learning is huge and also really old. We don't mention the basics and concentrate on the aspect of deep learning. We recommend the book from Goodfellow et al. (2016) \cite{goodfellow2016deep} as an introduction and we will assume the reader has a basic understanding of its content. Two algorithms worth mentioning is the deep Q-network(DQN) algorithm from Mnih et al. (2015) \cite{mnih2015human} and the asynchronous actor critic(A3C) from Mnih et al. (2016) \cite{mnih2016asynchronous}.
 
 \section*{Related Work}
 The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approach was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today were proposed in the nineties. To summarize these three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}. This thesis is based on the options framework.
@@ -73,29 +74,51 @@ A finite discounted MDP $\mathcal{M}$ is a tuple $\mathcal{M} \doteq (\mathcal{S
 A policy $\pi(s) : \mathcal{S} \to \mathcal{A} $ is a description of behavior. Meaning in a deterministic setting the action taken is always the same given the same state. In a stochastic setting the policy $\pi(a | s) : \mathcal{S} \times \mathcal{A} \to [0,1]$ is a distribution given a state. This means an action is sampled from this distribution where each action has a probability of getting selected.
 
 \section*{Value Function}
-For each action in given state $s$ the environment returns a reward $r(s,a)$. Based on this reward value function can be defined as follows given start state $s$:
+For each action in given state $s$ the environment returns a reward $r(s,a)$. Based on this reward a value function can be defined as follows given start state $s$:
 \begin{equation*}
 V^{\pi}(s) = \mathbb{E} \left[ \sum_{t=1}^{\infty} \gamma^{t} r_t(s_t,a=\pi(s_t)) \right]
 \end{equation*}
 This value can be used to compare different policies given start state $s$. With the same concept in mind a value can be calculated when the first action is additionally separated from the rest of the policy. This yields a state-action value function $Q_{\pi}(s,a):\mathcal{S}\times\mathcal{A} \to \mathbb{R}$ which can be used to compare different initial actions $a$ from a given start state $s$.
 
-\subsection*{$\epsilon$-greedy policy}
-An $\epsilon$-greedy policy is a policy where with $\epsilon$ probability a random action is taken:
+\section*{$\epsilon$-greedy policy}
+Since values can be calculated for given states or state-action pairs we also can define a policy based on these values. A well-known definition is the $\epsilon$-greedy policy which takes with $\epsilon$ probability a random action or else it takes the maximum of the Q-value function.
 \begin{equation*}
-\pi_{\epsilon}
+\pi_{\epsilon} = \begin{cases}
+				  a \sim U_{\mathcal{A}} & \text{if} \; 0<p<\epsilon<1 \\
+				  \displaystyle \max_{a \in \mathcal{A}}{Q(s,a)} &\text{if} \;  0<\epsilon<p<1 	
+			     \end{cases} \qquad p \sim U_{(0,1)}
 \end{equation*}
-Most theory of reinforcement learning research is based on Markov Decision Processes(MDP) since it provides the simplest framework which allows us to study basic algorithms and their properties. A finite discounted MDP $\mathcal{M}$ is a tuple $\mathcal{M} \doteq (\mathcal{S},\mathcal{A},\gamma,r,P)$ encapsulating a state space $\mathcal{S}$, an action space $\mathcal{A}$, a discount factor $\gamma$ where $\gamma \in [0,1)$, a reward function $r(s,a): \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ which maps a state-action pair to a real number and state transition probability function $P(s,a):\mathcal{S} \times \mathcal{A} \to \mathbb{S} $ which maps old states with actions to new states.\\
-A policy $\pi(s) : \mathcal{S} \to \mathcal{A} $ is a description of behavior. Meaning in a deterministic setting the action taken is always the same given the same state. In a stochastic setting the policy $\pi(a | s) : \mathcal{S} \times \mathcal{A} \to [0,1]$ is a distribution given a state. This means an action is sampled from this distribution where each action has a probability of getting selected.
+
+\section*{Policy gradient methods}
+In general a policy $\pi$ is dependent on parameters $\theta$ which for example describe the distribution. Hence the goal in reinforcement learning is to optimize the policy parameters $\theta$ so that the expected return
+\begin{equation*}
+ J (\theta) = \mathbb{E} \left[ \sum_{t=1}^{\infty} \gamma^{t} r_t \right]
+\end{equation*}
+is maximized where $\gamma \in [0,1]$ is the discount factor. This can be accomplished by using the gradient update rule:
+\begin{equation*}
+\theta_{t+1} = \theta_{t} + \alpha_t \cdot \nabla_{\theta} J(\theta) \big|_{\theta=\theta_t} 
+\end{equation*} 
+where $\alpha_t$ is the learning rate. The main problem in policy gradient methods is to obtain a good estimator of the policy gradient $\nabla_{\theta} J(\theta) \big|_{\theta=\theta_t}$. $\alpha_t$ is often refereed to as a hyper-parameter where the best value has to be searched over $[10^{-1},10^{-5}]$ given an environment and algorithm. For a more rigorous explanation of policy gradient methods we refer to Williams (1992) \cite{williams1992simple} and Peters et al. (2008) \cite{peters2008reinforcement}
 
 
 \section*{Option-critic}
-This is needed since options in the options framework from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super-policy can again be an $\epsilon$-greedy policy.\\%but now we act greedily based on the estimated $Q$-value belonging to the options. 
-\includegraphics[scale=1.3]{option_critic_arch.pdf}\\
-The option-critic architecture is similar to the actor-critic algorithm hence the name. For a complete mathematical derivation we refer to Bacon et al. (2017) \cite{bacon2017option} where everything can be found and we only highlight the resulting equations. In this architecture the super-policy acts $\epsilon$-greedy based on $Q$-values learned by $Q$-learning. The super-policy selects an option which is as already mentioned just a stochastic sub-policy and returns basic actions until termination. As one can imagine this model allows in a sense temporally extended sub-strategies. When the termination function is to high for all states the algorithm collapses to basic actions but chosen indirectly over options. The initiation set is generally given by the set of all states meaning any option can start from any state. The function for the $Q$-values used by the super-policy is given by the following equation:
+Learning with temporally abstract actions, named options, from Sutton et al. (1999) \cite{sutton1999between} depend on past decisions. Options are in essence encapsulated policies and thus also a super-policy is required who decides which options gets control in a given state. The last piece needed is a function which describes when a sub-policy should terminate itself and give control back to the super-policy. Mathematically described an option consists of three components. A stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. Last but not least the super-policy $\pi_{\Omega}: \mathcal{S} \times \Omega \to [0,1]$ where $\Omega$ is the set of options. The super-policy is chosen to be $\epsilon$-greedy using the $Q$-value function in this case an a option-state value function. For options the normal MDP has to be extended to a semi-Markov decision process(SMDP) \cite{puterman2014markov} in which the transition time between two decision points is a random variable and shown in figure \ref{fig:mdp_vs_smdp}.\\
+\begin{figure}
+\includegraphics[scale=0.9]{options_over_mdp.pdf}
+\caption{Comparison of time transitions in MDP's and SMDP's}
+\label{fig:mdp_vs_smdp}
+\end{figure}
+\noindent The option-critic architecture \ref{fig:option_critic_arch} is similar to the actor-critic algorithm hence the name. For a complete mathematical derivation we refer to Bacon et al. (2017) \cite{bacon2017option}. We only highlight the resulting equations. In this architecture the super-policy acts $\epsilon$-greedy based on $Q$-values learned by $Q$-learning. The super-policy selects an option which is as already mentioned just a stochastic sub-policy which returns basic actions until termination. As one can imagine this model allows in a sense temporally extended sub-strategies. When the termination function is set to $1.0$ for all states the algorithm collapses to basic actions but chosen indirectly over the super-policy and the option-state value function. The initiation set is generally given by the set of all states meaning any option can start from any state.\\
+\begin{figure}
+\includegraphics[scale=1.1]{option_critic_arch.pdf}
+\caption{Depiction of the option-critic architecture}
+\label{fig:option_critic_arch}
+\end{figure}
+\noindent The function for the $Q$-values used by the super-policy is given by the following equation:
 \begin{equation*}
 Q_{\Omega}(s,\omega) = \sum_{a} \pi_{\omega,\theta}(a|s) Q_{U}(s,\omega,a)
 \end{equation*}
-It is simply the expectation over all actions an option $\omega$ can take and a corresponding state-option-action value given by the sub-policy. The state-option-action value function is defined as follows:
+It is simply the expectation over all actions an option $\omega$ can take and a corresponding state-option-action value given by the sub-policies. The state-option-action value function is defined as follows:
 \begin{gather*}
 Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s') \\
 U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\omega,\vartheta}(s') V_{\Omega}(s')
@@ -122,10 +145,21 @@ In case that the action space is to large and therefore $N_{\Omega} \cdot N_{\ma
 \begin{equation*}
 Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s')=r(s,a)+\gamma \mathbb{E}_{s' \sim P } \left[ U(\omega,s') \big| s,a \right]
 \end{equation*}
-\TODO{pseudo code for option critic?}
+
 
 \section*{Deliberation cost}
-
+As apparent from the figure \ref{fig:delib_cost} at each decision point, marked with a white circle, an additional cost is added. This penalizes fast changes between options. Mathematically this is done by defining an immediate cost function $c(s,\omega,a,s',\omega')$ and a corresponding deliberation cost function $D_{\theta}(s,\omega)$. 
+\begin{figure}[!ht]
+\includegraphics[scale=0.7]{option_critic_delib_cost.pdf}
+\caption{Structure of deliberation cost model}
+\label{fig:delib_cost}
+\end{figure}
+\noindent Without going into the rigorous derivation from Harb et al. (2017) \cite{harb2017waiting} we show the new equations.
+\begin{gather*}
+\rho(\vartheta) = \mathbb{E}\left[  \sum_{t=1}^{\infty} \gamma^{t-1} ( R_t - \eta c(s,\omega,a,s',\omega') ) \bigg| s',\omega,\Omega \right]\\
+\frac{\partial U_{\omega, s'} }{\partial \vartheta} = \sum_{\omega'} \sum_{s''} d_{\Omega}(s',\omega ) \frac{\partial \beta_{\omega',\vartheta}(s'') }{\partial \vartheta} \left( V_{\Omega}(s'') - Q_{\Omega}(s'',\omega') + \eta \right)
+\end{gather*}
+Thus one can see that a margin $\eta$ was introduced in the gradient. This allows us to tilt the termination of an option in both directions. For example when the margin is high in comparison to the reward the system will use a chosen option for longer periods of time. A negative $\eta$ motivates the system to change more between given options. 
 
 \begin{comment}
 % Start writing here
@@ -295,29 +329,23 @@ H( \pi_{\omega,\theta}(\cdot |s) ) = -\sum_{a} \pi_{\omega,\theta}(a|s)\log(\pi_
 
 \subsection*{Deliberation Cost}
 
-\TODO{graphic from paper}
-
-
 \chapter{Implementation}
 \end{comment}
-
 \section*{Implementation details}
-
-We based our implementation on the UNREAL \cite{miyoshigithubunreal} implementation of Jaderberg et al. (2016) \cite{jaderberg2016reinforcement} which uses the Asynchronous Advantage Actor Critic(A3C) algorithm from Mnih et al (2016) \cite{mnih2016asynchronous}. Next we implemented Asynchronous Advantage Option Critic(A2OC) from Harb et al. (2017) \cite{harb2017waiting} where a theano based implementation can be found here \cite{harbgithuba2oc}.
+K. Miyoshi re-implemented \cite{miyoshigithubunreal} the UNREAL version based on the paper of Jaderberg et al. (2016) \cite{jaderberg2016reinforcement}. This paper extended A3C algorithm from Mnih et al (2016) \cite{mnih2016asynchronous} with unsupervised auxiliary tasks. His implementation was tested on the DeepMind Lab \cite{beattie2016deepmind}. We used this re-implementation from K. Miyoshi where he also used tensorflow but changed the algorithm to Asynchronous Advantage Option Critic(A2OC) from Harb et al. (2017) \cite{harb2017waiting} and added our own environment. To implement the environment we used the OpenAI gym toolkit from Brockman et al. \cite{brockman2016openai}. The original A2OC from Harb \cite{harbgithuba2oc} uses the thenao framework for neural networks hence it could only be used as a reference.
+%(ALE) \cite{brockman2016openai} DeepMind Lab \cite{beattie2016deepmind}
 
 \subsection*{Environment}
-Most interesting learn environments used such as the Arcade Learning Environment (ALE) \cite{brockman2016openai} or the DeepMind Lab \cite{beattie2016deepmind} where complicated tasks are learned from pixel inputs are harder to study. The simple reason is that the network heavily relies on GPU's and their ability to fast transform pixel inputs in the convolution layer to features usable for training. Hence the training time until reasonable performance can easily take days. This is unsuitable for scientific analysis of the algorithm where we want to study the effect of each small change in the model, hyper-parameters or environment. Therefore since we repeat all simulation very often we want fast convergence. Thus we implemented simple grid worlds where we can easily control the world size and hence the input dimension to the network. The OpenAI gym toolkit from Brockman et al. \cite{brockman2016openai} allowed easy implementation of our grid-world through inheritance of their environment classes. Also there is a tutorial online on github which explains how to accomplish that.
-
-\subsection*{Multithreading}
-We used an on-policy approach where multiple threads like in Mnih et al. \cite{mnih2016asynchronous} make small batches of data, apply the gradients from this data then resynchronize the networks. For this we used the python multiprocessing tools namely Process and Pipe. This handled multiple instances of the same environments and their communication and was used in the UNREAL implementation. Since multiple threads also have their own instances of the neural networks the total resulting graph is relatively huge.
-
-
-\TODO{input the graphic for graph}
+For fast evaluation circumvent GPU usage we used an easy two dimensional grid world. There are only three features, namely an empty cell represented as $0.$, the agent position represented as $1.0$ and the goal position represented as $2.0$. The goal for the agent is to reach the goal. After each environment reset the positions of the agent and the goal are uniformly sampled but will never collide. The environment is later extended to also include a key represented with $3.0$ which has to be picked up first in order to reach the goal. \cite{flofreigithubmaze}
 
 \subsection*{Neural Networks}
-To implement all neural networks we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} in python. In essence tensorflow constructs a direct acyclic graph for the flow of information through the layers. Elements in this graph are variables such as weights and biases but also all operations such as multiplication and addition. The nice thing about that is that the library takes care for computing backwards and forwards propagation within the network since it computes and applies the gradients itself. When $N_{\omega}$ is the number of options then we needed $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the $Q$-value model and the convolution layer. Before the input gets fed into the convolution layer the input is rescaled to $[0,1]$.
+As already mentioned we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} to implement our neural networks. Given $N_{\omega}$ options we need for A2OC total of $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the Q-value model and the convolution layer. Before the input gets fed into the convolution layer the input is rescaled to $[0,1]$ as it is ueblich when using convolution with filters. In the figure we depict the flow of information but with correct representations of the networks.
 
-\includegraphics[scale=0.74]{option_critic.pdf}
+\begin{figure}
+\includegraphics[scale=0.65]{option_critic.pdf}
+\label{fig:option_critic_nn}
+\caption{Flow of information in option-critic architecture including showing the neural networks}
+\end{figure}
 
 \subsection*{Convolution network}
 Since our world is relatively simple we choose one layer of convolution followed by two fully connected layers. The number of filters we choose was $64$ and the filter size was chosen the same as the world size. Meaning a $4 \times 4$ grid world gets a $4 \times 4$ filter since we didn't wanted to loose any information. We used padding such that the dimension stays the same meaning an input of $4 \times 4$ gets transformed to an output of $4 \times 4 \times 64$. For initialization the standard Xavier initializer for weights and Zero initializer for biases were used. For both fully connected layers Rectified Linear Units(ReLUs) were utilized as activation functions. The second fully connected layer has a dimension of $32$ units. 
@@ -329,183 +357,147 @@ We utilize different deep networks of options depending on the experiment. The i
 As already talked about the $Q$-value model is the basis for the super-policy for making decisions. Our $Q$-value  network has two layers. First a fully connected layer compromised of $16$ units with a ReLU activation function followed by a second fully connected layer but with a linear activation function since we have to allow negative $Q$-values for the algorithm to work properly. Whereas the output dimension is the number of options $N_{\Omega}$ since we compare among them for making decisions. 
 
 \subsection*{Termination network}
-The termination network is exactly the same as the $Q$-value network where the only difference is that the last activation is no longer linear but a sigmoid function. This gives us a vector of termination probabilities corresponding to the options. It was observed already in \cite{harb2017waiting} that the termination model suffers under over-fitting hence the introduction of a deliberation cost as a form of regularization is sensible.  
-
+The termination network is exactly the same as the $Q$-value network where the only difference is that the last activation is no longer linear but a sigmoid function. This gives us a vector of termination probabilities corresponding to the options. %It was observed already in \cite{harb2017waiting} that the termination model suffers under over-fitting hence the introduction of a deliberation cost as a form of regularization is sensible.  
 
 \subsection*{Sensitivity of reward function}
-The convergence of the network respectively the algorithm is dependent on the reward function. First of all to avoid problems the reward functions in most cases is scaled to $[-1,1]$. Furthermore one tries to eliminate all local optima in a sensible reward function otherwise the network can get stuck during learning. It could also happen that a flaw in the reward function can lead to reward hacking and the system learns something the user never intended to. Hence constructing a sensible reward function is not an easy task. In our environment we get a reward for each step. We divided this into three categories namely stepping outside of the world, stepping inside the world, and stepping on the goal. The reward for the goal is constant $1$ and the episode is terminated. The other two have more variability and hence we want to test different scenarios. These are summarized in the table below:\\
-\begin{tabular}{cccc}
-Name&\{outside,flag\}&\{inside,flag\}&\{goal,flag\} \\
-$S_1=$ & \{-1,True\} &\{0,False\} & \{1,True\} \\
-$S_2=$ & \{-1,True\}& \{-0.1,False\}& \{1,True\} \\
-$S_3=$ & \{0,True\}& \{0,False\}& \{1,True\} \\
-$S_4=$ & \{-1,False\} &\{0,False\} & \{1,True\} \\
-$S_5=$ & \{-1,False\}& \{-0.1,False\}& \{1,True\} \\
-$S_6=$ & \{0,False\}& \{0,False\}& \{1,True\} \\
-$S_7=$ & \{-0.1,False\}& \{-0.1,False\}& \{1,True\} 
+The convergence of the networks respectively used in the algorithms is generally dependent on the reward function. First of all to avoid problems the reward functions in most cases is scaled to $[-1,1]$. Furthermore one tries to eliminate all local optima in a sensible reward function otherwise the network can get stuck during learning. It could also happen that a flaw in the reward function can lead to reward hacking and the system learns something the user never intended to. Hence constructing a sensible reward function is not an easy task. In our environment we get a reward for each step. We divided this into three categories namely stepping outside of the world, stepping inside the world, and stepping on the goal. The reward for the goal is constant $1$ and the episode is terminated. The other two have more variability and hence we want to test different scenarios. These are summarized in the table below:\\
+\begin{tabular}{l|cccc}
+&Name & \makecell{ \{step outside boundary, \\ terminate? \} } & step inside&reaching goal \\
+\hline
+Monte Carlo & $R_1=$ & \{ {$-1.0$} , Yes\} & $0.$ & $1.0$ \\
+&$R_2=$ & \{ ${-1.0}$ , Yes\} & {$-0.1$} & $1.0$ \\
+&$R_3=$ & \{ {$-0.1$} , Yes\} & {$-0.1$} & $1.0$ \\
+&$R_4=$ & \{$0.$ , Yes\} & $0.$ & $1.0$ \\
+\hline
+Small local & $R_5=$ & \{$-1.0$ , No \} & $0.$ & $1.0$ \\
+&$R_6=$ & \{$-1.$ , No\}& $-0.1$ & $1.0$ \\
+&$R_7=$ & \{$0.$ , No\}& $0.$ & $1.0$ \\
+&$R_8=$ & \{$-0.1$ , No\}& $-0.1$ & $1.0$
 \end{tabular}
 
+\noindent Monte Carlo updates with trajectories need premature termination, in this case through colliding with the wall, otherwise it will not converge. We will later proof that in an experiment but the reason is simple since the occurrence of a trajectory and hence its probability is proportional to its length. Meaning when the length reaches a certain threshold the value for learning diminishes since learning with seldom occurring trajectories is inefficient. The rewards $R_1$-$R_3$ will hence only be used for learning with trajectories. Later we will additionally add a key to the environment which has to be picked up first. To avoid another local optima we will give $0$ reward for picking up the key and will obviously not terminate.
 
-As one can see the sets $S_1$ and $S_2$ have local optima. Note that in $S_2$ the local optima occurs when the agent makes more the $10$ steps in the world which is worse than walking into a wall since this terminates the episode. Furthermore when whole trajectories are used to learn like in Monte Carlo, utilizing the sets $S_4$ and $S_5$ as rewards lead with high probability that the network will not converge. Later on we introduce an additional barrier namely a key which has to picked up first before reaching the goal is possible. Picking up the key gives \{0,False\} or \{1,False\} reward and could potentially add a local optima.
-
-\subsection*{Epsilon annealing vs. constant epsilon}
-Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. We tested two scenarios and looked at their development. First scenario is were start with the highest value of $\epsilon = 1.0$ and then anneal epsilon linearly down to $0.1$ or $0.01$ over constant number of steps. The second scenario is to let be epsilon constant $\epsilon=0.1$ or $\epsilon=0.01$ and hope that this randomness is enough over long time for convergence. 
+\subsection*{Epsilon annealing}
+Since we use an $\epsilon$-greedy super-policy we are confronted with the question which value is reasonable. When we use a constant $\epsilon$ of $0.1$ most problems are converge but really slow since the exploration-rate at the beginning is to small. Hence we decided to use epsilon annealing meaning we start with a value of $1.0$ and go linear down during the anneal time reaching terminal value of $0.1$. Thus the anneal time is now a hyper-parameter of the experiment and hence easily tunable. Generally we saw that depending on the amount of missing information the optimal anneal time is longer which was evident from the experiment shown in the appendix.
 
 \subsection*{Deliberation cost annealing}
-The deliberation cost is mainly used to steer the termination network. For example when the termination get stuck on 0\% or 100\% but it is a local optima instead of restarting the networks the deliberation cost can be used to increase or decrease termination. 
-
-\TODO{graphic stuck optima from paper}  
-
+The problem of premature termination of options seen in Harb et al. (2017) \cite{harb2017waiting} did not emerge in our experiments with our environment. The most likely reason is that with only 2-3 features the distance in the representation after the convolution between steps is minimal. Therefore the input vector of the Q-value network does not fluctuate enough between steps to change output significantly. Using trajectories in the second experiment resulted in local optima. We tested the viability of using the deliberation cost to kick the system out of the local optima. This was done by annealing the cost from a negative value which supports termination of the currents options which are stuck in the optima to a small positive value.
 
 \subsection*{Exponential window function}
 The tensorboard tool given with tensorflow library allows to view all defined summaries in the web-browser. This is useful for observing a current running experiment. It case something goes wrong with the network we can prematurely terminate the experiment and restart it. Since we deal with very noisy data we always look at an moving average to determine if we are converged. The window size for this average is determined by the following function:
 \begin{equation}
 \label{eq:smoothwindow}
-f(x) = \frac{1000^{x}-1}{999}
+f(x) = \frac{1000^{x}-1}{999} \qquad x \in [0,1]
 \end{equation}
-We mostly used a factor of $0.8$ in the figures together with pandas plotting tools. This is not exactly equivalent to the web-browser tensorboard with smoothing factor $0.9$ but close enough for consistency. Also consider that using rolling average shortens data at the end in our figures whereas this does not happen in tensorboard for unknown reasons.
+We used $x=0.8$ rounded to integers in most figures together with pandas plotting tools. This was close enough to the curves in tensorboard where a smoothing factor of $0.99$ was used. 
 
 \chapter{Experiments}
 
-We structure our experiments into two sections. The first section is about testing the adaptability of the super-policy where only bias options are given, and there is missing knowledges to be learned, which is tested under different reward functions and local data roll-outs. The second section is about testing the usability of an expert given two-layered options where a key has to be picked up first for reaching the goal. 
+We structure our experiments into two sections. The first section is about testing the \emph{adaptability}, as mentioned in the title, of the super-policy where only bias options are given, and there is missing knowledges to be learned, which is tested under different reward functions, local data roll-outs and trajectories. The second section is similar but the environment is slightly more difficult and the options are multi-layered networks. 
 
 \section*{Input independent options}
-In this experiment we only used options comprising a bias term. Hence the experts in this experiments are one-shot vectors defining one direction. We tested all kinds of combinations of experts and Xavier initialized options and observed the different learning behavior. We further divided the experiment into two update schemes. The first is using a small local roll-out of $5$ steps like in A3C and the second is to use the whole trajectory of the environment like in Monte Carlo methods.
+In this experiment we only used options comprising of a bias term. Hence the experts in this experiments are one-shot vectors defining one direction. We tested all kinds of combinations of experts and Xavier initialized options and observed the different learning behavior. We further divided the experiment into two update schemes. The first is using a small local roll-out of $5$ steps like in A3C and the second is using the whole trajectory of the environment like in Monte Carlo methods. This means the update frequency with gradients on the network is much higher in the small roll-out in comparison to using hundreds of trajectories. This makes it more stable across multiple threads but also much slower in how many steps are made per hour.
 
 \subsection*{Small local roll-out}
-By definition the local batch size is only $5$ steps. In this case the reward function where premature termination can happen is nearly equivalent and hence not considered. What is more interesting to test is how good missing knowledge is learned depending on how much is missing and if it changes under time pressure. We found that the best learning rate for this experiment was $2e-3$ whereas $\epsilon$ was annealed over $10^{6}$ timesteps. For finding the most sensible choice of hyper-parameters we refer to the appendix.
+By definition the local batch size is only $5$ steps. The world size is $4 \times 4$ and hence task is solvable in one roll-out meaning that at the end each batch of data should reach the goal in case of convergence. What is interesting to test is how good missing knowledge is learned and if it changes under time pressure. We found that the best learning rate for this experiment was $2e-3$ whereas $\epsilon$ was annealed over $10^{6}$ steps. For finding the most sensible choice of hyper-parameters we refer to the appendix.
 
 \subsubsection{No time pressure}
-We present the results of using the reward set $S_7$. Note that these results are strongly smoothed with an moving average and the window size is determined by function \eqref{eq:smoothwindow} with factor of $0.8$ rounded to the next integer.
+\begin{figure}[!ht]
+\includegraphics[scale=0.32]{./figures/local/4e_avrg_score_nt2.pdf}
+\includegraphics[scale=0.32]{./figures/local/3e_1x_avrg_score_nt2.pdf}\\
+\includegraphics[scale=0.32]{./figures/local/2e_2x_o_avrg_score_nt2.pdf}
+\includegraphics[scale=0.32]{./figures/local/2e_2x_p_avrg_score_nt2.pdf}\\
+\includegraphics[scale=0.32]{./figures/local/1e_3x_avrg_score_nt2.pdf}
+\includegraphics[scale=0.32]{./figures/local/4x_avrg_score_nt2.pdf}
+\caption{6 experiments under no time pressure with missing variable information}
+\label{fig:local_ntime}
+\end{figure}
 
-\includegraphics[scale=0.45]{./figures/local/4e_avrg_score_nt.pdf}\\
-The first run was done with $4$ experts as options meaning the directions don't have to be learned. The three curves are repetition of the same experiment. Everything has to be learned by the super-policy hence the $Q$-value network. Noteworthy is that in this case the learning rate could be set slightly higher then in the other cases for faster convergence but then we have no direct comparison.\\
-\includegraphics[scale=0.45]{./figures/local/3e_1x_avrg_score_nt.pdf}\\
-Here the one direction is missing and has to be learned from Xavier initialization. We already see that this learning curve is slower then before.\\
-\includegraphics[scale=0.45]{./figures/local/2e_2x_o_avrg_score_nt.pdf}\\
-In this case two directions are missing which are orthogonal to each other. Here we can also observe that some initialization of the networks will not converge. The orange curve is an example where the distributions of the unknown directions is stuck in a $\{0,0.5,0.5,0\}$ optima where the four directions are given in order left right up down.\\
-\includegraphics[scale=0.45]{./figures/local/2e_2x_p_avrg_score_nt.pdf}\\
-This depicts the case where the directions are opposite of each other. Note that also in this scenario it can get stuck in a local optima.\\
-\includegraphics[scale=0.45]{./figures/local/1e_3x_avrg_score_nt.pdf}\\
-As one can intuitively guess the more knowledge is missing the slower the convergence.
-\includegraphics[scale=0.45]{./figures/local/4x_avrg_score_nt.pdf}
-Interesting to see is that when no expert is given and all options are Xavier initialized the scenario of the cases with two missing reoccurs. In most likelihood both directions get stuck in a 50/50 local optima and can never recover. Hence since this is happens in both directions convergence is not impossible but really unlikely.
-
-\TODO{what about termination ,option activity and q values}
+In this setting we use reward set $S_7$. Note that these results are strongly smoothed with an moving average and the window size is determined by function \eqref{eq:smoothwindow} with factor of $0.8$ rounded to the next integer. In figure \ref{fig:local_ntime} we see that missing knowledge can be learned but is unstable. Convergence means in this case reaching the $1.0$ score level. First we see a trend that the delay time until the curves reach convergence levels is depending on the amount of missing knowledge. Second we see that the orange curve in sub-figure 3 and 4 is stuck in a local 50/50 optima where orthogonal and opposite directions have to be learned. Hence it is not surprising that when all knowledge of the directions are missing like in sub-figure 6 that convergence is highly unlikely.
 
 \subsubsection{With time pressure}
-We compare the results from before to a scenario where each step has a cost. 
-\includegraphics[scale=0.5]{./figures/local/4e_avrg_score_t.pdf}\\
-\includegraphics[scale=0.5]{./figures/local/3e_1x_avrg_score_t.pdf}\\
-\includegraphics[scale=0.5]{./figures/local/2e_2x_o_avrg_score_t.pdf}\\
-\includegraphics[scale=0.5]{./figures/local/2e_2x_p_avrg_score_t.pdf}\\
-\includegraphics[scale=0.5]{./figures/local/1e_3x_avrg_score_t.pdf}\\
-\includegraphics[scale=0.5]{./figures/local/4x_avrg_score_t.pdf}
 
-\TODO{what about termination ,option activity and q values}
+\begin{figure}[!ht]
+\includegraphics[scale=0.32]{./figures/local/4e_avrg_score_t2.pdf}
+\includegraphics[scale=0.32]{./figures/local/3e_1x_avrg_score_t2.pdf}\\
+\includegraphics[scale=0.32]{./figures/local/2e_2x_o_avrg_score_t2.pdf}
+\includegraphics[scale=0.32]{./figures/local/2e_2x_p_avrg_score_t2.pdf}\\
+\includegraphics[scale=0.32]{./figures/local/1e_3x_avrg_score_t2.pdf}
+\includegraphics[scale=0.32]{./figures/local/4x_avrg_score_t2.pdf}
+\caption{6 experiments under time pressure with missing variable information}
+\label{fig:local_time}
+\end{figure}
 
-\subsection*{Trajectory}
+\noindent We changed here the reward function such that each step gives $-0.1$ instead of $0$ and hence creates a time pressure. The changes in convergence are very obvious. The time pressure stabilized the convergence in such a way that the algorithm finds faster the solution and additionally the most difficult to learn with 4 Xavier initialized directions converges almost guaranteed. This makes sense because in the previous case there were many ways to reach the goal without penalty and hence were equivalent to the algorithm. In this experiment this was no longer the case and it has to find the fastest way.
 
 
+\subsection*{Monte Carlo}
+In this section we look at the how the system learn using trajectories. Note that here we have to use reward sets $R_1-R_4$ for convergence since only short trajectories are usable as learning mechanism.
+
+\subsubsection*{No time pressure}
+Here we present the result from using the reward set $R_1$:
+\begin{figure}[!ht]
+\includegraphics[scale=0.5]{./figures/mc/mc_ntime_-1wallterm.pdf}
+\caption{Mean score using trajectories with reward $R_1$}
+\end{figure}
+
+Missing knowledge
+failed conv
+
+
+
+Here is $R_4$
+
+
+\subsubsection*{Time pressure}
+Reward set $R_2$ and $R_3$
 
 
 \section*{Key Pickup}
+As already mentioned in this experiment a key was added to the environment. The big difference to before is that one two-layered option is capable enough to learn to whole problem itself. The expert is only capable of picking up the key itself. 
 
+\subsection*{Small local}
+Small local only picks options...
 
+\subsubsection*{No time pressure}
 
-\begin{comment}
-\subsection{missing experiments}
-reward sets swapping
-4 options 4 experts for 4 directions with small local rollout
-4 options 2 experts for parallel directions with 2 xavier init with small local rollout
-4 options 2 experts for orthogonal directions with 2 xavier init with small local rollout
+\subsubsection*{Time pressure}
 
-increasing world size to look at convergence time
-learning rate hyper-parameter search
+\subsection*{Monte Carlo}
 
-4 options 1 key expert 3 xavier init score function?
+\subsubsection*{No time pressure}
+In this experiment we look at the 
+wall -1 terminate
+step 0
+key 0
+goal 1 terminate
 
-\subsection{brainstorm}
+Jump ending\\
+\includegraphics[scale=0.45]{./figures/mc/score_key_0r_jumpe.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_jumpe.pdf}\\
+Bad ending\\
+\includegraphics[scale=0.45]{./figures/mc/score_key_0r_bade.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_bade.pdf}
 
-many experiments
-much data
+\subsubsection*{Time pressure}
+wall -1 terminate
+step -0.1
+key 0
+goal 1 terminate
 
-changed experiment environment domain
-behaviour of options of different kind of structures on this domain
-overfitting prolem? no termination
-learning of options vs superpolicy
-delibration cost not needed?
-
-different hyperparameters and their influence
-
-filter size
-world size
-learning rate
-annealing vs 0.1 eps
-
-bias part
-
-learning missing knowledge
-
-missing 1 direction
-missing 2 direction parallel vs orthogonal
-missing 0 direction
-superpolicy speed
-
-2D key environment
-4 2 layered options
-3 2 layered options with 1 expert
-expert end termination problem
-
-jump vs bad ending for expert
-reward 1 vs 0 on key
-local optima prison
--delib cost annealing
-
-
-\section{Small vs longer rollout}
-Multiple threads create local batches of data. One way is to create whole trajectories with the environment and then apply the update gradients on the network. These types of methods are called Monte Carlo methods. This is only possible when the trajectory is small enough since the longer the trajectory the smaller the probability of it occurring and hence more difficult using this data to train. This was ensured by using the termination of the environment. When the agent walks into the boundary of the domain the environment terminated the agent. This accomplished small local batches of data where the agent could learn efficiently. In case where the agent was not terminated learning was close to impossible with the generated data. Another way is make small local steps in the environment and then update the network with this local gradient. This methods are called Temporal Difference methods.
+Jump ending\\
+\includegraphics[scale=0.45]{./figures/mc/score_key_0r_timep_jumpe.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_timep_jumpe_conv.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_timep_jumpe_updownup.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_timep_jumpe_updown.pdf}\\
+Bad ending\\
+\includegraphics[scale=0.45]{./figures/mc/score_key_0r_timep_bade.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/score_key_0r_timep_bade_16M.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_timep_bade_3M.pdf}\\
+\includegraphics[scale=0.45]{./figures/mc/usage_0r_timep_bade_16M.pdf}
 
 
 \nocite{merheb2017learning}
-
-\section{Environment}
-The toolkit we use to implement our own test environments is the OpenAI gym from Brockman et al. \cite{brockman2016openai} in python.
-
-1D 2D 2Dkey
-
-\section{Networks}
-hyoerparameters? 
-
-
-\section{Asynchronous Advantage Option Critic (A2OC)}
-
-
-Bacon et al. 2017 \cite{bacon2017option} has shown that learning options in an end-end fashion is possible but frequent termination is an issue. The introduction of a deliberation cost in \cite{harb2017waiting} helped but again is a sensitive hyperparameter. 
-
-
-In case that the environment is changed to something simpler than ALE
-
-
-
-\chapter{Thoughts}
-$\bullet$ basic actor critic, td error, 1D environment, multithreaded \\
-$\bullet$ learning tensorflow with python \\
-$\bullet$ options paper \\
-$\bullet$ learning about gym for definition of own environment \\
-$\bullet$ implement option critic on multithreaded own environment \\
-
-fast and easy environment for testing the abstraction levels and depth
-
-
-The option critic has a significant overhead in comparison to the actor critic implementation.
-The option critic architecture consists of 3 network types, namely an option network, a Q value model and a termination model.
-The actor critic model as the name implies consists only of an actor and a critic model hence two networks.
-The Q value model describe how a state is for the given options.
-The options describe action probabilities for a given state and can be understood as a strategy.
-The termination model characterized how likely a given option terminates given the state as input. 
-\end{comment}
-
 % This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
 \bibliographystyle{splncs}
 \bibliography{references}
@@ -516,11 +508,11 @@ The termination model characterized how likely a given option terminates given t
 
 \section*{Hyperparameter annealing time for small local}
 In this experiment we wanted to test how long annealing is required for a reasonable convergence. Hence we see in the figure below that $10^{6}$ time steps is a reasonable time.\\
-\includegraphics[scale=0.45]{./figures/local/annealing_hyperpara.pdf}
+\includegraphics[scale=0.45]{./figures/hyperparam/annealing_hyperpara.pdf}
 
 \section*{Hyperparameter learning rate for small local}
-\includegraphics[scale=0.45]{./figures/local/learningrate_hyperpara.pdf}
-
-
+\includegraphics[scale=0.45]{./figures/hyperparam/learningrate_hyperpara.pdf}\\
+\includegraphics[scale=0.45]{./figures/hyperparam/filter_4x4.pdf}\\
+\includegraphics[scale=0.45]{./figures/hyperparam/filter_var.pdf}
 
 \end{document}
