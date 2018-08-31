@@ -40,21 +40,15 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-I would first like to thank my thesis advisors Oliver Richter and Gino Brunner of the Distributed Computing Group at Swiss Federal Institute of Technology Zurich.  
-
-The door to Prof. [Last name] office was always open whenever I ran into a trouble spot or had a question about my research or writing. He/She consistently allowed this paper to be my own work, but steered me in the right the direction whenever he thought I needed it.
-
-I would also like to acknowledge David Haldimann a student colleague of mine at Swiss Federal Institute of Technology Zurich as the second reader of this thesis, and I am gratefully indebted for his very valuable comments on this thesis.
-
-Finally, I must express my very profound gratitude to my parents for providing me with unfailing support and continuous encouragement throughout my years of study and through the process of researching and writing this thesis. This accomplishment would not have been possible without them. Thank you.
-
-Florian Frei
+I would first like to thank my thesis advisors Oliver Richter and Gino Brunner, for the patient guidance, ideas and advice they have provided every week throughout the duration of my work. I would also like to thank my supervisor Prof.\ Dr.\ Roger Wattenhofer for his input.\\
+I would further like to thank the stuff of the Distributed Computing Group at Swiss Federal Institute of Technology Zurich for providing a workplace and a server node to run experiments.\\
+I would also like to acknowledge David Haldimann a student colleague of mine at Swiss Federal Institute of Technology Zurich as the second reader of my work, and I am gratefully indebted for his very valuable comments.\\
+Finally, I must express my very profound gratitude to my parents and my brothers for providing me with unfailing support and continuous encouragement throughout my years of study and through the process of researching and writing this thesis. This accomplishment would not have been possible without them. Thank you.
 \end{acknowledgements}
 
 
 \begin{abstract}
-	smart short recapitulation of stuff done
-	main work experiments with temporal abstraction and their adaptability 
+Temporal abstraction is trivial for humans but difficult for machines. Recently the new algorithm Asynchronous Advantage Option-Critic (A2OC) \cite{bacon2017option} was introduced in hierarchical deep reinforcement learning which was able learn some temporal abstraction on the Atari games. This algorithm uses the well-established options framework \cite{sutton1999between}. In this work we want to test the adaptability of this algorithm based on the knowledge already present in the options.
 \end{abstract}
 
 \tableofcontents
@@ -137,7 +131,7 @@ U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\o
 \section{Deliberation Cost}
 \label{seq:delib_cost}
 We will present here briefly the concept and motivation for a deliberation cost in the option-critic architecture but we recommend reading the original paper from Harb et al. (2017) \cite{harb2017waiting}.
-The problem they showed in an experiment was that using options for learning to play Atari games lead to high   
+They showed in an experiment that the options used to learn Atari games were very short-lived. This is problematic since this implies there was no temporal abstraction done in the algorithm. They fixed this issue by introducing a deliberation cost who acts on the same time scale as the super-policy shown in Figure \ref{fig:delib_cost}. The idea is that the algorithm has to pay an additional cost if he wants to change to another option. Shown in the experiment this lead to options acting on longer time-scales and hence better temporal abstraction. Note however that this deliberation cost is a hyper-parameter of the experiment and thus has to be determined case-by-case.
 
 \begin{figure}[!ht]
 \centering
@@ -192,16 +186,25 @@ K. Miyoshi re-implemented \cite{miyoshigithubunreal} the UNREAL version based on
 %(ALE) \cite{brockman2016openai} DeepMind Lab \cite{beattie2016deepmind}
 
 \subsection*{Environment}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.9]{env_2d.pdf} \qquad
+\includegraphics[scale=0.9]{env_2d_key.pdf}
+\caption{Depiction of the 2-dimensional grid world where the agent "a" needs to find the goal "T". An addition is where first a key "k" has to picked up first before reaching the goal.}
+\label{fig:2d_grid_world}
+\end{figure}
+
 For fast evaluation circumvent GPU usage we used an easy two dimensional grid world. There are only three features, namely an empty cell represented as $0.$, the agent position represented as $1.0$ and the goal position represented as $2.0$. The goal for the agent is to reach the goal. After each environment reset the positions of the agent and the goal are uniformly sampled but will never collide. The environment is later extended to also include a key represented with $3.0$ which has to be picked up first in order to reach the goal. \cite{flofreigithubmaze}
 
 \subsection*{Neural Networks}
 As already mentioned we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} to implement our neural networks. Given $N_{\omega}$ options we need for A2OC total of $N_{\omega}+3$ networks. Each options has its own neural network and hence we can test mixed models of different depth against each other. The rest is used for the termination model, the Q-value model and the convolution layer. Before the input gets fed into the convolution layer the input is rescaled to $[0,1]$ as it is ueblich when using convolution with filters. In the figure we depict the flow of information but with correct representations of the networks.
 
-\begin{figure}
-\includegraphics[scale=0.65]{option_critic.pdf}
-\label{fig:option_critic_nn}
-\caption{Flow of information in option-critic architecture including showing the neural networks}
-\end{figure}
+%\begin{figure}
+%\includegraphics[scale=0.65]{option_critic.pdf}
+%\label{fig:option_critic_nn}
+%\caption{Flow of information in option-critic architecture including showing the neural networks}
+%\end{figure}
 
 \subsection*{Convolution network}
 Since our world is relatively simple we choose one layer of convolution followed by two fully connected layers. The number of filters we choose was $64$ and the filter size was chosen the same as the world size. Meaning a $4 \times 4$ grid world gets a $4 \times 4$ filter since we didn't wanted to loose any information. We used padding such that the dimension stays the same meaning an input of $4 \times 4$ gets transformed to an output of $4 \times 4 \times 64$. For initialization the standard Xavier initializer for weights and Zero initializer for biases were used. For both fully connected layers Rectified Linear Units(ReLUs) were utilized as activation functions. The second fully connected layer has a dimension of $32$ units. 
