@@ -40,15 +40,16 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-First I would like to thank my thesis advisors Oliver Richter and Gino Brunner for the patient guidance, ideas and advice they have provided during my thesis. I also like to thank my supervisor Prof.\ Dr.\ Roger Wattenhofer for allowing me to do this work in his Distributed Computing Group at Swiss Federal Institute of Technology Zurich.\\
-Furthermore I want to thank the staff of the Distributed Computing Group at Swiss Federal Institute of Technology Zurich for providing me a workplace and a server node to run my experiments.\\
-I would also like to acknowledge David Haldimann a student colleague of mine at Swiss Federal Institute of Technology Zurich as the second reader of my work, and I am gratefully indebted for his very valuable comments.\\
+First I would like to thank my thesis advisors Oliver Richter and Gino Brunner for the patient guidance, ideas and advice they have provided during my thesis. I would also like to thank my supervisor Prof.\ Dr.\ Roger Wattenhofer for allowing me to do this thesis in his Distributed Computing Group at Swiss Federal Institute of Technology Zurich.\\
+Furthermore, I want to thank the staff of the Distributed Computing Group at Swiss Federal Institute of Technology Zurich for providing me a workplace and a server node to run my experiments.\\
+I would also like to acknowledge David Haldimann, a student colleague of mine at Swiss Federal Institute of Technology Zurich, as the second reader of my work, and I am gratefully indebted for his very valuable comments.\\
 Finally, I express my very profound gratitude to my parents and my brothers for providing me with unfailing support and continuous encouragement throughout my years of study and through the process of researching and writing this thesis. This accomplishment would not have been possible without them. Thank you.
 \end{acknowledgements}
 
 
 \begin{abstract}
-Temporal abstraction is trivial for humans but difficult for machines. Recently the new algorithm Asynchronous Advantage Option-Critic (A2OC) \cite{bacon2017option} was introduced in hierarchical deep reinforcement learning which was able to learn some temporal abstraction on the Atari games. This algorithm uses the well-established options framework \cite{sutton1999between}. In this work we want to test the adaptability of this algorithm based on the knowledge already present in the options.
+Temporal abstraction is trivial for humans but difficult for machines. Recently the new algorithm Asynchronous Advantage Option-Critic (A2OC) \cite{bacon2017option} was introduced in hierarchical deep reinforcement learning, which was able to learn some temporal abstraction on the Atari games. This algorithm uses the well-established options framework \cite{sutton1999between}. In this work we want to test the adaptability of this algorithm when there are pre-trained options in the model, but to solve the complete problem some other essential knowledge is missing.\\
+In our experiments we found ... reward sensitivity, option capability
 \end{abstract}
 
 \setcounter{tocdepth}{1}
@@ -60,13 +61,13 @@ Temporal abstraction is trivial for humans but difficult for machines. Recently 
 %Proximal Policy Approximation for OpenAI five \cite{schulman2017proximal}
 
 \chapter{Introduction}
-In 2017 an artificial intelligence named Alpha Go \cite{silver2017mastering} beat the worlds known strongest player in a well-known Japanese board game named Go. This was achieved without using human knowledge but rather the algorithm learned by playing against itself. This type of learning by playing against itself or from an environment in machine learning, is called reinforcement learning(RL). Another well-known success was in 2015, where the deep Q-network(DQN) algorithm from Mnih et al. (2015) \cite{mnih2015human} learned to play the Atari games from Nintendo only by using pixel input. Both algorithms used the well-known neural networks from deep learning and combined them with reinforcement learning. This approach is known as deep reinforcement learning(DRL). Because of these successes there is potential in using DRL for learning something more complex such as driving a car. During driving actions, such as changing gears, is often repeated in time. Hence it makes sense to introduce a hierarchy for these temporal reoccurring actions to increase learn efficiency. This is studied in the field of hierarchical reinforcement learning(HRL). An algorithm which combines hierarchies with deep reinforcement learning is the option-critic architecture from Bacon et al. (2017) \cite{bacon2017option}. In this work we want to test the \emph{adaptability} and \emph{limitations} of this option-critic architecture and the effectiveness of deliberation cost from Harb et al. (2017) \cite{harb2017waiting}. The option-critic architecture is based on the well-known Asynchronous Advantage Actor-Critic(A3C) algorithm in DRL from Mnih et al. (2016) \cite{mnih2016asynchronous} which is capable of learning navigation in a 3-dimensional random maze from visual input.
+In 2017, an artificial intelligence named Alpha Go \cite{silver2017mastering} beat the worlds known strongest player in a well-known Japanese board game named Go. This was achieved without using human knowledge but rather the algorithm learned by playing against itself. This type of learning by playing against itself or from an environment in machine learning, is called reinforcement learning (RL). Another well-known success was in 2015, where the deep Q-network (DQN) algorithm from Mnih et al. (2015) \cite{mnih2015human} learned to play the Atari games from Nintendo only by using pixel input. Both algorithms used the well-known neural networks from deep learning and combined them with reinforcement learning. This approach is known as deep reinforcement learning (DRL). Because of these successes there is potential in using DRL for learning something more complex such as driving a car. During driving actions, such as changing gears, are often repeated in time. Hence it makes sense to introduce a hierarchy for these temporal reoccurring actions to increase learn efficiency. This is studied in the field of hierarchical reinforcement learning (HRL). An algorithm which combines hierarchies with deep reinforcement learning is the option-critic architecture from Bacon et al. (2017) \cite{bacon2017option}. In this work we want to test the \emph{adaptability} and \emph{limitations} of this option-critic architecture and the effectiveness of deliberation cost from Harb et al. (2017) \cite{harb2017waiting}. The option-critic architecture is based on the well-known Asynchronous Advantage Actor-Critic (A3C) algorithm in DRL from Mnih et al. (2016) \cite{mnih2016asynchronous} which is capable of learning navigation in a 3-dimensional random maze from visual input.
 
 \section{Background}
-For the basic knowledge in deep learning such as neural networks we refer to the book from Goodfellow et al. (2016) \cite{goodfellow2016deep} as an introduction and we will assume the reader has a basic understanding of its content. As an introduction into deep reinforcement learning, as already mentioned, we recommend reading about the algorithms such as DQN \cite{mnih2015human} and A3C \cite{mnih2016asynchronous}. To learn more about recent advances in hierarchical reinforcement learning, we refer to Bartos et al. (2003) \cite{barto2003recent}.
+For the basic knowledge in deep learning, such as neural networks, we refer to the book by Goodfellow et al. (2016) \cite{goodfellow2016deep} as an introduction and we will assume the reader has a basic understanding of its content. As an introduction into deep reinforcement learning, as already mentioned, we recommend reading about the algorithms such as DQN \cite{mnih2015human} and A3C \cite{mnih2016asynchronous}. To learn more about recent advances in hierarchical reinforcement learning, we refer to Bartos et al. (2003) \cite{barto2003recent}.
 
 \section{Related Work}
-The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approach was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today, were proposed in the nineties. These three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM(hierarchical abstract machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}.
+The idea of using a hierarchy in reinforcement learning to increase efficiency is well established. The first approach was to define macro actions or operators which can be invoked instead of just basic actions. The first three real frameworks which are still used today, were proposed in the nineties. These three major frameworks were the options framework of Sutton et al. (1999) \cite{sutton1999between}, the HAM (Hierarchies of Abstract Machines) framework of Parr et al. (1998) \cite{parr1998reinforcement}, and the MaxQ framework of Dietterich (2000) \cite{dietterich2000hierarchical}.
 
 \chapter{Preliminaries}
 \label{chap:theory}
@@ -82,35 +83,35 @@ This value can be used to compare different policies given start state $s$. With
 				  a \sim U_{\mathcal{A}} & \text{if} \; 0<p<\varepsilon<1 \\
 				  \displaystyle \max_{a \in \mathcal{A}}{Q(s,a)} &\text{if} \;  0<\varepsilon<p<1 	
 			     \end{cases} \qquad p \sim U_{(0,1)}
-\end{equation*} where $U_{\mathcal{A}}$ is the uniform distribution over actions and $p$ is a number sampled from an uniform distribution over $(0,1)$.\\
-In general, a policy $\pi$ is dependent on parameters $\theta$ which for example describe the distribution. Hence the goal in reinforcement learning is to optimize the policy parameters $\theta$ so that the expected discounted return
+\end{equation*} where $U_{\mathcal{A}}$ is the uniform distribution over actions and $p$ is a number sampled from a uniform distribution over $(0,1)$.\\
+In general, a policy $\pi$ is dependent on parameters $\theta$ which for example describe the distribution. Hence, the goal in reinforcement learning is to optimize the policy parameters $\theta$, such that the expected discounted return
 \begin{equation*}
  J (\theta) = V^{\pi_{\theta} }(s) =  \mathbb{E} \left[ \sum_{t=0}^{\infty} \gamma^{t} R_t(s_t,a=\pi_{\theta}(s_t)) \right]
 \end{equation*}
-is maximized where $\gamma \in [0,1)$ is the discount factor. This can be accomplished by using the gradient update rule:
+is maximized, where $\gamma \in [0,1)$ is the discount factor. This can be accomplished by using the gradient update rule:
 \begin{equation*}
 \theta_{t+1} = \theta_{t} + \alpha_t \cdot \nabla_{\theta} J(\theta) \big|_{\theta=\theta_t} 
 \end{equation*} 
-where $\alpha_t$ is the learning rate and often referred to as a hyper-parameter of the problem. The main problem in policy gradient methods is to obtain a good estimator of the policy gradient $\nabla_{\theta} J(\theta) \big|_{\theta=\theta_t}$. To approximate $J(\theta)\big|_{\theta=\theta_t}$ using the $Q$-value function there are commonly two ways namely Monte-Carlo(MC) estimates and n-Step Sarsa(n-step) estimates. Monte-Carlo uses the expected return of a whole episode $g_t = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{T-1} r_{T}$ to estimate $Q(s_t,a_t)$ by using the incremental mean method:
+where $\alpha_t$ is the learning rate and often referred to as a hyper-parameter of the problem. The main problem in policy gradient methods is to obtain a good estimator of the policy gradient $\nabla_{\theta} J(\theta) \big|_{\theta=\theta_t}$. To approximate $J(\theta)\big|_{\theta=\theta_t}$ using the $Q$-value function there are commonly two ways namely Monte-Carlo (MC) estimates and n-Step Sarsa (n-step) estimates. Monte-Carlo uses the expected return of a whole episode $g_t = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{T-1} r_{T}$ to estimate $Q(s_t,a_t)$ by using the incremental mean method:
 \begin{equation*}
 Q(s_t , a_t) \leftarrow Q(s_t , a_t) + \alpha_t(g_t - Q(s_t , a_t))
 \end{equation*}
-This Monte-Carlo estimate has zero bias but high variance. However MC can only learn from complete episodes which requires an episodic(terminating) environment. In comparison n-Step Sarsa uses an approximation for $g_t$ by bootstrapping. 
+This Monte-Carlo estimate has zero bias but high variance. However MC can only learn from complete episodes which requires an episodic (terminating) environment. In comparison n-Step Sarsa uses an approximation for $g_t$ by bootstrapping. 
 \begin{gather*}
 Q(s_t , a_t) \leftarrow Q(s_t , a_t) + \alpha_t(q^{(n)}_t - Q(s_t , a_t)) \\
-q^{(n)}_t  = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{n-1} r_{t+n} + \gamma^n Q(s_{t+n})
-\end{gather*} where $n \in \mathbb{N} $ can be arbitrarily chosen and is referred to as $n$-step estimate. Note that $Q(s_{t+n})$ is also an estimate using the policy $\pi_{\theta}$. Notice that when $n \to \infty$ the n-step estimate is equivalent to the Monte-Carlo estimate. The n-step method has low variance but is a biased estimate. The n-step estimate has the advantage that it can learn from incomplete episodes and hence works in continuing(non-terminating) environments. For our experiments we compared the MC estimate against a 5-step estimate. For a more rigorous explanation of policy gradient methods we refer to Williams (1992) \cite{williams1992simple} and Peters et al. (2008) \cite{peters2008reinforcement}
+q^{(n)}_t  = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{n-1} r_{t+n} + \gamma^n Q(s_{t+n}) , \;
+\end{gather*} where $n \in \mathbb{N} $ can be arbitrarily chosen and is referred to as $n$-step estimate. Note that $Q(s_{t+n})$ is also an estimate using the policy $\pi_{\theta}$. Notice that when $n \to \infty$ the n-step estimate is equivalent to the Monte-Carlo estimate. The n-step method has low variance but is a biased estimate. The n-step estimate has the advantage that it can learn from incomplete episodes and hence works in continuing (non-terminating) environments. For our experiments we compared the MC estimate against a 5-step estimate. For a more rigorous explanation of policy gradient methods we refer to Williams (1992) \cite{williams1992simple} and Peters et al. (2008) \cite{peters2008reinforcement}
 
 \section{Option-Critic}
 \label{seq:o_c}
-One of the key elements for treating temporal abstraction is by extending the MDP framework from reinforcement learning minimally to semi-Markov Decision Processes(SMDPs). For the complete theory we refer to the book from Puterman (2014) \cite{puterman2014markov}. The actions in SMDP's take variable amounts of time and are intended to model temporally-extended courses of actions as shown in Figure \ref{fig:mdp_vs_smdp}.
+One of the key elements for treating temporal abstraction is by extending the MDP framework from reinforcement learning minimally to semi-Markov Decision Processes (SMDPs). For the complete theory we refer to the book from Puterman (2014) \cite{puterman2014markov}. The actions in SMDP's take variable amounts of time and are intended to model temporally-extended courses of actions as shown in Figure \ref{fig:mdp_vs_smdp}.
 \begin{figure}
 \centering
 \includegraphics[scale=0.9]{options_over_mdp.pdf}
-\caption{Comparison of time transitions in MDP's and SMDP's from \cite{sutton1999between}. The top panel shows the state trajectory over discrete time of an MDP, the middle panel shows the large state changes over continuous time of an SMDP, and the last panel shows how these two levels can be superimposed through the use of options}
+\caption{Comparison of time transitions in MDP's and SMDP's from \cite{sutton1999between}. The top panel shows the state trajectory over discrete time of an MDP, the middle panel shows the large state changes over continuous time of an SMDP, and the last panel shows how these two levels can be superimposed through the use of options.}
 \label{fig:mdp_vs_smdp}
 \end{figure}
-The Option-Critic architecture from Sutton et al. (1999) \cite{sutton1999between} is an interplay between MDP's and SMDP's. The options which pick courses of actions act on the base MDP. Any fixed set of options defines a discrete-time SMDP embedded within the original MDP as suggested by Figure \ref{fig:mdp_vs_smdp}. The options framework is commonly described by mathematically defining three functions. Namely, a stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating an option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing the all states from which an option $\omega$ can start from. The initiation set is commonly given by the set of all states, meaning any option can start from any state. Last but not least a policy over options, we call it the super-policy, $\pi(\omega): \mathcal{S} \to \Omega$ has pick an option given a state where $\Omega$ is the set of all options. In a stochastic setting the super-policy $\pi(\omega): \mathcal{S} \times \Omega \to [0,1]$ is a distribution over options. The super-policy can theoretically be chosen arbitrarily but we will use the same as in the original paper  \cite{bacon2017option} which is $\varepsilon$-greedy.\\
+The Option-Critic architecture from Sutton et al. (1999) \cite{sutton1999between} is an interplay between MDP's and SMDP's. The options choose courses of basic actions on the base MDP. Whereas any fixed set of options defines a discrete-time SMDP embedded within the original MDP as suggested by Figure \ref{fig:mdp_vs_smdp}. The options framework is commonly described by mathematically defining three functions. Namely, a stochastic sub-policy $\pi_{\omega}:\mathcal{S}\times \mathcal{A} \to [0,1]$ which represents the behavior of an option $\omega$, a termination function $\beta: \mathcal{S} \to [0,1]$ which describes the probability of terminating an option $\omega$ given state $s$, and an initiation set $\mathcal{I}_{\omega} \subset \mathcal{S}$ containing all states from which an option $\omega$ can start. The initiation set is commonly given by the set of all states, meaning any option can start from any state. Last but not least, a policy over options, we call it the super-policy, $\pi(\omega): \mathcal{S} \to \Omega$ has to choose an option given a state, where $\Omega$ is the set of all options. In a stochastic setting the super-policy $\pi(\omega): \mathcal{S} \times \Omega \to [0,1]$ is a distribution over options. The super-policy can theoretically be chosen arbitrarily but we will use the same as in the original paper  \cite{bacon2017option} which is $\varepsilon$-greedy.\\
 The option-critic architecture \ref{fig:option_critic_arch} is similar to the actor-critic \cite{mnih2016asynchronous} algorithm hence the name. For a complete mathematical derivation we refer to the original paper from Bacon et al. (2017) \cite{bacon2017option}. A schematic view of the algorithm is shown in Figure \ref{fig:option_critic_arch}.
 \begin{figure}[!ht]
 \centering
@@ -128,12 +129,12 @@ Q_{U}(s,\omega,a) = r(s,a) + \gamma \sum_{s'} P(s'|s,a) U(\omega,s')
 \intertext{where $U:\Omega \times \mathcal{S} \to \mathbb{R}$ is called the option-value function or utility term.}
 U(\omega,s') = (1-\beta_{\omega,\vartheta}(s'))Q_{\Omega}(s',\omega) + \beta_{\omega,\vartheta}(s') V_{\Omega}(s')
 \end{gather*}
-\noindent The utility term $U(\omega,s')$ is an expectation over the termination function $\beta_{\omega,\vartheta}(s')$. In case the option $\omega$ does not terminate, we use the state-option value function $Q_\Omega(s',\omega)$ for the new state $s'$. Otherwise we use $V_{\Omega}(s')$, which is estimated by averaging over all state-options values $Q_\Omega(s',\omega)$. Note that both $Q_U$ and $U$ depend on the parameters of the termination function $\vartheta$ and the parameters of the options $\theta$ and thus for deriving the gradients the chain-rule has to be used.
+\noindent The utility term $U(\omega,s')$ is an expectation over the termination function $\beta_{\omega,\vartheta}(s')$. In case the option $\omega$ does not terminate, we use the state-option value function $Q_\Omega(s',\omega)$ for the new state $s'$. Otherwise we use $V_{\Omega}(s')$, which is estimated by averaging over all state-options values $Q_\Omega(s',\omega)$. Note that both $Q_U$ and $U$ depend on the parameters of the termination function $\vartheta$ and the options $\theta$, and thus for deriving the gradients the chain-rule has to be applied.
 
 \section{Deliberation Cost}
 \label{seq:delib_cost}
-We will present here briefly the concept and motivation for a deliberation cost in the option-critic architecture, but we recommend reading the original paper from Harb et al. (2017) \cite{harb2017waiting}.
-They showed in an experiment that the options used to learn Atari games were very short-lived. This is problematic, since this implies there was no temporal abstraction done in the algorithm. They fixed this issue by introducing a deliberation cost who acts on the same time scale as the super-policy shown in Figure \ref{fig:delib_cost}. The idea is that the algorithm has to pay an additional cost if he wants to change to another option. Shown in the experiment this lead to options acting on longer time-scales and hence better temporal abstraction. Note however that this deliberation cost is a hyper-parameter of the experiment and thus has to be determined case-by-case.
+We will present here briefly the concept and motivation for a deliberation cost in the option-critic architecture, but we recommend reading the original paper written by Harb et al. (2017) \cite{harb2017waiting}.
+They showed in an experiment that the options used to learn Atari games were very short-lived. This is problematic, since this implies there was no temporal abstraction done in the algorithm. They fixed this issue by introducing a deliberation cost which acts on the same time scale as the super-policy shown in Figure \ref{fig:delib_cost}. The idea is that the algorithm has to pay an additional cost if it wants to change to another option. Shown in the experiment, this led to options acting on longer time-scales and hence better temporal abstraction. Note however that this deliberation cost is a hyper-parameter of the experiment and thus has to be determined case-by-case.
 
 \begin{figure}[!ht]
 \centering
@@ -181,7 +182,7 @@ As apparent from the figure \ref{fig:delib_cost} at each decision point, marked 
 Thus one can see that a margin $\eta$ was introduced in the gradient. This allows us to tilt the termination of an option in both directions. For example when the margin is high in comparison to the reward the system will use a chosen option for longer periods of time. A negative $\eta$ motivates the system to change more between given options. 
 \end{comment}
 
-\chapter{Experiments}
+\chapter{Experiments and Results}
 
 \section{Implementation Details}
 K. Miyoshi re-implemented \cite{miyoshigithubunreal} the UNREAL agent based on the paper of Jaderberg et al. (2016) \cite{jaderberg2016reinforcement}. This paper extended A3C algorithm from Mnih et al (2016) \cite{mnih2016asynchronous} with unsupervised auxiliary tasks. His implementation was tested on the DeepMind Lab \cite{beattie2016deepmind}. We used this tensorflow re-implementation from K. Miyoshi but changed the algorithm to Asynchronous Advantage Option Critic(A2OC) from Harb et al. (2017) \cite{harb2017waiting} and added our own environment. To implement the environment we used the OpenAI gym toolkit from Brockman et al. \cite{brockman2016openai}.
@@ -191,35 +192,35 @@ K. Miyoshi re-implemented \cite{miyoshigithubunreal} the UNREAL agent based on t
 \centering
 \includegraphics[scale=0.9]{env_2d.pdf} \qquad
 \includegraphics[scale=0.9]{env_2d_key.pdf}
-\caption{Depiction of the 2-dimensional grid world where the agent "a" needs to find the goal "T". An addition is where first a key "k" has to picked up first before reaching the goal.}
+\caption{Depiction of the 2-dimensional grid world where the agent ``a" needs to find the goal ``T". An addition is where first a key ``k" has to be picked up first before reaching the goal.}
 \label{fig:2d_grid_world}
 \end{figure}
-\noindent Our environment is a simple 2-dimensional grid world shown on the left in Figure \ref{fig:2d_grid_world} where the agent "a" starts at a random position and has to find the goal "T". The agent can only walk in four directions, namely, left right up and down indicated by the arrows. When the agent reaches the goal "T" the episode is terminated and he receives a reward of $1$. The standard size we chose was $4 \times 4$. We tested how the agent learns with different kinds of reward functions and this will be explained in the experimental setting.\\
-Note that when the world size is $4\times 4$ we have $16$ possible positions and hence $\binom{16}{2} \cdot 2 = 240$ possible states of the world.
+\noindent Our environment used in this thesis is a simple 2-dimensional grid world shown on the left in Figure \ref{fig:2d_grid_world} where the agent ``a" starts at a random position and has to find the goal ``T". The agent can only walk in four directions, namely, ``left" ``right" ``up" and ``down" indicated by the arrows. When the agent reaches the goal ``T" the episode is terminated and he receives a reward of $1.0$. The standard size chosen in this thesis was was $4 \times 4$. We tested how the agent learns with different kinds of reward functions and this will be explained in the experimental setting.\\
+Note that when the world size is $4\times 4$ there are $16$ possible positions and hence, $\binom{16}{2} \cdot 2 = 240$ possible states of the world.
 
 \subsection{Neural Network}
-As already mentioned we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} to implement our neural network. In the Figure \ref{fig:nn_schematic} we see a schematic representation of our network. First is our feature extractor containing a convolutional neural network(CNN) and a fully connected(FC) layer. This transformed input is fed into 3 different parts of the network. These are the termination model, the $Q$-value model and the options model, each containing 2 fully connected layers. For initialization the standard Xavier initializer for weights and zero initializer for biases were used.
+As already mentioned we used the well-established tensorflow library from Abadi et al. (2016) \cite{abadi2016tensorflow} to implement our neural network. In the Figure \ref{fig:nn_schematic} we see a schematic representation of our network. First is our feature extractor containing a convolutional neural network(CNN) and a fully connected(FC) layer. This transformed input is fed into three different parts of the network. These are the termination model, the $Q$-value model and the options model, each containing two fully connected layers. For initialization the standard Xavier initializer for weights and zero initializer for biases were used.
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.9]{nn_schematic.pdf}
-\caption{Schema of the neural network where the first part is the feature extractor containing the CNN and one FC and then spitted into termination model, $Q$-value model and options model.}
+\caption{Schema of the neural network where the first part is the feature extractor containing the CNN and one FC and then split into termination model, $Q$-value model and options model.}
 \label{fig:nn_schematic}
 \end{figure}
 \noindent Note that before the input gets fed into the CNN it gets commonly rescaled to $[-1,1]$
 
 \subsection{Feature Extractor}
-Our feature extractor contains one convolutional neural network, followed by one fully connected layer. Since our features in the 2-dimensional grid world are simple, we chose a filter size of $4 \times 4$ for our CNN. We used $64$ number of filters and thus the input of $4 \times 4 \times 1$ dimension is transformed to $4\times 4 \times 64$. Our CNN uses a rectified linear unit(ReLU) as an activation function. The output vector gets flattened to a one-dimensional vector of size $1024$ and then fed into the next fully connected layer containing $32$ units together with a ReLU activation. The output after the feature extractor is thus a vector of length $32$.
+Our feature extractor contains one convolutional neural network, followed by one fully connected layer. Since our features in the 2-dimensional grid world are simple, we chose a filter size of $4 \times 4$ for our CNN. We used $64$ number of filters and thus the input of $4 \times 4 \times 1$ dimension is transformed to $4\times 4 \times 64$. Our CNN uses a rectified linear unit (ReLU) as an activation function. The output vector gets flattened to a one-dimensional vector of size $1024$ and then fed into the next fully connected layer containing $32$ units together with a ReLU activation. The output after the feature extractor is thus a vector of length $32$.
 
 \subsection{Options Model}
 \label{subsec:options_model}
-Depending on the experiment we used different types of options. For each option we used two fully connected layers. The input comes from the feature extractor and the output is fixed by the number of possible actions. In our case the agent could choose between 4 directions and thus the output of each option is fixed to a probability vector of size 4. For the first fully connected layer in the options model we used $16$ units and a ReLU activation. To get a probability vector of size 4 as output the second fully connected layer needs $4$ units with a softmax activation function. One type of option we used in the experiment, was done by decoupling the input from the output of the options model. We did this by setting all weights and biases to zero except in the last layer, where the last bias vector was conserved. This option could still learn, but was no longer depending on the input. The other type of option we used in the experiment is the same network as before but everything is normally initialized with zero and Xavier initialization and the output is depending on the input.
+Depending on the experiment we used different types of options. For each option we used two fully connected layers. The input comes from the feature extractor and the output is fixed by the number of possible actions. In our case, the agent could choose between 4 directions and thus, the output of each option is fixed to a probability vector of size 4. For the first fully connected layer in the options model we used $16$ units and a ReLU activation. To get a probability vector of size 4 as output the second fully connected layer needs $4$ units with a softmax activation function. One type of option we used in the experiment, was done by decoupling the input from the output of the options model. We did this by setting all weights and biases to zero except in the last layer, where the last bias vector was conserved. This option could still learn, but was no longer depending on the input. The other type of option we used in the experiment is the same network as before but everything is normally initialized with zero and Xavier initialization and the output is depending on the input.
 
 \subsection{$Q$-value Model}
-The network for the $Q$-value model as shown in the Figure \ref{fig:nn_schematic} also consists of two fully connected layers and the input comes from the feature extractor. The first layer again has $16$ units with ReLU activation like before. The difference is that the output size is dependent on the number of options used in the experiment. Since negative $Q$-values must be allowed so that the gradients work properly, the second activation therefore has to be linear. In our experiments we used 4 options and hence the output size of the $Q$-value model is 4. 
+The network for the $Q$-value model as shown in the Figure \ref{fig:nn_schematic} also consists of two fully connected layers and the input comes from the feature extractor. The first layer again has $16$ units with ReLU activation like before. The difference is that the output size is dependent on the number of options used in the experiment. Since negative $Q$-values must be allowed so that the gradients work properly, the second activation therefore has to be linear. In our experiments we used 4 options and hence, the output size of the $Q$-value model is 4. 
 
 \subsection{Termination Model}
-The termination network has the same structure as the $Q$-value network, and hence also has the same input and output, except the last activation. Since for each option we also need a corresponding termination probability, we need to change the last activation to a sigmoid function. Thus we have two fully connected layers, one with $16$ units and ReLU activation, followed by one with number of options as units with sigmoid activation.
+The termination network has the same structure as the $Q$-value network, and hence also has the same input and output, except the last activation. Since for each option we also need a corresponding termination probability, we need to change the last activation to a sigmoid function. Thus we have two fully connected layers, one with $16$ units and ReLU activation, followed by one with the number of options as unit-number with sigmoid activation.
 
 \begin{comment}
 \subsection*{Sensitivity of reward function}
@@ -242,7 +243,7 @@ Small local & $R_5=$ & \{$-1.0$ , No \} & $0.$ & $1.0$ \\
 \end{comment}
 
 \subsection{Epsilon Annealing}
-Since we use an $\varepsilon$-greedy super-policy we are confronted with the question which value is reasonable. When we use a constant $\varepsilon$ of $0.1$ our experiments showed that the algorithm learns to reach the goal, but really slowly. At the beginning of the learning phase, the algorithm knows nothing and hence the exploration-rate should be high. Thus we decided to anneal $\varepsilon$ linearly over time starting at $1.0$ and ending at $0.1$. The anneal time is now a hyper-parameter of the experiment and hence easily tunable. The experiments to find the anneal time are shown in the appendix \ref{subsec:eps_anneal_time_bias} and \ref{subsec:eps_anneal_time_mc}.
+Since we use an $\varepsilon$-greedy super-policy we are confronted with the question of; which value is reasonable. When we use a constant $\varepsilon$ of $0.1$ our experiments showed that the algorithm learns to reach the goal, but really slowly. At the beginning of the learning phase, the algorithm knows nothing and hence the exploration-rate should be high. Thus we decided to anneal $\varepsilon$ linearly over time starting at $1.0$ and ending at $0.1$. The anneal time is now a hyper-parameter of the experiment and hence easily tunable. The experiments to find the anneal time for the first experiment is shown in the appendix \ref{subsec:eps_anneal_time_bias}.
 
 \begin{comment}
 \subsection*{Deliberation cost annealing}
@@ -250,22 +251,21 @@ The problem of premature termination of options seen in Harb et al. (2017) \cite
 \end{comment}
 
 \subsection{Moving Average}
-Since our data is very noisy we calculate and plot the moving average. This was also done in the tensorboard tool from the tensorflow library which plots the summaries in the web-browser. There one can adjust a smoothing factor. The smoothing factor determines the number of data points used for the average with the following function:
+Since our data is very noisy we calculated and plotted the moving average. This was also done in the tensorboard tool from the tensorflow library which plots the summaries in the web-browser. There, one can adjust a smoothing factor. The smoothing factor determines the number of data points used for the average with the following function:
 \begin{equation*}
 \label{eq:smoothwindow}
 f(x) = \frac{1000^{x}-1}{999} \qquad x \in [0,1]
 \end{equation*}
-\noindent For example $x=1$ means that half of the data points is used for average. We used an average of a quarter of our data points which correspond approximately to $x=0.899$. In our case this corresponded to $250$ data points. This number was used as an argument for the window size in the python pandas rolling function. For the argument of minimum number of observations required in the window we used $1$.
+\noindent For example, $x=1$ means that half of the total data points are used for the average. We used an average of a $250$ data points which corresponds approximately to $x=0.899$. This number was used as an argument for the window size in the python pandas rolling function. For the argument of minimum number of observations required in the window we used $1$.
 
 \section{Experimental Settings}
-We structure our experiments into two sections corresponding to the slightly different environments as shown in Figure \ref{fig:2d_grid_world}. The first section is tested with the environment where no key is present and the second section is tested with the environment where there is a key. The agent, the goal and also the key are randomly placed in the $4 \times 4$ grid world using an uniform distribution. For both experiments we have shared hyper-parameters. One is the entropy $\beta$ commonly used for regularization in A3C algorithms with a value of $10^{-4}$. We used $8$ threads for the asynchronous on-policy updates. For the discount factor $\gamma$ we used $0.99$. As already mentioned we used in both experiments $4$ options but they differ in structure. Last but not least we limited the number of steps the agent can do in the environment to $100$ before it automatically resets itself.
+We structured our experiments into two sections corresponding to the slightly different environments as shown in Figure \ref{fig:2d_grid_world}. The first section is tested with the environment where no key is present and the second section is tested with the environment where there is a key. The agent, the goal and also the key are randomly placed in the $4 \times 4$ grid world using a uniform distribution. For both experiments we have shared hyper-parameters. One is the entropy $\beta$ commonly used for regularization in A3C algorithms with a value of $10^{-4}$. We used $8$ threads for the asynchronous on-policy updates. For the discount factor $\gamma$ we used $0.99$. As already mentioned, we used in both experiments $4$ options, but they differ in structure. Last but not least, we limited the number of steps the agent can do in the environment to $100$ before it automatically resets itself.
 
 \subsection{Without Key}
-In this experiment we used the decoupled options as already explained in Section \ref{subsec:options_model}. We tested the adaptability of our super-policy by using pre-defined options which we call experts. These options are not trainable and return a one-shot vector in one direction. For example when we use 4 of these experts which correspond to the 4 directions the super-policy needs to learn in which state to chose which expert. In case 3 or less experts are used the super-policy additionally has to train the missing directions otherwise it can not reach the goal for all possible positions. Furthermore we look at the different learning behavior when using two different updating schemes. We used the Monte Carlo and 5-step method to update the $Q$-value model which are explained in Section \ref{chap:theory}.
+In this experiment we used the decoupled options as already explained in Section \ref{subsec:options_model}. We tested the adaptability of our super-policy by using pre-defined options which we call experts. These options are not trainable and return a one-shot vector in one direction. For example when we use 4 of these experts, corresponding to the 4 directions, the super-policy needs to learn in which state to chose which expert. In case 3 or less experts are used, the super-policy additionally has to train the missing directions, otherwise it can not reach the goal for all possible positions in the shortest amount of time. Furthermore we looked at the different learning curves when using two different updating schemes. We used the Monte Carlo and 5-step method to update the $Q$-value model which are explained in Section \ref{chap:theory}.
 
 \subsubsection{5-step Method}
-The agent in the first experiment was given $0$ reward for each step except when he reaches the goal. When he wants to step outside the world boundary he well be put back to the previous position, receives $0$ reward but the episode continues. The local size of a batch of data is $5$ or less since we use 5-step method. We found that the best learning rate for this experiment was $2 \cdot 10^{-3}$ whereas $\varepsilon$ was annealed over $10^{6}$ steps as shown in Appendix \ref{subsec:eps_anneal_time_bias} and \ref{subsec:learning_rate_bias}.
-
+The agent in the first experiment was given $0$ reward for each step, except when he reaches the goal. When the algorithm wants to step outside the world boundary, he will be moved back to the previous position, receives $0$ reward, but the episode continues. The local size of a batch of data is $5$ or less, since we use the 5-step method. We found that the best learning rate for this experiment was $2 \cdot 10^{-3}$, whereas $\varepsilon$ was annealed over $10^{6}$ steps as shown in Appendix \ref{subsec:eps_anneal_time_bias} and \ref{subsec:learning_rate_bias}.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.32]{./figures/local/4e_avrg_score_nt2.pdf}
 \includegraphics[scale=0.32]{./figures/local/3e_1x_avrg_score_nt2.pdf}\\
@@ -273,11 +273,11 @@ The agent in the first experiment was given $0$ reward for each step except when
 \includegraphics[scale=0.32]{./figures/local/2e_2x_p_avrg_score_nt2.pdf}\\
 \includegraphics[scale=0.32]{./figures/local/1e_3x_avrg_score_nt2.pdf}
 \includegraphics[scale=0.32]{./figures/local/4x_avrg_score_nt2.pdf}
-\caption{6 experiments with repeated runs using different experts as described}
+\caption{6 experiments with repeated runs using different experts as described.}
 \label{fig:local_ntime}
 \end{figure}
-\noindent The Figure \ref{fig:local_ntime} shows the mean score of the 5-step roll-out. The title in each sub-figure describes which experts were used. For example the run with 2 experts and 2 Xavier orthogonal describe the situation where the left and up directions, or one of its permutations, where given by option experts with one-shot vectors but the last two options were Xavier initialized. This means to completely solve the problem the algorithm has to train experts in the right and down direction itself. But this can fail as shown in the orange curves in the middle sub-figures. The Xavier initialized vectors were trained on the local optima 50\% right and 50\% down instead of 100\% right for one and 100\% down for the other. The algorithm does not care since he is not strongly penalized for going in the wrong direction and still reaches the goal. But we see statistically that in the mean score of the local 5-step roll-out he is worse than the case when training options to 100\% right and 100\% down. Note that in the 5-step roll-out the maximal mean score the algorithm could achieve without noise would be $0.983$ since there are $4$ cases out of $240$ possible scenarios where he cannot reach the goal within $5$ steps. The problem with the 50/50 local optima described before is most prevalent in the case when all our options are Xavier initialized. Remember that the reward is directly penalized over the discount factor $\gamma$ but it was not enough to find the better optima of training 100\% in one direction.\\
-In the next experiment we changed the reward the agent receives for each step from $0$ to $-0.1$. This change is commonly known as adding a time pressure on the agent. The results are displayed in Figure \ref{fig:local_time}.
+\noindent Figure \ref{fig:local_ntime} shows the mean score of the 5-step roll-out. The title in each sub-figure describes which expert option configuration was used. For example the test in the middle left used the 2 experts 2 Xavier orthogonal configuration. This means that the ``left" and ``up" directions, or one of its permutations, where given by option experts with one-shot vectors, whereas the others were Xavier initialized. The algorithm should be able to completely solve the problem when it trains the Xavier options into the missing ``right" and ``down" direction. But this can fail, as shown in the middle of Figure \ref{fig:local_ntime} with run1 marked curves. We see that these curves have a significant lower mean score in comparison to the others. We looked at the distributions and we found, that the Xavier initialized options were trained on the local optima 50\% right and 50\% down, instead of 100\% right for one and 100\% down for the other. Hence, statistically the algorithm does not reach the goal in the shortest amount of time leading to lower mean scores. The algorithm does not care since it is not strongly penalized in this case for wasting time. Note that in a 5-step roll-out the maximal mean score in this environment is around $0.983$ since in $4$ edge cases more then 5 steps is needed to reach the goal. The problem with the 50/50 local optima as described before, is most prevalent when all options are Xavier initialized shown in bottom right plot. The reward is weakly penalized with the the discount factor $\gamma$ but, it was not enough to find the better optima of training 100\% in one direction.\\
+In the next experiment we tested the influence when the algorithm is penalized for wasting time. This was done by changing the reward the agent receives for each step and going out of bounds from $0$ to $-0.1$. This change is commonly known as adding a time pressure on the agent. The results are displayed in Figure \ref{fig:local_time}.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.32]{./figures/local/4e_avrg_score_t2.pdf}
 \includegraphics[scale=0.32]{./figures/local/3e_1x_avrg_score_t2.pdf}\\
@@ -288,87 +288,110 @@ In the next experiment we changed the reward the agent receives for each step fr
 \caption{6 experiments with repeated runs using different experts as described with time pressure}
 \label{fig:local_time}
 \end{figure}
-\noindent The changes after adding a time pressure are very obvious. First of all the mean score in our experiments increases earlier than before implying that the algorithm learns faster. The second change is that the local 50/50 optima in our experiments is no longer present and he always finds the other 100\% experts of directions.
+\noindent The changes after adding a time pressure are very obvious. First of all the mean score increases earlier in time than before implying that the algorithm learns faster. The second change is that the local 50/50 optima in our experiments is no longer present and it always found the global 100\% expert optima.
 
 \subsubsection{MC Method}
-In this experiment we changed the update method to a Monte Carlo update with whole episodes. This method only works when the environment is episodic as explained in \ref{chap:theory}. We achieved this by terminating the current episode when the agent walks outside the boundary of the world. \\
-In the first experiment the agent receives $0$ reward for a step and also when he walks outside the boundary.
-
-\noindent In next experiment the agent receives $0$ reward for each step but he receives $-1$ reward for walking outside the boundary the boundary. 
-
+In this experiment we changed the update method from 5-step to a Monte Carlo. This means that updates use whole episodes and thus we plotted the mean episode scores. This method only works when the environment is episodic as explained in Chapter \ref{chap:theory}. We achieved this by changing the environment in such a way that the agent gets terminated by the environment when walking outside the world boundary.\\
+In the first experiment the agent receives $0$ reward for a step and also when he walks outside the boundary. We found in the experiment that we had to increase the anneal time to $1.2 \cdot 10^{6}$ to get a mean episode reward close to $1$, which means the algorithm learned everything.\\
 \begin{figure}[!ht]
-\includegraphics[scale=0.45]{./figures/mc/mc_ntime_-1wallterm.pdf}
+\includegraphics[scale=0.45]{./figures/mc/mc_ntime_wallterm_0.pdf}
 \caption{Summarized figure of 6 experiments showing mean episode reward given different experts and Xavier option combinations}
-\label{fig:mc_nt_wall}
+\label{fig:mc_nt_wall_0}
 \end{figure}
- 
-\noindent As we can see in figure \ref{fig:mc_nt_wall} the convergence is faster then in \ref{fig:local_ntime} and \ref{fig:local_time}. We used only $4 \cdot 10^5$ steps for annealing. Important to note that likewise in this case the networks can get stuck in local optima shown in figure \ref{fig:mc_stuck} and hence we only have shown here the runs which converged. The same logic applies as in \ref{fig:local_ntime} \ref{fig:local_time} that when more knowledge is missing convergence is slower.
-
-\subsubsection{Time pressure}
-In figure \ref{fig:mc_t_wall} the result of using Reward set $R_3$:
+\noindent As we can see from our experiment in Figure \ref{fig:mc_nt_wall_0} the performance, we mean by this the amount of time steps used for reaching maximal mean score, is similar to the 5-step method in Figure \ref{fig:local_ntime}. We expected that MC should be better, because it learns from complete episodes where there is no bias.\\
+For testing if this was because of the reward function we changed the environment such that the agent receives $-1.0$ reward for walking out of bounds. The results of this experiment is shown in Figure \ref{fig:mc_nt_wall__1}.\\
 \begin{figure}[!ht]
-\includegraphics[scale=0.45]{./figures/mc/mc_time_-0_1wallterm.pdf}
-\caption{Mean score using trajectories with reward $R_3$}
-\label{fig:mc_t_wall}
+\includegraphics[scale=0.45]{./figures/mc/mc_ntime_wallterm_-1.pdf}
+\caption{Summarized figure of 6 experiments showing mean episode reward given different experts and Xavier option configurations}
+\label{fig:mc_nt_wall__1}
 \end{figure}
-
-\noindent Interesting to see is that using $R_1$ in \ref{fig:mc_nt_wall} is better for convergence than using $R_3$ as shown in \ref{fig:mc_t_wall}. Another aspect we found is that the probability of getting stuck in a local optima is much higher in \ref{fig:mc_t_wall} than in \ref{fig:mc_nt_wall}.
-
-\noindent In figure \ref{fig:mc_stuck} we show what is meant by stuck in local optima.
+As we can see from Figure \ref{fig:mc_nt_wall__1} the performance drastically increases. Note that we had to adjust the annealing time to $3 \cdot 10^{5}$, since we found out that this system learns much faster and hence needs less exploration.\\
+As before in the 5-step method we will next add a time pressure to the MC method and see how the performance changes. The agent in the this experiment receives $-0.1$ for each step and also $-0.1$ for walking out of bounds with termination. The results are displayed in Figure \ref{fig:mc_t_wall_0_1}.\\
 \begin{figure}[!ht]
-\includegraphics[scale=0.45]{./figures/mc/mc_time_local.pdf}
-\caption{Mean score using trajectories stuck in local optima}
-\label{fig:mc_stuck}
+\includegraphics[scale=0.45]{./figures/mc/mc_time_wallterm_-0_1.pdf}
+\caption{Summarized figure of the best experiments showing mean episode reward given different experts and Xavier option configurations}
+\label{fig:mc_t_wall_0_1}
 \end{figure}
-
-\noindent In figure \ref{fig:mc_8x8} we tested what happens using trajectories with $1$ Xavier going to a $8 \times 8$ world. This shows the weakness of using trajectories since the size doubled and hence its probability has halved. Thus it is preferable using small local roll-outs of data to get a gradual improvement. The problem is that in this case a reasonable annealing time has to be known but this is depending on the world size. Hence we need to compromise and use a short burst of exploration at the start followed by a long learning phase by using $\varepsilon=0.1$
-
+\noindent The first thing we observed, is the lower mean episode scores in comparison to before. We also found out that many runs were stuck on a lower $0.6$ score level than displayed in Figure \ref{fig:mc_t_wall_0_1}. The problem was that the agent found again a local optima. This came from our badly shaped reward function. For example, the algorithm can prefer walking into the wall terminating with $-0.1$ reward instead of trying to find the goal by walking around. This can happen, since finding the goal at the beginning can result in walking more than 11 steps resulting in a lower episode reward.\\
+In the last experiment, we wanted to know how the fastest method of MC with $-1$ boundary reward would scale up to a bigger world size. For this, we first looked at the mean episode score curves of different filters and world sizes shown in Appendix \ref{subsec:world_size} and \ref{subsec:filter_size_with_world}. Thus in the next experiment we look at an $8 \times 8$ world where we also increased the filter size to $8 \times 8$, to get the best performance. In our experiment we tested the configuration of using 3 experts and 1 Xavier initialized option. The anneal time was $3 \cdot 10^{5}$ time steps and the environment gave $-1.0$ reward for the boundary and else $0$ for taking a step.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.45]{./figures/mc/8x8_score.pdf}
-\caption{Mean score using trajectories in a 8 by 8 world}
+\caption{Episode mean score in a 8 by 8 world}
 \label{fig:mc_8x8}
 \end{figure}
+\noindent As visible in Figure \ref{fig:mc_8x8}, it is more difficult for the algorithm to learn the way to the goal. This is not surprising, since the number of possible positions of the agent and the goal increased from $240$ to $4032$. Meaning that finding the right way has a lower probability than before. It is still possible but many more repetitions are needed, but this is very inefficient when we need a practical solution working most of the time.
 
 \subsection{With key}
-As already mentioned in this experiment a key was added to the environment. The big difference to before is that one two-layered option is capable enough to learn to whole problem itself. The expert is only capable of picking up the key itself. The key itself gives $0$ reward.
+As already mentioned in this experiment we use the environment with key. The big difference to the previous experiment is that one of the two-layered options is capable enough to learn the whole problem itself, which we tested with an experiment. We in addition implemented an expert function which is capable of picking up the key in the shortest amount of steps. If there is no key present in the environment, the expert either hops between two positions or walks in a straight line in downwards direction. The key itself gives the agent $0$ reward if not explicitly states. The super-policy can choose between Xavier initialized options and the expert which is also treated as an option. We found out that for this experiment $4 \cdot 10^{5}$ is a good annealing time and $2\cdot 10^{-3}$ a good learning rate.
 
+\subsubsection{5-step method}
+In this experiment we used the 5-step update method. Note that the number of steps needed to reach the goal increased because of the key and hence, the maximal mean score of a 5-step roll-out is only around $0.6$ as shown in \ref{fig:sl_key_bade}. We first look at the case where the expert behaves simple by walking straight downwards if the key is absent.\\
+\begin{figure}[!ht]
+\includegraphics[scale=0.25]{./figures/local/local_score_key_nt_bade.pdf}
+\includegraphics[scale=0.25]{./figures/local/usage_key_nt_bade_run1.pdf}
+\caption{Mean local score and usage of expert vs other options of run1}
+\label{fig:sl_key_bade}
+\end{figure}
+We see in Figure \ref{fig:sl_key_bade} on the right that the algorithm did not learn to use the expert. It only learned to avoid using the expert when there is no key present. Next we switched to an expert who is a jumper when the key is absent.\\
+\begin{figure}[!ht]
+\includegraphics[scale=0.25]{./figures/local/local_score_key_nt_jump.pdf}
+\includegraphics[scale=0.25]{./figures/local/usage_key_nt_jump_run1.pdf}
+\caption{Mean local score and usage of expert vs other options of run1}
+\label{fig:sl_key_jump}
+\end{figure}
+Shown in Figure \ref{fig:sl_key_jump} the same happened as before and everything is learned by the options. Before it helped to add a time pressure and thus, we add the same time pressure as before into the environment. Making a step, picking up the key, or going out of bounds is rewarded with $-0.1$.\\
+\begin{figure}[!ht]
+\includegraphics[scale=0.25]{./figures/local/local_score_key_timep_bade.pdf}
+\includegraphics[scale=0.25]{./figures/local/usage_key_timep_bade_run2.pdf}
+\caption{Mean local score and usage of expert vs other options of run2}
+\label{fig:sl_key_timep_bade}
+\end{figure}
+\begin{figure}[!ht]
+\includegraphics[scale=0.25]{./figures/local/local_score_key_timep_jump.pdf}
+\includegraphics[scale=0.25]{./figures/local/usage_key_timep_jump_run1.pdf}
+\caption{Mean local score and usage of expert vs other options of run1}
+\label{fig:sl_key_timep_jump}
+\end{figure}
+As seen in Figures \ref{fig:sl_key_timep_bade} and \ref{fig:sl_key_timep_jump} adding a time pressure increases instability in both cases. By instability we meant losing the ability to reach highest local mean score level. As shown there are cases where the algorithm learns for some reason to use the expert only when the key is absent. 
 
-
-\subsection*{Trajectories}
-What happens using trajectories was highly depending on what the expert was doing at the end when there was no longer any key in the world. We tested two scenarios. The first is where the expert walks just in one direction and the other is that the expert walks back and forth between two fields where he is located at.
-\subsubsection{Reward $R_1$}
-In this part we look at the results using reward set $R_1$. As one can see this reward set has a local optima in $0$ because this is still better then walking into a boundary for $-1$.
+\subsubsection{MC method}
+Since 5-step method seems to not use the expert correctly we wanted to test if the MC method does the same.
+By using the MC method we again had to change the reward function of the environment. We look at the better setting where the agent receives a reward of $-1.0$ for going out of bounds with termination. For each step and the key he receives $0$ reward. We look first at the jumping expert when the key is absent.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.25]{./figures/mc/score_key_0r_jumpe.pdf}
 \includegraphics[scale=0.25]{./figures/mc/usage_0r_jumpe.pdf}
-\caption{Mean score and usage of expert with jumping at the end}
+\caption{Mean score and usage of expert with jumping}
 \label{fig:mc_key_jump}
 \end{figure}
-\noindent As we can see in figure \ref{fig:mc_key_jump} we are stuck in a local optima where he uses the expert only to avoid going out of bounds. In comparison to figure \ref{fig:mc_key_simple} where the expert is as bad as the options and hence he can train an option to find the goal.
+\noindent As we can see in Figure \ref{fig:mc_key_jump} the algorithm uses the expert also when there is no key present and hence is stuck in a local optima of $0$ score. Next we changed to the simple downwards expert.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.25]{./figures/mc/score_key_0r_bade.pdf}
 \includegraphics[scale=0.25]{./figures/mc/usage_0r_bade.pdf}
-\caption{Mean score and usage of expert with simple direction at the end}
+\caption{Mean score of episode and usage of expert vs options of run1}
 \label{fig:mc_key_simple}
 \end{figure}
-
-\subsubsection{Reward $R_2$}
-Adding a time pressure of $-0.1$ for making a step does not help in any way but more likely hinders the learning. In figure \ref{fig:mc_key_timep_jump} we show the usage of expert corresponding to orange, brown and purple curve.
+\noindent As visible from Figure \ref{fig:mc_key_simple} the algorithm learns to reach the goal after picking up the key. But as we can see on the right side of Figure \ref{fig:mc_key_simple} it was done by ignoring the expert.\\
+In the next experiments we again added a time pressure. The agent now receives $-0.1$ reward for picking up the key and for making a step in the environment. First we look at the jumping expert.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.25]{./figures/mc/score_key_0r_timep_jumpe.pdf}
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_conv.pdf}\\
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_updownup.pdf}
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_updown.pdf}
-\caption{Mean score and usage of expert with jumping at the end}
+\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_run1.pdf}\\
+\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_run5.pdf}
+\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_run4.pdf}
+\caption{Mean score and usage of expert with jumping}
 \label{fig:mc_key_timep_jump}
 \end{figure}
+First of all we notice that the performance drastically dropped. After $1.5 \cdot 10^{6}$ time steps the mean score stopped increasing and started to declined again. Also we see in the top right Figure \ref{fig:mc_key_timep_jump} that the algorithm in run1 learns to stop using the other options when a key is present. However, as we can see in the figure the algorithm is not sure when he should use the expert. One of the reasons is probably that in our case the uniform distribution selects the other options more often than the expert in the exploration phase. Last but not least we tested the simple downwards expert.\\
 \begin{figure}[!ht]
 \includegraphics[scale=0.25]{./figures/mc/score_key_0r_timep_bade.pdf}
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_bade.pdf}
-\caption{Mean score and usage of expert with simple direction at the end}
+\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_bade_run2.pdf}
+\caption{Mean score and usage of expert with simple direction}
 \label{fig:mc_key_timep_simple}
 \end{figure}
-\noindent In figure \ref{fig:mc_key_timep_simple} we see for the green curve the usage. He does recognize that using the option when the key is there is not so good but he is not sure which of the other options is better hence all other probabilities increase.
+In Figure \ref{fig:mc_key_timep_simple} we see the same behavior as before.
+\chapter{Future Work}
+
+
+
 
 \nocite{merheb2017learning}
 % This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
@@ -403,18 +426,21 @@ We see from \ref{hyper:learning_rate} that in our experiments a learning rate of
 
 \subsection{World Size}
 \label{subsec:world_size}
-Description
+In this test we looked at the performance of the mean score using the same filter size of $4 \times 4$ but increasing the world size with the MC update method
 \begin{figure}[!ht]
 \includegraphics[scale=0.42]{./figures/hyperparam/filter_4x4.pdf}
-\caption{Testing runtime when the filter size is constant $4 \times 4$ but the world size grows}
+\caption{Mean episode score with constant filter size $4 \times 4$ but increasing world size}
+\label{hyper:world_size}
 \end{figure}
 
 \subsection{Filter Size with World Size}
 \label{subsec:filter_size_with_world}
-Description
+In this test we looked at the performance of the mean score using increasing filter sizes together with the world size using MC update method.
 \begin{figure}[!ht]
 \includegraphics[scale=0.42]{./figures/hyperparam/filter_var.pdf}
-\caption{Testing runtime when the filter size is as big as the world size}
+\caption{Mean episode score with increasing filter size and world size}
+\label{hyper:world_size_filter}
 \end{figure}
+\noindent From Figure \ref{hyper:world_size} and \ref{hyper:world_size_filter} we can conclude that the number of time steps taken until reaching mean episode score of $1.0$ decreases drastically when using the same filter size as the world size. Hence when we want to test bigger world sizes we also should increase the filter size in the CNN. 
 
 \end{document}
