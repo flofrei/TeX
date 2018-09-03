@@ -49,7 +49,7 @@ Finally, I express my very profound gratitude to my parents and my brothers for 
 
 \begin{abstract}
 Temporal abstraction is trivial for humans but difficult for machines. Recently the new algorithm Asynchronous Advantage Option-Critic (A2OC) \cite{bacon2017option} was introduced in hierarchical deep reinforcement learning, which was able to learn some temporal abstraction on the Atari games. This algorithm uses the well-established options framework \cite{sutton1999between}. In this work we want to test the adaptability of this algorithm when there are pre-trained options in the model, but to solve the complete problem some other essential knowledge is missing.\\
-In our experiments we found ... reward sensitivity, option capability
+In our experiments we found that it is possible to use the A2OC algorithm to learn missing knowledge with separate options while other experts are present. However, the success was highly sensitive to the reward function, the network structure of the option, and the number of options used compared to the number of experts.
 \end{abstract}
 
 \setcounter{tocdepth}{1}
@@ -387,9 +387,12 @@ First of all we notice that the performance drastically dropped. After $1.5 \cdo
 \caption{Mean score and usage of expert with simple direction}
 \label{fig:mc_key_timep_simple}
 \end{figure}
-In Figure \ref{fig:mc_key_timep_simple} we see the same behavior as before.
-\chapter{Future Work}
+In Figure \ref{fig:mc_key_timep_simple} we see the same behavior as before.\\
+In our experiments the problem of high termination mentioned in \cite{harb2017waiting} did not occur. However, we tried to use the deliberation cost to push the algorithm out of the local optima. This worked but in the undesired direction. For example in MC method case with key the algorithm got pushed back to the $-1.0$ episode score level instead of the hoped-for $1.0$ episode score level. Furthermore we found out that in our experiments, using mixed option models in the environment without key, led to using the options who could solve the whole problem itself, instead of dividing the knowledge across different options. 
 
+\chapter{Conclusion and Future Work}
+We can conclude from our experiments that the A2OC algorithm is capable of using pre-trained experts and Xavier initialized options together to solve the problem. However, the performance strongly depends on the reward function thus the environment, the chosen update method, and the capabilities of the options and experts. We showed in our experiments both scenarios. In the first scenario we looked at the environment without a key using directional experts. We showed that any amount of missing information is learnable by the algorithm given the right update method and a sensible reward function. Furthermore we showed that this approach was scalable to bigger world sizes. In the second scenario we looked at the environment with the key. We showed that the algorithm learned the problem only by ignoring the expert who did some nonsense when the key was absent. Interesting to see was that introducing a time pressure for the 5-step method stabilized the performance in the first scenario but destabilized it in the second scenario.\\
+We used in all experiments an $\varepsilon$-greedy super-policy and hence, we needed to tune the annealing time on a case-by-case basis. Future work could comprise using neural networks to implement the super-policy instead of simple $\varepsilon$-greedy. This would allow the super-policy to have features such as detecting capabilities and limitations of given experts and options, the shape of the reward function given by the environment etc. 
 
 
 
