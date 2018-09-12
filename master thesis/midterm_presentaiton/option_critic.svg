@@ -1839,9 +1839,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1923616"
-     inkscape:cx="270.92684"
-     inkscape:cy="794.05655"
+     inkscape:zoom="3.8786959"
+     inkscape:cx="265.82703"
+     inkscape:cy="636.98332"
      inkscape:document-units="px"
      inkscape:current-layer="layer5"
      showgrid="false"
@@ -1955,7 +1955,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1963,7 +1963,7 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="costs"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <image
        y="254.7066"
@@ -2012,8 +2012,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="other graph nodes"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <circle
        style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5810"
@@ -2201,66 +2200,11 @@
        d="M 579.27994,112.36219 V 370.33935"
        id="path3613"
        inkscape:connector-curvature="0" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.18962479px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.72758502px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="139.84987"
-       y="138.53398"
-       id="text5283"><tspan
-         sodipodi:role="line"
-         id="tspan5281"
-         x="139.84987"
-         y="138.53398"
-         style="stroke-width:0.72758502px">state</tspan></text>
     <path
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.40625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker6471)"
        d="M 214.60813,412.86402 H 108.38732"
        id="path5291"
        inkscape:connector-curvature="0" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.18962669px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.72758502px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="139.8177"
-       y="269.92181"
-       id="text5283-3"><tspan
-         sodipodi:role="line"
-         id="tspan5281-6"
-         x="139.8177"
-         y="269.92181"
-         style="stroke-width:0.72758502px">state</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.18962669px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.72758502px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="139.8177"
-       y="409.0358"
-       id="text5283-7"><tspan
-         sodipodi:role="line"
-         id="tspan5281-5"
-         x="139.8177"
-         y="409.0358"
-         style="stroke-width:0.72758502px">state</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.18962669px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.72758502px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="191.73291"
-       y="190.80775"
-       id="text5283-35"><tspan
-         sodipodi:role="line"
-         id="tspan5281-62"
-         x="191.73291"
-         y="190.80775"
-         style="stroke-width:0.72758502px">state</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.18962669px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.72758502px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="165.75807"
-       y="160.80775"
-       id="text5283-9"><tspan
-         sodipodi:role="line"
-         id="tspan5281-1"
-         x="165.75807"
-         y="160.80775"
-         style="stroke-width:0.72758502px">state</tspan></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.40625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6248)"
        d="M 311.17893,360.60067 451.35342,285.37246"
@@ -2269,31 +2213,108 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:23.4375px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="40.449471"
-       y="498.41718"
+       x="67.786674"
+       y="461.82059"
        id="text2046"><tspan
          sodipodi:role="line"
          id="tspan2044"
-         x="40.449471"
-         y="498.41718"
-         style="stroke-width:0.9375px">convolution</tspan></text>
+         x="67.786674"
+         y="461.82059"
+         style="stroke-width:0.9375px">feature</tspan><tspan
+         sodipodi:role="line"
+         x="67.786674"
+         y="491.11746"
+         style="stroke-width:0.9375px"
+         id="tspan2098">extractor</tspan></text>
     <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.40625;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.26218295;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect2048"
        width="154.41063"
-       height="27.263514"
-       x="31.182007"
-       y="476.04785" />
+       height="70.552467"
+       x="44.442982"
+       y="432.45523" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.40625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2062)"
        d="M 108.38732,543.00443 V 506.55902"
        id="path2050"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="113.38509"
+       y="417.53967"
+       id="text2062-3"
+       transform="scale(1.0169442,0.98333811)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6"
+         x="113.38509"
+         y="417.53967"
+         style="stroke-width:0.81241649px">Φ(state)</tspan></text>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.40625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 108.38732,476.04785 V 142.36219"
-       id="path2052"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 108.38732,142.36219 V 432.45523"
+       id="path2100"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="118.8048"
+       y="274.49911"
+       id="text2062-3-9"
+       transform="scale(1.0169442,0.98333812)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6-1"
+         x="118.8048"
+         y="274.49911"
+         style="stroke-width:0.81241649px">Φ(state)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="169.855"
+       y="194.04453"
+       id="text2062-3-2"
+       transform="scale(1.0169442,0.98333812)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6-7"
+         x="169.855"
+         y="194.04453"
+         style="stroke-width:0.81241649px">Φ(state)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="144.31296"
+       y="163.53621"
+       id="text2062-3-0"
+       transform="scale(1.0169442,0.98333812)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6-9"
+         x="144.31296"
+         y="163.53621"
+         style="stroke-width:0.81241649px">Φ(state)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="118.83643"
+       y="140.88503"
+       id="text2062-3-3"
+       transform="scale(1.0169442,0.98333812)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6-6"
+         x="118.83643"
+         y="140.88503"
+         style="stroke-width:0.81241649px">Φ(state)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:20.31041145px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.81241649px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="108.95206"
+       y="549.52759"
+       id="text2062-3-36"
+       transform="scale(1.0169442,0.98333812)"><tspan
+         sodipodi:role="line"
+         id="tspan2060-6-75"
+         x="108.95206"
+         y="549.52759"
+         style="stroke-width:0.81241649px">state</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
