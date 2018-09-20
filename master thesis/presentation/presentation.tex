@@ -102,6 +102,14 @@ MC method & boundary reward $-1$ & $8\times 8$ world\\
 \end{frame}
 \end{comment}
 
+\begin{frame}{5-step method with default reward}
+\includegraphics[scale=0.4]{./figures/local/sl_ntime_0r.pdf}
+\end{frame}
+
+\begin{frame}{5-step method with time pressure}
+\includegraphics[scale=0.4]{./figures/local/sl_timepressure_sumary.pdf}
+\end{frame}
+
 \begin{frame}{Second experimental setting}
 \includegraphics[scale=0.52]{second_exp.pdf}
 \end{frame}
@@ -110,18 +118,26 @@ MC method & boundary reward $-1$ & $8\times 8$ world\\
 \includegraphics[scale=0.5]{exp_modulator2.pdf}
 \end{frame}
 
+\begin{frame}{Summary of experiments using no time pressure}
+\includegraphics[scale=0.5]{./figures/summary_exp_2_notimepr.pdf}
+\end{frame}
+
 
 \begin{frame}{Conclusion}
 \begin{itemize}
-\item time pressure not always helpful \pause
-\item missing knowledge can be learned \pause
-\item big difference if using all options is required
+\item missing knowledge can be learned but ... \pause
+\item sensitive to reward, update method, option architecture \pause
+\item big difference if using experts is mandatory
 \end{itemize}
 \end{frame}
 
 \begin{frame}{QnA}
-\Huge ?
+\includegraphics[scale=0.9]{happy_robot.pdf}
 \end{frame}
+
+\begin{frame}
+\end{frame}
+
 
 \begin{frame}{Option-Critic Architecture}
 \includegraphics[scale=0.6]{option_critic.pdf}
@@ -147,6 +163,23 @@ q^{(n)}_t  = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{n-1} r_{t+n} + \gamma^n
 \end{frame}
 
 \begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/2e_2x_o_avrg_score_nt2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/2e_2x_p_avrg_score_nt2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/3e_1x_avrg_score_nt2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/4x_avrg_score_nt2.pdf}
+\end{frame}
+
+
+\begin{frame}{5-step method}
 \includegraphics[scale=0.4]{./figures/local/sl_ntime_0r.pdf}
 \end{frame}
 
@@ -156,6 +189,22 @@ q^{(n)}_t  = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{n-1} r_{t+n} + \gamma^n
 
 \begin{frame}{5-step method}
 \includegraphics[scale=0.4]{./figures/local/3e_1x_avrg_score_t2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/2e_2x_o_avrg_score_t2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/2e_2x_p_avrg_score_t2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/3e_1x_avrg_score_t2.pdf}
+\end{frame}
+
+\begin{frame}{5-step method}
+\includegraphics[scale=0.4]{./figures/local/4x_avrg_score_t2.pdf}
 \end{frame}
 
 \begin{frame}{5-step method}
@@ -235,11 +284,11 @@ q^{(n)}_t  = r_{t+1} + \gamma r_{t+2} + \ldots + \gamma^{n-1} r_{t+n} + \gamma^n
 \end{frame}
 
 \begin{frame}{MC method}
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_run5.pdf}
+\includegraphics[scale=0.4]{./figures/mc/usage_0r_timep_jumpe_run5.pdf}
 \end{frame}
 
 \begin{frame}{MC method}
-\includegraphics[scale=0.25]{./figures/mc/usage_0r_timep_jumpe_run4.pdf}
+\includegraphics[scale=0.4]{./figures/mc/usage_0r_timep_jumpe_run4.pdf}
 \end{frame}
 
 \begin{frame}{MC method}
